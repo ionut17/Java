@@ -1,5 +1,9 @@
-package main.pkg;
+package main;
 
+/**
+ *
+ * @author Anca Adascalitei, Ionut Iacob
+ */
 public class Main {
     
     public static void main(String[] args) {
