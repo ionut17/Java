@@ -1,0 +1,76 @@
+
+<!-- saved from url=(0052)http://profs.info.uaic.ro/~acf/java/labs/lab_01.html -->
+<html hola_ext_inject="disabled"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <title> Lab 1</title> <style type="text/css"></style></head>
+<body>
+
+
+<h1> Lab 1</h1>
+<b>[valid 2015-2016]</b>
+
+
+<p>
+
+<b><a href="https://en.wikipedia.org/wiki/Graeco-Latin_square">Graeco-Latin square</a></b> <br>
+Write a Java application that generates and prints on the screen Graeco-Latin squares. 
+A Graeco-Latin Square is a <i>n x n</i> matrix. Each cell of the matrix is a pair of elements taken from the carthesian product of two given sets: <i>S X T</i>;
+for example, S may be a subset of the Latin alphabet and T a subset of the Greek alphabet.
+</p><p>The constraints are:
+</p><ol>
+<li>In each row, and in each column, all the <i>2n</i> elements are different.
+</li><li>No two pairs are the same in the matrix.
+</li></ol>
+<p>Example:
+</p><p>
+<img src="./Lab 1_files/225px-GraecoLatinSquare-Order3.svg.png" width="10%" height="10%"> 
+
+</p><p>
+The main specifications of the application are:
+</p><li> (0.5p) Create and display the square from the example. The <a href="http://unicode.org/charts">Unicode</a> character for α is "\u03B1".
+
+</li><li> (0.25) Parse the command line arguments - they are given in the following format: <br>
+<pre>  [n:number of elements] [S:"elements of the first set"] [T:"elements of the second set"]
+</pre>
+If command line arguments are missing, the application will generate a random value for <i>n</i>,
+<i>S</i> contains the first <i>n</i> characters of the Latin alphabet (upper case) and 
+<i>T</i> the first <i>n</i> characters of the Greek alphabet (lower case).
+
+</li><li> Generate Graeco-Latin squares of size <i>n x n</i> and display them on the screen:
+  <ul>
+  <li>(0.5p) at least one...
+  </li><li>(1.25p) all of them (display only the first, count them instead).
+  </li></ul>
+  
+</li><li>The running time of the application will be displayed on the screen (try n=5).
+
+
+<p>
+</p><hr>
+Please consult <a href="https://docs.oracle.com/javase/8/docs/api/">the API documentation </a> to learn more information about the classes and methods used!
+
+<p>
+</p><p>Resources:
+</p><ul>
+<li> <a href="http://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html"> Language Basics </a>
+</li><li> <a href="https://docs.oracle.com/javase/tutorial/java/data/index.html"> Numbers and Strings </a>
+</li><li> <a href="https://netbeans.org/kb/docs/java/quickstart.html"> NetBeans IDE Java Quick Start Tutorial</a>
+</li></ul>
+
+<p> Objectives:
+</p><ul>
+<li> Get used with an integrated development environment (IDE): <a href="https://netbeans.org/">Netbeans</a>.
+</li><li> Get used with the Java language syntax.
+</li><li> Create and run a simple application.
+</li><li> Understand the following concepts: compiler, interpreter, byte-code, Java Virtual Machine (JVM), portability.
+</li><li> Use the <a href="http://unicode.org/">Unicode</a> alphabet and Java special characters.
+</li><li> Work with primitive data types and strings (<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a>, 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html">StringBuilder</a>).
+</li><li> Work with one- and multi-dimensional arrays.
+</li><li> Parse command line arguments. 
+</li><li> Perform conversions between strings and numbers.
+</li><li> Split a string into tokens.
+</li><li> Generate random numbers.
+</li><li> Create multiple methods in the main class of the application.
+</li></ul>
+
+
+</li></body></html>
