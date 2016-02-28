@@ -1,5 +1,8 @@
 package main;
 
+import java.util.ArrayList;
+import model.*;
+
 /**
  *
  * @author Anca Adascalitei, Ionut Iacob
@@ -7,7 +10,23 @@ package main;
 public class Main {
     
     public static void main(String[] args) {
- 
+        
+        Student stud = new Student();
+        stud.setName("Marcel");
+        stud.setEmail("gugustiuc@marcel.com");
+        
+        Project proj = new Project();
+        ArrayList<Project> projectList = new ArrayList<>();
+        projectList.add(proj);
+        
+        stud.setProjectPreferences(projectList);
+        
+        System.out.println(stud.isFree());
+        
+        stud.setAllocatedProject(proj);
+        
+        System.out.println(stud.isFree());
+        
         // TODO code application logic here
     }
     

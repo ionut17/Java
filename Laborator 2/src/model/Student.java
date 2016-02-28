@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Student extends Person {
 
     private ArrayList<Project> projectPreferences = new ArrayList<>();
-    private Project allocatedProject = new Project();
+    private Project allocatedProject;
 
     /**
      * Checks if the student has any preferences
