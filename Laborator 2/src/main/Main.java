@@ -87,11 +87,12 @@ public class Main {
         for (int i = 0; i < Integer.valueOf(number[1]); i++) {
             lecturerList.get(i).setLecturerCapacity(Integer.valueOf(lCap[i]));
         }
-        //Creating students/lecturers
+        //Adding preferences
         int count = 0;
         int type = 0;
         for (int i = 3; i < lines.length; i++) {
-            count = Integer.valueOf(number[type]) - 1;
+            if (type == 0) count = Integer.valueOf(number[0]);
+            else count = Integer.valueOf(number[1]);
             for (int j = 0; j < count; j++) {
                 String[] values = lines[i + j].split(" ");
                 switch (type) {
@@ -138,7 +139,7 @@ public class Main {
                         break;
                 }
             }
-            i = i + count;
+            i = i + count - 1;
             type++;
         }
         //Creating the problem
