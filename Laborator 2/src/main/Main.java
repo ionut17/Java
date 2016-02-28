@@ -11,6 +11,13 @@ public class Main {
     
     public static void main(String[] args) {
         
+        Main app = new Main();
+        app.debug();
+        
+        // TODO code application logic here
+    }
+    
+    public void debug(){
         Student stud = new Student();
         stud.setName("Marcel");
         stud.setEmail("gugustiuc@marcel.com");
@@ -26,8 +33,6 @@ public class Main {
         stud.setAllocatedProject(proj);
         
         System.out.println(stud.isFree());
-        
-        // TODO code application logic here
     }
     
 }
