@@ -10,6 +10,7 @@ public class Student extends Person {
 
     private ArrayList<Project> projectPreferences = new ArrayList<>();
     private Project allocatedProject;
+    private int projectIndex = 0;
 
     /**
      * Checks if the student has any preferences
@@ -35,6 +36,13 @@ public class Student extends Person {
         this.projectPreferences = projectPreferences;
     }
 
+    public Project getFirstAvailablePreference() {
+        if (projectIndex < projectPreferences.size()-1){
+            return projectPreferences.get(++projectIndex);
+        }
+        else return null;
+    }
+
     /**
      * @return the allocatedProject
      */
@@ -51,6 +59,7 @@ public class Student extends Person {
 
     /**
      * Checks if 2 students are equal
+     *
      * @param obj is a student object
      * @return boolean true or false
      */
@@ -67,7 +76,8 @@ public class Student extends Person {
     }
 
     /**
-     * Converts the projectPreferences array to String 
+     * Converts the projectPreferences array to String
+     *
      * @return string with the student's preferences in projects
      */
     public String toStringProjectPreferences() {

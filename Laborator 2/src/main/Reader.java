@@ -72,7 +72,7 @@ public class Reader {
                 }
                 case 2: {
                     //Creating projects
-                    for (int i = 0; i < Integer.valueOf(number[numberId]); i++) {
+                    for (int i = 0; i < Integer.valueOf(number[numberId].trim()); i++) {
                         Project p = new Project();
                         p.setName("P" + String.valueOf(i + 1));
                         p.setProjectCapacity(1);
@@ -86,20 +86,21 @@ public class Reader {
         }
         //Setting the project capacities
         String[] pCap = lines[1].split(" ");
-        for (int i = 0; i < Integer.valueOf(number[2]); i++) {
-            projectList.get(i).setProjectCapacity(Integer.valueOf(pCap[i]));
+        for (int i = 0; i < Integer.valueOf(number[2].trim()); i++) {
+            projectList.get(i).setProjectCapacity(Integer.valueOf(pCap[i].trim()));
         }
         //Setting the lecturers capacities
         String[] lCap = lines[2].split(" ");
         for (int i = 0; i < Integer.valueOf(number[1]); i++) {
-            lecturerList.get(i).setLecturerCapacity(Integer.valueOf(lCap[i]));
+            lecturerList.get(i).setLecturerCapacity(Integer.valueOf(lCap[i].trim()));
         }
         //Adding preferences
         int count = 0;
         int type = 0;
         for (int i = 3; i < lines.length; i++) {
-            if (type == 0) count = Integer.valueOf(number[0]);
-            else count = Integer.valueOf(number[1]);
+            if (type == 0) count = Integer.valueOf(number[0].trim());
+            else count = Integer.valueOf(number[1].trim());
+//            System.out.println("i: "+i+" count:"+count+" lines length:"+lines.length);
             for (int j = 0; j < count; j++) {
                 String[] values = lines[i + j].split(" ");
                 switch (type) {
@@ -136,6 +137,7 @@ public class Reader {
                             for (Project p : projectList) {
                                 if (p.getName().equals(auxValues)) {
                                     tempProject.add(p);
+                                    p.setProjectLecturer(lecturerList.get(j));
                                 }
                             }
                         }
