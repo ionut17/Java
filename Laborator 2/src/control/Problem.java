@@ -67,13 +67,13 @@ public class Problem {
         for (Student stud : studentList) {
             sb.append(stud.toStringProjectPreferences()).append("\n");
         }
-        sb.append("Lecturer preferences\n");
+        sb.append("\nLecturer preferences\n");
         for (Lecturer lect : lecturerList) {
             sb.append(lect.toStringStudentPreferences()).append("\n");
         }
-        sb.append("Available projects\n");
+        sb.append("\nAvailable projects\n");
         for (Lecturer lect : lecturerList) {
-            sb.append(lect.toStringAvailableProjects()+"\n");
+            sb.append(lect.toStringAvailableProjects()).append("\n");
         }
         return sb.toString();
     }
