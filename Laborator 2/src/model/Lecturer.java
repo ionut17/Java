@@ -85,5 +85,42 @@ public class Lecturer extends Person {
     public void setAcceptedStudents(ArrayList<Student> acceptedStudents) {
         this.acceptedStudents = acceptedStudents;
     }
+    
+    /**
+     * Checks if 2 lecturers are equal
+     * @param obj is a lecturer object
+     * @return boolean true or false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Lecturer)) {
+            return false;
+        }
+        Lecturer lect = (Lecturer) obj;
+        return (lect.getName().equals(this.getName()) && lect.getEmail().equals(this.getEmail()));
+    }
 
+    public String toStringStudentPreferences() {
+        String studentString;
+        StringBuilder sb = new StringBuilder();
+        for (Student stud : studentPreferences) {
+            sb.append(stud.getName()).append(" ");
+        }
+        studentString = sb.toString();
+        return this.getName() + " : " + studentString;
+    }
+
+    
+    public String toStringProjectPreferences() {
+        String projectString;
+        StringBuilder sb = new StringBuilder();
+        for (Project proj : projectProposals) {
+            sb.append(proj.getName()).append(" ");
+        }
+        projectString = sb.toString();
+        return this.getName() + " : " + projectString;
+    }
 }
