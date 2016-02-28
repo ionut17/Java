@@ -7,16 +7,18 @@ import java.util.ArrayList;
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Student extends Person {
-    
+
     private ArrayList<Project> projectPreferences = new ArrayList<>();
+    private Project allocatedProject = new Project();
 
     /**
      * Checks if the student has any preferences
+     *
      * @return true or false
      */
     @Override
     public boolean isFree() {
-        return projectPreferences.isEmpty();
+        return allocatedProject == null;
     }
 
     /**
@@ -31,6 +33,20 @@ public class Student extends Person {
      */
     public void setProjectPreferences(ArrayList<Project> projectPreferences) {
         this.projectPreferences = projectPreferences;
+    }
+
+    /**
+     * @return the allocatedProject
+     */
+    public Project getAllocatedProject() {
+        return allocatedProject;
+    }
+
+    /**
+     * @param allocatedProject the allocatedProject to set
+     */
+    public void setAllocatedProject(Project allocatedProject) {
+        this.allocatedProject = allocatedProject;
     }
 
 }

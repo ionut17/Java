@@ -8,7 +8,6 @@ abstract public class Person {
 
     private String name;
     private String email;
-    boolean status;
 
     /**
      * @return if the inherited class is free
