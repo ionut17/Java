@@ -158,6 +158,7 @@ public class Reader {
                             for (Project p : getProjectList()) {
                                 if (p.getName().equals(auxValues)) {
                                     tempProject.add(p);
+                                    p.setProjectLecturer(lecturerList.get(j));
                                 }
                             }
                         }
