@@ -114,13 +114,13 @@ public class Lecturer extends Person {
     }
 
     
-    public String toStringProjectPreferences() {
+    public String toStringAvailableProjects() {
         String projectString;
         StringBuilder sb = new StringBuilder();
         for (Project proj : projectProposals) {
             sb.append(proj.getName()).append(" ");
         }
         projectString = sb.toString();
-        return this.getName() + " : " + projectString;
+        return this.getName() + " offers " + projectString;
     }
 }
