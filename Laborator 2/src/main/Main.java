@@ -12,14 +12,18 @@ import model.*;
 public class Main {
 
     public static void main(String[] args) {
-
+        
         Main app = new Main();
         Reader rd = new Reader();
         rd.setFileName("ExampleSource.txt");
         rd.read();
-        //app.debug();
-
-        // TODO code application logic here
+        
+        Problem exampleProblem = new Problem();
+        
+        exampleProblem.setStudentList(rd.getStudentList());
+        exampleProblem.setLecturerList(rd.getLecturerList());
+        exampleProblem.setProjectList(rd.getProjectList());        
+        System.out.println(exampleProblem.toString());
     }
 
     public void debug() {

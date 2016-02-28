@@ -10,9 +10,19 @@ import java.util.ArrayList;
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Reader {
+
     
     private String fileName;
-    
+    private final ArrayList<Student> studentList;
+    private final ArrayList<Lecturer> lecturerList;
+    private final ArrayList<Project> projectList;
+
+    public Reader() {
+        this.projectList = new ArrayList<>();
+        this.lecturerList = new ArrayList<>();
+        this.studentList = new ArrayList<>();
+    }
+
     /**
      * @return the fileName
      */
@@ -26,11 +36,11 @@ public class Reader {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-    
-    void read() {
-        ArrayList<Student> studentList = new ArrayList<>();
-        ArrayList<Lecturer> lecturerList = new ArrayList<>();
-        ArrayList<Project> projectList = new ArrayList<>();
+
+    /**
+     * Read from the selected file
+     */
+    public void read() {
 //      Reading
         String content = null;
         File file = new File(fileName);
@@ -44,39 +54,48 @@ public class Reader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        parse(content);
+    }
+
+    /**
+     * Parse the content and insert the data
+     * @param content
+     */
+    private void parse(String content) {
 //        Actual parsing
 //        System.out.println(content);
         String[] lines = content.split("\n");
-        String[] number = lines[0].split(" ");
+        String[] entitiesCount = lines[0].split(" ");
+//        Set the student, lecturer, projects names
         for (int numberId = 0; numberId < 3; numberId++) {
             switch (numberId) {
                 case 0: {
-                    //Creating students
-                    for (int i = 0; i < Integer.valueOf(number[numberId]); i++) {
+//                    Creating students
+                    for (int i = 0; i < Integer.valueOf(entitiesCount[numberId]); i++) {
                         Student e = new Student();
                         e.setName("S" + String.valueOf(i + 1));
                         e.setEmail("S" + String.valueOf(i + 1) + "@mail.com");
-                        studentList.add(e);
+                        getStudentList().add(e);
                     }
                     break;
                 }
                 case 1: {
-                    //Creating lecturers
-                    for (int i = 0; i < Integer.valueOf(number[numberId]); i++) {
+//                    Creating lecturers
+                    for (int i = 0; i < Integer.valueOf(entitiesCount[numberId]); i++) {
                         Lecturer e = new Lecturer();
                         e.setName("L" + String.valueOf(i + 1));
                         e.setEmail("L" + String.valueOf(i + 1) + "@mail.com");
-                        lecturerList.add(e);
+                        getLecturerList().add(e);
                     }
                     break;
                 }
                 case 2: {
                     //Creating projects
-                    for (int i = 0; i < Integer.valueOf(number[numberId]); i++) {
+                    for (int i = 0; i < Integer.valueOf(entitiesCount[numberId]); i++) {
                         Project p = new Project();
                         p.setName("P" + String.valueOf(i + 1));
                         p.setProjectCapacity(1);
-                        projectList.add(p);
+                        getProjectList().add(p);
                     }
                     break;
                 }
@@ -86,20 +105,23 @@ public class Reader {
         }
         //Setting the project capacities
         String[] pCap = lines[1].split(" ");
-        for (int i = 0; i < Integer.valueOf(number[2]); i++) {
-            projectList.get(i).setProjectCapacity(Integer.valueOf(pCap[i]));
+        for (int i = 0; i < Integer.valueOf(entitiesCount[2]); i++) {
+            getProjectList().get(i).setProjectCapacity(Integer.valueOf(pCap[i]));
         }
         //Setting the lecturers capacities
         String[] lCap = lines[2].split(" ");
-        for (int i = 0; i < Integer.valueOf(number[1]); i++) {
-            lecturerList.get(i).setLecturerCapacity(Integer.valueOf(lCap[i]));
+        for (int i = 0; i < Integer.valueOf(entitiesCount[1]); i++) {
+            getLecturerList().get(i).setLecturerCapacity(Integer.valueOf(lCap[i]));
         }
         //Adding preferences
-        int count = 0;
+        int count;
         int type = 0;
         for (int i = 3; i < lines.length; i++) {
-            if (type == 0) count = Integer.valueOf(number[0]);
-            else count = Integer.valueOf(number[1]);
+            if (type == 0) {
+                count = Integer.valueOf(entitiesCount[0]);
+            } else {
+                count = Integer.valueOf(entitiesCount[1]);
+            }
             for (int j = 0; j < count; j++) {
                 String[] values = lines[i + j].split(" ");
                 switch (type) {
@@ -107,39 +129,39 @@ public class Reader {
                         //Add wanted projects to students
                         ArrayList<Project> tempProject = new ArrayList<>();
                         for (String auxValues : values) {
-                            for (Project p : projectList) {
+                            for (Project p : getProjectList()) {
                                 if (p.getName().equals(auxValues)) {
                                     tempProject.add(p);
                                 }
                             }
                         }
-                        studentList.get(j).setProjectPreferences(tempProject);
+                        getStudentList().get(j).setProjectPreferences(tempProject);
                         break;
                     }
                     case 1: {
                         //Add wanted students to lecturers
                         ArrayList<Student> tempStudent = new ArrayList<>();
                         for (String auxValues : values) {
-                            for (Student s : studentList) {
+                            for (Student s : getStudentList()) {
                                 if (s.getName().equals(auxValues)) {
                                     tempStudent.add(s);
                                 }
                             }
                         }
-                        lecturerList.get(j).setStudentPreferences(tempStudent);
+                        getLecturerList().get(j).setStudentPreferences(tempStudent);
                         break;
                     }
                     case 2: {
                         //Add supervised projects to lecturers
                         ArrayList<Project> tempProject = new ArrayList<>();
                         for (String auxValues : values) {
-                            for (Project p : projectList) {
+                            for (Project p : getProjectList()) {
                                 if (p.getName().equals(auxValues)) {
                                     tempProject.add(p);
                                 }
                             }
                         }
-                        lecturerList.get(j).setProjectProposals(tempProject);
+                        getLecturerList().get(j).setProjectProposals(tempProject);
                         break;
                     }
                     default:
@@ -149,12 +171,27 @@ public class Reader {
             i = i + count - 1;
             type++;
         }
-        //Creating the problem
-        Problem exampleProblem = new Problem();
-        exampleProblem.setStudentList(studentList);
-        exampleProblem.setLecturerList(lecturerList);
-        exampleProblem.setProjectList(projectList);
-        System.out.println(exampleProblem.toString());
     }
-    
+
+    /**
+     * @return the studentList
+     */
+    public ArrayList<Student> getStudentList() {
+        return studentList;
+    }
+
+    /**
+     * @return the lecturerList
+     */
+    public ArrayList<Lecturer> getLecturerList() {
+        return lecturerList;
+    }
+
+    /**
+     * @return the projectList
+     */
+    public ArrayList<Project> getProjectList() {
+        return projectList;
+    }
+
 }
