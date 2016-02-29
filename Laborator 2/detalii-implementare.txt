@@ -1,0 +1,21 @@
+// Clasa ce rezolva problema pe care vreau sa o rezolv (SMProblem, get/set Studenti, get/set profesori si proiecte)
+// ExampleProblem instanta a clasei Problem (setez st,prof,proiecte) si apelez toString
+// Student,Profesor extends Person (Person-abstracta), Proiect
+// Student nume,email,status(are proiect?)
+// Clasa responsabila cu rezolvarea unei probleme SMProblem, abstractSolver(set,getter), new Solver, solver.setProblem, solver.execute()
+// punem in solver o problema si executam un anumit cod, extind solver-ul abstract, in care o sa am mai multi solveri cu algoritm diferti
+//ma plimb prin studenti si cu getProject aflu solutia
+//Clasa Matching(Solution) unde cand termin alg iau din fiecare student proiectul si creeze o structura de date unde am toti stundetii pusi si
+//usor de modificat
+//Clasa Adresa, obiectul Persoana are referinta la o clasa tip adresa
+//pachete: pachet Model (Persoana,Student,Profesor,Proiect), pachet Control(Solver) (alg. pentru rez problemei)
+/*
+    Legat de algoritm:
+    S1;1,2,3
+S2:1,2,3
+s3:1,2
+
+S[1].setPref(p[1],p[2],p[3])
+L[1]=s2,s3,s1
+c[l[1]]=2;
+ */

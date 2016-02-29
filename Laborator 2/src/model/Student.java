@@ -37,8 +37,8 @@ public class Student extends Person {
     }
 
     public Project getFirstAvailablePreference() {
-        if (projectIndex < projectPreferences.size()-1){
-            return projectPreferences.get(++projectIndex);
+        if (projectIndex < projectPreferences.size()){
+            return projectPreferences.get(projectIndex++);
         }
         else return null;
     }
