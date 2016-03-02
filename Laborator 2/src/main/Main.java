@@ -1,16 +1,17 @@
 package main;
 
-import java.io.*;
-import java.util.ArrayList;
 import control.*;
-import model.*;
 
 /**
- *
+ * Application that solves the Student-Project allocation problem
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Main {
 
+    /**
+     * Main function where we create a problem and attach it to a solver
+     * @param args 
+     */
     public static void main(String[] args) {
         
         Main app = new Main();

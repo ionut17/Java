@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.*;
 
 /**
- *
+ * Creates the solution by getting the student list with the assigned projects
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Matching {

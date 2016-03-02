@@ -13,7 +13,7 @@ public class Student extends Person {
     private int projectIndex = 0;
 
     /**
-     * Checks if the student has any preferences
+     * Checks if the student has an allocated project
      *
      * @return true or false
      */
@@ -36,6 +36,10 @@ public class Student extends Person {
         this.projectPreferences = projectPreferences;
     }
 
+    /**
+     * Method compares the student's available preferences and returns the most preferred one
+     * @return Project which is available
+     */
     public Project getFirstAvailablePreference() {
         if (projectIndex < projectPreferences.size()){
             return projectPreferences.get(projectIndex++);

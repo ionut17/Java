@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.*;
 
 /**
- *
+ * Solver class which solves a Problem with an algorithm
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Solver {
@@ -25,6 +25,10 @@ public class Solver {
         this.problem = problem;
     }
 
+    /**
+     * Solves the assigned problem with the current algorithm
+     * @return Matching with the student-project pairs
+     */
     public Matching solve() {
         ArrayList<Student> studentList = problem.getStudentList();
         //Parse all the students and assign them a project

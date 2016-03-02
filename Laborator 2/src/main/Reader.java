@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- *
+ * Reader that reads from a file and saves the arrays
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Reader {
@@ -17,6 +17,9 @@ public class Reader {
     private final ArrayList<Lecturer> lecturerList;
     private final ArrayList<Project> projectList;
 
+    /**
+     * Reader constructor with array initializations
+     */
     public Reader() {
         this.projectList = new ArrayList<>();
         this.lecturerList = new ArrayList<>();

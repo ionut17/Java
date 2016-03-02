@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.*;
 
 /**
- *
+ * Contains the problem's data (students, lecturers, projects)
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Problem {

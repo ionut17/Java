@@ -103,6 +103,10 @@ public class Lecturer extends Person {
         return (lect.getName().equals(this.getName()) && lect.getEmail().equals(this.getEmail()));
     }
 
+    /**
+     * Converts the lecturers student preferences into a string
+     * @return string with lecturers student preferences
+     */
     public String toStringStudentPreferences() {
         String studentString;
         StringBuilder sb = new StringBuilder();
@@ -113,7 +117,10 @@ public class Lecturer extends Person {
         return this.getName() + " : " + studentString;
     }
 
-    
+    /**
+     * Converts the lecturers projects into a string
+     * @return string with lecturers project
+     */
     public String toStringAvailableProjects() {
         String projectString;
         StringBuilder sb = new StringBuilder();

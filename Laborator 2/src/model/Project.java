@@ -13,14 +13,26 @@ public class Project {
     private Lecturer projectLecturer;
     private ArrayList<Student> acceptedStudents = new ArrayList<>();
 
+    /**
+     * Checks if the project still has open spots
+     * @return boolean true or false
+     */
     public boolean isFree() {
         return acceptedStudents.size() < projectCapacity;
     }
 
+    /**
+     * Adds a student to the project's accepted list
+     * @param stud
+     */
     public void addStudent(Student stud) {
         acceptedStudents.add(stud);
     }
 
+    /**
+     * Removes a student from the project's accepted list
+     * @param stud 
+     */
     public void removeStudent(Student stud) {
         acceptedStudents.remove(stud);
     }
