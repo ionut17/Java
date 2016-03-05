@@ -51,8 +51,6 @@ public class TextView implements LabyrinthView {
             }
             sb.append("\n");
         }
-        //Temporary
-        System.out.println(sb.toString());
         return sb.toString();
     }
 

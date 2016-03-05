@@ -17,7 +17,7 @@ public class Main {
         
         Labyrinth maze = (new LabyrinthFactory().createRandom(10,10));
         maze.setView(new TextView());
-        maze.getView().toString();
+        maze.getView().toString();        
     }
     
 }
