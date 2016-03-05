@@ -5,6 +5,7 @@ import model.*;
 
 /**
  * Solver class which solves a Problem with an algorithm
+ *
  * @author Anca Adascalitei, Ionut Iacob
  */
 public class Solver {
@@ -27,6 +28,7 @@ public class Solver {
 
     /**
      * Solves the assigned problem with the current algorithm
+     *
      * @return Matching with the student-project pairs
      */
     public Matching solve() {
@@ -41,29 +43,37 @@ public class Solver {
                 while (preference != null) {
                     //If the preference has open spots assign the project to the student
                     if (preference.isFree()) {
-                        stud.setAllocatedProject(preference);
-                        preference.addStudent(stud);
-                        break;
+                        ArrayList<Student> tempStuds = preference.getProjectLecturer().getStudentPreferences();
+                        int studIndex = tempStuds.indexOf(stud);
+                        //If the student is in the lecturer's preferences
+                        if (studIndex > -1) {
+                            stud.setAllocatedProject(preference);
+                            preference.addStudent(stud);
+                            break;
+                        }
                     } else { //Search the least wanted student that got the wanted project
                         ArrayList<Student> tempStuds = preference.getProjectLecturer().getStudentPreferences();
                         int studIndex = tempStuds.indexOf(stud);
-                        int maxIndex = 0;
-                        ArrayList<Student> tempProjectStuds = preference.getAcceptedStudents();
-                        for (Student projectStudent : tempProjectStuds) {
-                            if (tempStuds.indexOf(projectStudent) > maxIndex) {
-                                maxIndex = tempStuds.indexOf(projectStudent);
+                        //If the student is in the lecturer's preferences
+                        if (studIndex > -1) {
+                            int maxIndex = 0;
+                            ArrayList<Student> tempProjectStuds = preference.getAcceptedStudents();
+                            for (Student projectStudent : tempProjectStuds) {
+                                if (tempStuds.indexOf(projectStudent) > maxIndex) {
+                                    maxIndex = tempStuds.indexOf(projectStudent);
+                                }
                             }
-                        }
-                        //If the current student is wanted more than the least wanted student that got a project, assign him the project and remove the other's project
-                        if (maxIndex > studIndex) {
-                            Student removedStudent = tempStuds.get(maxIndex);
-                            //Jump back in for to check the user's preferences again and assign another project
-                            i = studentList.indexOf(removedStudent) - 1;
-                            preference.removeStudent(removedStudent);
-                            removedStudent.setAllocatedProject(null);
-                            preference.addStudent(stud);
-                            stud.setAllocatedProject(preference);
-                            break;
+                            //If the current student is wanted more than the least wanted student that got a project, assign him the project and remove the other's project
+                            if (maxIndex > studIndex) {
+                                Student removedStudent = tempStuds.get(maxIndex);
+                                //Jump back in for to check the user's preferences again and assign another project
+                                i = studentList.indexOf(removedStudent) - 1;
+                                preference.removeStudent(removedStudent);
+                                removedStudent.setAllocatedProject(null);
+                                preference.addStudent(stud);
+                                stud.setAllocatedProject(preference);
+                                break;
+                            }
                         }
                     }
                     //If it wasn't break, it means we can't give the current student the current wanted project so we advance in the wanted project list
