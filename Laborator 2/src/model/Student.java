@@ -60,6 +60,17 @@ public class Student extends Person {
     public void setAllocatedProject(Project allocatedProject) {
         this.allocatedProject = allocatedProject;
     }
+    
+    /**
+     * Returns the student satisfaction
+     * @return double with value
+     */
+    public double getStudentSatisfaction(){
+        int index = projectPreferences.indexOf(allocatedProject);
+        int prefSize = projectPreferences.size(); 
+        double happy = (100/prefSize)*(prefSize-index);
+        return happy;
+    }
 
     /**
      * Checks if 2 students are equal
@@ -76,7 +87,7 @@ public class Student extends Person {
             return false;
         }
         Student stud = (Student) obj;
-        return (stud.getName().equals(this.getName()) && stud.getEmail().equals(this.getEmail()));
+        return ( stud.getName().equals(this.getName()) && stud.getEmail().equals(this.getEmail()) ); //&& stud.getAllocatedProject().equals(this.getAllocatedProject())
     }
 
     /**

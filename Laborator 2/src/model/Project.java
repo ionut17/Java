@@ -15,6 +15,7 @@ public class Project {
 
     /**
      * Checks if the project still has open spots
+     *
      * @return boolean true or false
      */
     public boolean isFree() {
@@ -23,6 +24,7 @@ public class Project {
 
     /**
      * Adds a student to the project's accepted list
+     *
      * @param stud
      */
     public void addStudent(Student stud) {
@@ -31,7 +33,8 @@ public class Project {
 
     /**
      * Removes a student from the project's accepted list
-     * @param stud 
+     *
+     * @param stud
      */
     public void removeStudent(Student stud) {
         acceptedStudents.remove(stud);
@@ -91,6 +94,24 @@ public class Project {
      */
     public void setProjectLecturer(Lecturer projectLecturer) {
         this.projectLecturer = projectLecturer;
+    }
+
+    /**
+     * Checks if 2 projects are equal
+     *
+     * @param obj is a project object
+     * @return boolean true or false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Project)) {
+            return false;
+        }
+        Project proj = (Project) obj;
+        return (proj.getName().equals(this.getName()) && proj.getProjectCapacity() == this.getProjectCapacity() && proj.getProjectLecturer().equals(this.getProjectLecturer()));
     }
 
 }

@@ -24,9 +24,28 @@ public class Matching {
     public void setStudentList(ArrayList<Student> studentList) {
         this.studentList = studentList;
     }
+    
+    /**
+     * Checks if 2 matchings are equal
+     *
+     * @param obj is a matching object
+     * @return boolean true or false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Matching)) {
+            return false;
+        }
+        Matching match = (Matching) obj;
+        return (match.getStudentList().equals(this.getStudentList()));
+    }
+
 
     /**
-     * Prints the table with the student and allocated project
+     * Prints the table with the student and allocated project and their satisfaction
      *
      * @return string with the solution data
      */
@@ -38,11 +57,14 @@ public class Matching {
             sb.append(stud.getName()).append("->");
             if (stud.getAllocatedProject() != null) {
                 sb.append(stud.getAllocatedProject().getName());
+                sb.append(" ").append(stud.getStudentSatisfaction());
             } else {
                 sb.append("null");
+                sb.append(" 0");
             }
-            sb.append("\n");
+            sb.append("%\n");
         }
         return sb.toString();
     }
+    
 }

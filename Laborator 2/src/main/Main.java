@@ -1,5 +1,6 @@
 package main;
 
+import control.Reader;
 import control.*;
 
 /**
@@ -25,7 +26,7 @@ public class Main {
         exampleProblem.setLecturerList(rd.getLecturerList());
         exampleProblem.setProjectList(rd.getProjectList());
         
-//        System.out.println(exampleProblem.toString());
+        System.out.println(exampleProblem.toString());
         
         Solver mySolver = new Solver();
         mySolver.setProblem(exampleProblem);
