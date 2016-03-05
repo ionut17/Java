@@ -1,4 +1,8 @@
-package laborator.pkg3;
+package main;
+
+import model.Labyrinth;
+import model.LabyrinthFactory;
+import view.TextView;
 
 /**
  *
@@ -10,7 +14,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        Labyrinth maze = (new LabyrinthFactory().createRandom(10,10));
+        maze.setView(new TextView());
+        maze.getView().toString();
     }
     
 }
