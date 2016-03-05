@@ -85,6 +85,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
      */
     public void setStartCell(Cell startCell) {
         this.startCell = startCell;
+        this.matrix[startCell.getRow()][startCell.getColumn()] = -1;
     }
 
     /**
@@ -92,6 +93,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
      */
     public void setFinishCell(Cell finishCell) {
         this.finishCell = finishCell;
+        this.matrix[finishCell.getRow()][finishCell.getColumn()] = 2;
     }
 
 }

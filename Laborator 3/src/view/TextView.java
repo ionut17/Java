@@ -38,13 +38,13 @@ public class TextView implements LabyrinthView {
                 if (labyrinth.isStartCell(i,j)) {
                     sb.append("S");
                 }
-                else if (labyrinth.isFinishCell(i,j)){
+                if (labyrinth.isFinishCell(i,j)){
                     sb.append("F");
                 }
-                else if (labyrinth.isFreeAt(i,j)){
+                if (labyrinth.isFreeAt(i,j)){
                     sb.append(" ");
                 }
-                else if (labyrinth.isWallAt(i,j)){
+                if (labyrinth.isWallAt(i,j)){
                     sb.append("*");
                 }
                 sb.append("|");
