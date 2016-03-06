@@ -15,11 +15,13 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        Labyrinth maze = (new LabyrinthFactory().createRandom(10,10));
+        Labyrinth maze = new LabyrinthFactory().createRandom(10,10);
         maze.setView(new TextView());
         maze.getView().toString();        
+        Labyrinth testMaze=new LabyrinthFactory().readFromFile("MazeExample.txt");
+        testMaze.setView(new TextView());
+        testMaze.getView().toString();
     }
-    
 }
 
 /*

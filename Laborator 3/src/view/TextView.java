@@ -50,6 +50,7 @@ public class TextView implements LabyrinthView {
                 sb.append("|");
             }
             sb.append("\n");
+            
         }
         return sb.toString();
     }

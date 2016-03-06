@@ -14,8 +14,8 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     private Cell finishCell;
     private LabyrinthView attachedViewer;
     private LabyrinthSolver attachedSolver;
-    
-    LabyrinthMatrixImpl(int rowCount, int columnCount){
+
+    LabyrinthMatrixImpl(int rowCount, int columnCount) {
         matrix = new int[rowCount][columnCount];
     }
 
@@ -58,13 +58,12 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     public boolean isFinishCell(int row, int column) {
         return (finishCell.getRow() == row && finishCell.getColumn() == column);
     }
-    
+
     @Override
     public LabyrinthView getView() {
         return this.attachedViewer;
     }
-    
-    
+
     @Override
     public void setView(LabyrinthView view) {
         this.attachedViewer = view;
@@ -75,9 +74,21 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     public void setSolver(LabyrinthSolver solver) {
         this.attachedSolver = solver;
     }
-    
-    public void setCell(int row, int column, int value){
-        matrix[row][column] = value;
+
+    public void setCell(int row, int column, int value) {
+        switch (value) {
+            case -1: {
+                Cell start = new Cell(row, column, value);
+                this.setStartCell(start);
+            }
+            case 2: {
+                Cell finish = new Cell(row, column, value);
+                this.setFinishCell(finish);
+            }
+            default: {
+                matrix[row][column] = value;
+            }
+        }
     }
 
     /**
