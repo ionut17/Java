@@ -1,5 +1,6 @@
 package model;
 
+import controller.LabyrinthObserver;
 import controller.LabyrinthSolver;
 import java.util.*;
 import view.LabyrinthView;
@@ -71,13 +72,12 @@ public class LabyrinthListImpl implements Labyrinth {
     public boolean isFinishCell(int row, int column) {
         return (finishCell.getRow() == row && finishCell.getColumn() == column);
     }
-    
+
     @Override
     public LabyrinthView getView() {
         return this.attachedViewer;
     }
-    
-    
+
     @Override
     public void setView(LabyrinthView view) {
         this.attachedViewer = view;
@@ -85,8 +85,24 @@ public class LabyrinthListImpl implements Labyrinth {
     }
 
     @Override
+    public LabyrinthSolver getSolver() {
+        return this.attachedSolver;
+    }
+
+    @Override
     public void setSolver(LabyrinthSolver solver) {
         this.attachedSolver = solver;
+        attachedSolver.setLabyrinth(this);
+    }
+    
+    @Override
+    public void setExplorerPosition(int row, int column) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Cell getExplorerPosition() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -109,7 +125,7 @@ public class LabyrinthListImpl implements Labyrinth {
      * @param cell
      */
     public void addCell(Cell cell) {
-        if (cell.getValue() == 1) list.add(cell);
+        list.add(cell);
     }
 
     /**
@@ -125,19 +141,35 @@ public class LabyrinthListImpl implements Labyrinth {
     public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
     }
-
+    
     /**
-     * @param startCell the startCell to set
+     * @param row
+     * @param column
      */
-    public void setStartCell(Cell startCell) {
-        this.startCell = startCell;
+    public void setStartCell(int row, int column) {
+        this.startCell = new Cell(row,column);
     }
 
     /**
-     * @param finishCell the finishCell to set
+     * @param row
+     * @param column
      */
-    public void setFinishCell(Cell finishCell) {
-        this.finishCell = finishCell;
+    public void setFinishCell(int row, int column) {
+        this.finishCell = new Cell(row,column);
     }
 
+    @Override
+    public void solve() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addObserver(LabyrinthObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyObservers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

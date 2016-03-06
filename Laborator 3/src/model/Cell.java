@@ -8,12 +8,10 @@ public class Cell {
 
     private int row;
     private int column;
-    private int value = 0;
 
-    Cell(int row, int column, int value) {
+    Cell(int row, int column) {
         this.row = row;
         this.column = column;
-        this.value = value;
     }
 
     /**
@@ -42,20 +40,6 @@ public class Cell {
      */
     public void setColumn(int column) {
         this.column = column;
-    }
-
-    /**
-     * @return the value
-     */
-    public int getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(int value) {
-        this.value = value;
     }
 
     @Override

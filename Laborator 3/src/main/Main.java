@@ -1,5 +1,7 @@
 package main;
 
+import controller.KeyboardSolver;
+import controller.PrintScreen;
 import model.Labyrinth;
 import model.LabyrinthFactory;
 import view.TextView;
@@ -14,13 +16,15 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        Labyrinth maze = new LabyrinthFactory().createRandom(10,10);
+
+//        Labyrinth maze = new LabyrinthFactory().createRandom(10, 10);
+//        maze.setView(new TextView());
+//        System.out.println(maze.getView().toString());
+        Labyrinth maze = new LabyrinthFactory().readFromFile("example");
         maze.setView(new TextView());
-        maze.getView().toString();        
-        Labyrinth testMaze=new LabyrinthFactory().readFromFile("MazeExample.txt");
-        testMaze.setView(new TextView());
-        testMaze.getView().toString();
+        maze.setSolver(new KeyboardSolver());
+        maze.addObserver(new PrintScreen());
+        maze.solve();
     }
 }
 
@@ -46,4 +50,4 @@ maze.solve();
 LabyrinthSolver: keyboardSolver, automatedSolver
 
 
-*/
+ */

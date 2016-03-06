@@ -22,35 +22,36 @@ public class LabyrinthFactory {
             }
             //Generating start/finish cells truly random
             if (rand.nextInt(2) == 0) {
-                labyrinth.setStartCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), -1));
+                labyrinth.setStartCell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount));
             } else {
-                labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), -1));
+                labyrinth.setStartCell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1));
             }
             if (rand.nextInt(2) == 0) {
-                labyrinth.setFinishCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), 2));
+                labyrinth.setFinishCell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount));
             } else {
-                labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), 2));
+                labyrinth.setFinishCell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1));
             }
             return labyrinth;
         } else {
+            //Vezi implementarea prin liste, fara valori
             LabyrinthListImpl labyrinth = new LabyrinthListImpl();
             labyrinth.setRowCount(rowCount);
             labyrinth.setColumnCount(columnCount);
             for (int i = 0; i < rowCount; i++) {
                 for (int j = 0; j < columnCount; j++) {
-                    labyrinth.addCell(new Cell(i, j, rand.nextInt(2)));
+                    labyrinth.addCell(new Cell(i, j));
                 }
             }
             //Generating start/finish cells truly random
             if (rand.nextInt(2) == 0) {
-                labyrinth.setStartCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), -1));
+                labyrinth.setStartCell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount));
             } else {
-                labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), -1));
+                labyrinth.setStartCell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1));
             }
             if (rand.nextInt(2) == 0) {
-                labyrinth.setFinishCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), 2));
+                labyrinth.setFinishCell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount));
             } else {
-                labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), 2));
+                labyrinth.setFinishCell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1));
             }
             return labyrinth;
         }
@@ -75,15 +76,15 @@ public class LabyrinthFactory {
     private Labyrinth parse(String content) {
         String[] lines = content.split("\n");
         int rowCount = lines.length;
-        String[] aux = lines[0].split("\\|");
+        String[] aux = lines[0].split(" ");
         int columnCount = aux.length;
-        LabyrinthMatrixImpl labyrinth = new LabyrinthMatrixImpl(rowCount, columnCount - 1);
+        LabyrinthMatrixImpl labyrinth = new LabyrinthMatrixImpl(rowCount, columnCount);
         int i = 0;
         for (String row : content.split("\n")) {
             int j = 0;
-            for (String column : row.split("\\|")) {
-                if (j > 0 && j < columnCount) {
-                    labyrinth.setCell(i, j - 1, Integer.valueOf(column));
+            for (String column : row.split(" ")) {
+                if (j < columnCount) {
+                    labyrinth.setCell(i, j, Integer.valueOf(column));
                 }
                 j++;
             }

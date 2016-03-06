@@ -1,6 +1,9 @@
 package model;
 
+import controller.LabyrinthObserver;
 import controller.LabyrinthSolver;
+import java.util.ArrayList;
+import java.util.List;
 import view.LabyrinthView;
 
 /**
@@ -12,8 +15,10 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     private int[][] matrix;
     private Cell startCell;
     private Cell finishCell;
+    private Cell explorerPosition;
     private LabyrinthView attachedViewer;
     private LabyrinthSolver attachedSolver;
+    List<LabyrinthObserver> labyrinthObservers = new ArrayList<>();
 
     LabyrinthMatrixImpl(int rowCount, int columnCount) {
         matrix = new int[rowCount][columnCount];
@@ -71,19 +76,33 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     }
 
     @Override
+    public LabyrinthSolver getSolver() {
+        return this.attachedSolver;
+    }
+
+    @Override
     public void setSolver(LabyrinthSolver solver) {
         this.attachedSolver = solver;
+        this.attachedSolver.setLabyrinth(this);
+    }
+
+    @Override
+    public void setExplorerPosition(int row, int column) {
+        this.explorerPosition = new Cell(row, column);
+    }
+
+    @Override
+    public Cell getExplorerPosition() {
+        return this.explorerPosition;
     }
 
     public void setCell(int row, int column, int value) {
         switch (value) {
             case -1: {
-                Cell start = new Cell(row, column, value);
-                this.setStartCell(start);
+                this.setStartCell(row, column);
             }
             case 2: {
-                Cell finish = new Cell(row, column, value);
-                this.setFinishCell(finish);
+                this.setFinishCell(row, column);
             }
             default: {
                 matrix[row][column] = value;
@@ -92,19 +111,42 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     }
 
     /**
-     * @param startCell the startCell to set
+     * @param row
+     * @param column
      */
-    public void setStartCell(Cell startCell) {
-        this.startCell = startCell;
-        this.matrix[startCell.getRow()][startCell.getColumn()] = -1;
+    public void setStartCell(int row, int column) {
+        this.startCell = new Cell(row, column);
+        this.matrix[row][column] = -1;
     }
 
     /**
-     * @param finishCell the finishCell to set
+     * @param row
+     * @param column
      */
-    public void setFinishCell(Cell finishCell) {
-        this.finishCell = finishCell;
-        this.matrix[finishCell.getRow()][finishCell.getColumn()] = 2;
+    public void setFinishCell(int row, int column) {
+        this.finishCell = new Cell(row, column);
+        this.matrix[row][column] = 2;
+    }
+
+    @Override
+    public void solve() {
+        this.explorerPosition = this.startCell;
+        this.attachedSolver.nextCellToExplore(this.startCell.getRow(), this.startCell.getColumn());
+    }
+
+    @Override
+    public void addObserver(LabyrinthObserver observer) {
+        this.labyrinthObservers.add(observer);
+        observer.setAttachedLabyrinth(this);
+    }
+
+    @Override
+    public void notifyObservers() {
+//        System.out.println("Notifying...");
+        for (LabyrinthObserver observer : labyrinthObservers) {
+            observer.processCell();
+            observer.processSolution();
+        }
     }
 
 }

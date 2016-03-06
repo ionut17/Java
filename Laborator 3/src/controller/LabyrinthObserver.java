@@ -5,6 +5,8 @@
  */
 package controller;
 
+import model.Labyrinth;
+
 /**
  *
  * @author Ionut
@@ -12,6 +14,19 @@ package controller;
 public interface LabyrinthObserver {
     
     void processCell();
+    
     void processSolution();
+    
+    /**
+     * Get attached observer labyrinth
+     * @return Labyrinth
+     */
+    public Labyrinth getAttachedLabyrinth();
+    
+    /**
+     * Set attached observer labyrinth
+     * @param attachedLabyrinth
+     */
+    public void setAttachedLabyrinth(Labyrinth attachedLabyrinth);
     
 }
