@@ -5,11 +5,12 @@ package model;
  * @author Ionut
  */
 public class Cell {
+
     private int row;
     private int column;
     private int value = 0;
-    
-    Cell(int row, int column, int value){
+
+    Cell(int row, int column, int value) {
         this.row = row;
         this.column = column;
         this.value = value;
@@ -56,5 +57,17 @@ public class Cell {
     public void setValue(int value) {
         this.value = value;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Cell)) {
+            return false;
+        }
+        Cell cell = (Cell) obj;
+        return (cell.row == row && cell.column == column);
+    }
+
 }
