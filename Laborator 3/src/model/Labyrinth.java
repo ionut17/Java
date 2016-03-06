@@ -1,13 +1,14 @@
 package model;
 
 import controller.LabyrinthSolver;
+import java.util.Observable;
 import view.LabyrinthView;
 
 /**
  *
  * @author Ionut
  */
-public interface Labyrinth {
+public interface Labyrinth{
 
     int getRowCount();
 

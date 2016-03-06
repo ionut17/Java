@@ -20,8 +20,17 @@ public class LabyrinthFactory {
                     labyrinth.setCell(i, j, rand.nextInt(2));
                 }
             }
-            labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(columnCount), -1));
-            labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(columnCount), 2));
+            //Generating start/finish cells truly random
+            if (rand.nextInt(2) == 0) {
+                labyrinth.setStartCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), -1));
+            } else {
+                labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), -1));
+            }
+            if (rand.nextInt(2) == 0) {
+                labyrinth.setFinishCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), 2));
+            } else {
+                labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), 2));
+            }
             return labyrinth;
         } else {
             LabyrinthListImpl labyrinth = new LabyrinthListImpl();
@@ -32,8 +41,17 @@ public class LabyrinthFactory {
                     labyrinth.addCell(new Cell(i, j, rand.nextInt(2)));
                 }
             }
-            labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(columnCount), -1));
-            labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(columnCount), 2));
+            //Generating start/finish cells truly random
+            if (rand.nextInt(2) == 0) {
+                labyrinth.setStartCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), -1));
+            } else {
+                labyrinth.setStartCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), -1));
+            }
+            if (rand.nextInt(2) == 0) {
+                labyrinth.setFinishCell(new Cell(rand.nextInt(2) * (rowCount - 1), rand.nextInt(columnCount), 2));
+            } else {
+                labyrinth.setFinishCell(new Cell(rand.nextInt(rowCount), rand.nextInt(2) * (columnCount - 1), 2));
+            }
             return labyrinth;
         }
     }

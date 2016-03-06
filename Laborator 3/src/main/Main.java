@@ -17,7 +17,7 @@ public class Main {
         
         Labyrinth maze = new LabyrinthFactory().createRandom(10,10);
         maze.setView(new TextView());
-      //  maze.getView().toString();
+        maze.getView().toString();        
         Labyrinth testMaze=new LabyrinthFactory().readFromFile("MazeExample.txt");
         testMaze.setView(new TextView());
         testMaze.getView().toString();
