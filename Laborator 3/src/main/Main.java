@@ -1,10 +1,8 @@
 package main;
 
-import controller.KeyboardSolver;
-import controller.PrintScreen;
-import model.Labyrinth;
-import model.LabyrinthFactory;
-import view.TextView;
+import controller.*;
+import model.*;
+import view.*;
 
 /**
  *
@@ -20,13 +18,16 @@ public class Main {
 //        Labyrinth maze = new LabyrinthFactory().createRandom(10, 10);
 //        maze.setView(new TextView());
 //        System.out.println(maze.getView().toString());
-        Labyrinth maze = new LabyrinthFactory().readFromFile("example");
+        Labyrinth maze = new LabyrinthFactory().readFromFile("example3");
         maze.setView(new TextView());
+//        maze.setSolver(new AutomatedSolver());
         maze.setSolver(new KeyboardSolver());
         maze.addObserver(new PrintScreen());
         maze.solve();
     }
 }
+
+/*Keyboard solver: addPath, store solutions*/
 
 /*
 

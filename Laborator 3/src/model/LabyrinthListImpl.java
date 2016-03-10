@@ -7,7 +7,7 @@ import view.LabyrinthView;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class LabyrinthListImpl implements Labyrinth {
 
@@ -18,7 +18,11 @@ public class LabyrinthListImpl implements Labyrinth {
     private Cell finishCell;
     private LabyrinthView attachedViewer;
     private LabyrinthSolver attachedSolver;
+    List<Cell> path = new ArrayList<>();
 
+    /**
+     * Labyrinth List Implementation Constructor
+     */
     public LabyrinthListImpl() {
         this.list = new ArrayList<>();
     }
@@ -171,5 +175,16 @@ public class LabyrinthListImpl implements Labyrinth {
     @Override
     public void notifyObservers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void addPath(int row, int column){
+        path.add(new Cell(row,column));
+    }
+            
+    
+    @Override
+    public List<Cell> getPath(){
+        return path;
     }
 }

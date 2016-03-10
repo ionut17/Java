@@ -7,10 +7,16 @@ import java.util.Random;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class LabyrinthFactory {
 
+    /**
+     * Makes a random set size labyrinth with start and finish on the edges
+     * @param rowCount
+     * @param columnCount
+     * @return Labyrinth
+     */
     public Labyrinth createRandom(int rowCount, int columnCount) {
         Random rand = new Random();
         if (rowCount < 100 && columnCount < 100) {
@@ -57,6 +63,11 @@ public class LabyrinthFactory {
         }
     }
 
+    /**
+     * Read from file a labyrinth, parse it and return an object
+     * @param fileName
+     * @return Labyrinth object
+     */
     public Labyrinth readFromFile(String fileName) {
         String content = null;
         File file = new File(fileName);
@@ -73,6 +84,11 @@ public class LabyrinthFactory {
         return parse(content);
     }
 
+    /**
+     * Parse method to save the data read from file to an object
+     * @param content
+     * @return Labyrinth object
+     */
     private Labyrinth parse(String content) {
         String[] lines = content.split("\n");
         int rowCount = lines.length;

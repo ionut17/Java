@@ -5,7 +5,7 @@ import model.Labyrinth;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class TextView implements LabyrinthView {
 
@@ -25,10 +25,6 @@ public class TextView implements LabyrinthView {
         this.labyrinth = labyrinth;
     }
 
-    public void printLabyrinth() {
-        System.out.println(labyrinth.toString());
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -36,7 +32,7 @@ public class TextView implements LabyrinthView {
         for (int i = 0; i < labyrinth.getRowCount(); i++) {
             sb.append("|");
             for (int j = 0; j < labyrinth.getColumnCount(); j++) {
-                if (explorer.getRow() == i && explorer.getColumn() == j) {
+                if (explorer!=null && explorer.getRow() == i && explorer.getColumn() == j) {
                     sb.append("E");
                 } else {
                     if (labyrinth.isStartCell(i, j)) {
@@ -46,7 +42,11 @@ public class TextView implements LabyrinthView {
                         sb.append("F");
                     }
                     if (labyrinth.isFreeAt(i, j)) {
-                        sb.append(" ");
+                        if (labyrinth.getPath().indexOf(new Cell(i, j)) >= 0) {
+                            sb.append("X");
+                        } else {
+                            sb.append(" ");
+                        }
                     }
                     if (labyrinth.isWallAt(i, j)) {
                         sb.append("*");

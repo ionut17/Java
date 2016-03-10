@@ -29,6 +29,7 @@ public class KeyboardSolver implements LabyrinthSolver {
             labyrinth.notifyObservers();
         } else {
 //            System.out.format("Current position: %d|%d\n", row, column);
+            labyrinth.addPath(row, column);
             labyrinth.notifyObservers();
             System.out.print("Enter command: ");
             char direction = sc.next().charAt(0);
@@ -85,6 +86,12 @@ public class KeyboardSolver implements LabyrinthSolver {
                     break;
             }
         }
+    }
+
+    @Override
+    public void solve() {
+        labyrinth.setExplorerPosition(labyrinth.getStartCell().getRow(),labyrinth.getStartCell().getColumn());
+        nextCellToExplore(this.labyrinth.getStartCell().getRow(), this.labyrinth.getStartCell().getColumn());
     }
 
 }

@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
-import java.awt.AWTException;
-import java.awt.Robot;
 import model.Labyrinth;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class PrintScreen implements LabyrinthObserver {
 
@@ -19,7 +12,7 @@ public class PrintScreen implements LabyrinthObserver {
 
     @Override
     public void processCell() {
-        System.out.format("\n");
+        System.out.println();
         System.out.println(attachedLabyrinth.getView().toString());
     }
 

@@ -4,7 +4,7 @@ import model.Labyrinth;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public interface LabyrinthView {
 

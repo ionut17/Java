@@ -4,7 +4,7 @@ import model.*;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public interface LabyrinthSolver {
     
@@ -24,5 +24,10 @@ public interface LabyrinthSolver {
      * @param column
      */
     public void nextCellToExplore(int row, int column);
+    
+    /**
+     * Solver method which solves the labyrinth
+     */
+    public void solve();
     
 }

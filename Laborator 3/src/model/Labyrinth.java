@@ -2,6 +2,7 @@ package model;
 
 import controller.LabyrinthObserver;
 import controller.LabyrinthSolver;
+import java.util.List;
 import view.LabyrinthView;
 
 /**
@@ -80,6 +81,19 @@ public interface Labyrinth {
      * @return Cell
      */
     Cell getExplorerPosition();
+    
+    /**
+     * Add cell to the path
+     * @param row
+     * @param column
+     */
+    void addPath(int row, int column);
+    
+    /**
+     * Get a list of cells which construct the path
+     * @return Cell
+     */
+    List<Cell> getPath();
     
     /**
      * Get the labyrinth attached viewer

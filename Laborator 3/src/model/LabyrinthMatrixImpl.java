@@ -8,17 +8,18 @@ import view.LabyrinthView;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class LabyrinthMatrixImpl implements Labyrinth {
 
-    private int[][] matrix;
+    private final int[][] matrix;
     private Cell startCell;
     private Cell finishCell;
     private Cell explorerPosition;
     private LabyrinthView attachedViewer;
     private LabyrinthSolver attachedSolver;
     List<LabyrinthObserver> labyrinthObservers = new ArrayList<>();
+    List<Cell> path = new ArrayList<>();
 
     LabyrinthMatrixImpl(int rowCount, int columnCount) {
         matrix = new int[rowCount][columnCount];
@@ -96,6 +97,12 @@ public class LabyrinthMatrixImpl implements Labyrinth {
         return this.explorerPosition;
     }
 
+    /**
+     * Sets a cell from matrix with a specific value
+     * @param row
+     * @param column
+     * @param value
+     */
     public void setCell(int row, int column, int value) {
         switch (value) {
             case -1: {
@@ -111,6 +118,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     }
 
     /**
+     * Sets start cell
      * @param row
      * @param column
      */
@@ -120,6 +128,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
     }
 
     /**
+     * Sets finish cell
      * @param row
      * @param column
      */
@@ -130,8 +139,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
 
     @Override
     public void solve() {
-        this.explorerPosition = this.startCell;
-        this.attachedSolver.nextCellToExplore(this.startCell.getRow(), this.startCell.getColumn());
+        this.attachedSolver.solve();
     }
 
     @Override
@@ -148,5 +156,17 @@ public class LabyrinthMatrixImpl implements Labyrinth {
             observer.processSolution();
         }
     }
+    
+    @Override
+    public void addPath(int row, int column){
+        path.add(new Cell(row,column));
+    }
+            
+    
+    @Override
+    public List<Cell> getPath(){
+        return path;
+    }
+    
 
 }

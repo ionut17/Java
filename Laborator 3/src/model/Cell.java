@@ -2,14 +2,19 @@ package model;
 
 /**
  *
- * @author Ionut
+ * @author Adascalitei Anca, Iacob Ionut
  */
 public class Cell {
 
     private int row;
     private int column;
 
-    Cell(int row, int column) {
+    /**
+     * Cell constructor
+     * @param row
+     * @param column
+     */
+    public Cell(int row, int column) {
         this.row = row;
         this.column = column;
     }
