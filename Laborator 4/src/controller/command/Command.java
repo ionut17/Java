@@ -1,6 +1,7 @@
 package controller.command;
 
 import controller.AudioManager;
+import view.exception.InvalidCommandException;
 
 /**
  *
@@ -35,6 +36,6 @@ public interface Command {
     /**
      * Execute the command with the given arguments
      */
-    public void execute();
+    public void execute() throws InvalidCommandException;
     
 }

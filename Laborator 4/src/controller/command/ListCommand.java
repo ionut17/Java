@@ -1,6 +1,6 @@
 package controller.command;
 
-import controller.AudioManager;
+import view.exception.InvalidCommandException;
 
 /**
  *
@@ -10,8 +10,20 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println("Listing...");
-        System.out.println("args count: " + args.length);
+        if (args.length > 1) {
+            throw new InvalidCommandException("list: too many arguments");
+        }
+        String[] paths;
+
+        try {
+            for (String path : attachedAudioManager.getCurrentDirectory().toFile().list()) {
+                // prints filename and directory name
+                if (path.matches("(.*)\\.(mp3|flac|wav)")) System.out.println(path);
+            }
+        } catch (Exception e) {
+            // if any error occurs
+            e.printStackTrace();
+        }
     }
 
 }

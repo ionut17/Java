@@ -1,5 +1,7 @@
 package view;
 
+import controller.AudioManager;
+
 /**
  *
  * @author Anca Adascalitei, Ionut Iacob
@@ -7,5 +9,9 @@ package view;
 public interface ManagerObserver {
     
     public void update();
+    
+    public AudioManager getAttachedManager();
+    
+    public void setAttachedManager(AudioManager attachedManager);
     
 }

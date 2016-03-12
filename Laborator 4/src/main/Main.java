@@ -16,6 +16,11 @@ public class Main {
         spotify.start();
     }
     
+    /*
+        Check for invalid directory
+    TODO: Song class
+    */
+    
     
     /*
     Main: 2 linii de cod (instantiem, porneste aplicatia)

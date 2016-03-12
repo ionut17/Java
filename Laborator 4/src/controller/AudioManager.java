@@ -3,11 +3,11 @@ package controller;
 import view.ManagerObserver;
 import view.PrintObserver;
 import controller.command.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import view.exception.InvalidCommandException;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import view.exception.*;
 
 /**
  *
@@ -15,12 +15,14 @@ import view.exception.InvalidCommandException;
  */
 public class AudioManager {
 
-    private String currentDirectory;
+    private Path currentDirectory = Paths.get("C:\\");
     private final List<ManagerObserver> observerList = new ArrayList<>();
     private final Scanner sc = new Scanner(System.in);
 
     public AudioManager() {
-        observerList.add(new PrintObserver());
+        ManagerObserver print = new PrintObserver();
+        print.setAttachedManager(this);
+        observerList.add(print);
     }
 
     public void start() {
@@ -28,14 +30,23 @@ public class AudioManager {
         //Read commands until close
         while (ok == 1) {
             try {
-//                notifyObservers();
-                System.out.println("\nInsert command: ");
+                notifyObservers();
                 String stringCommand = readCommand();
                 Command targetCommand = parseCommand(stringCommand);
                 targetCommand.execute();
-            }
-            catch (InvalidCommandException e){
+            } catch (ExitCommandException e) {
+                System.err.println("Closing app..");
+                break;
+            } catch (InvalidCommandException e) {
                 System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println("I/O Error..");
+            }
+//            catch (Exception e){
+//                System.err.println("Something went wrong..");
+//            }
+            finally{
+                System.out.println();
             }
         }
     }
@@ -45,8 +56,12 @@ public class AudioManager {
      *
      * @return String with command
      */
-    private String readCommand() {
-        return sc.nextLine();
+    private String readCommand() throws InvalidCommandException, IOException {
+        String nextLine = sc.nextLine();
+        if (nextLine.isEmpty()) {
+            throw new InvalidCommandException("Empty command! Try again..");
+        }
+        return nextLine;
     }
 
     /**
@@ -60,10 +75,16 @@ public class AudioManager {
         String[] tokens = stringCommand.split(" ");
         switch (tokens[0]) {
             case "cd":
+                myCommand = new CdCommand();
                 break;
             case "list":
                 myCommand = new ListCommand();
                 break;
+            case "play":
+                myCommand = new PlayCommand();
+                break;
+            case "close":
+                throw new ExitCommandException();
             default:
                 throw new InvalidCommandException("Invalid command! Try again..");
         }
@@ -75,14 +96,14 @@ public class AudioManager {
     /**
      * @return the currentDirectory
      */
-    public String getCurrentDirectory() {
+    public Path getCurrentDirectory() {
         return currentDirectory;
     }
 
     /**
      * @param currentDirectory the currentDirectory to set
      */
-    public void setCurrentDirectory(String currentDirectory) {
+    public void setCurrentDirectory(Path currentDirectory) {
         this.currentDirectory = currentDirectory;
     }
 
@@ -91,5 +112,4 @@ public class AudioManager {
             obs.update();
         }
     }
-
 }
