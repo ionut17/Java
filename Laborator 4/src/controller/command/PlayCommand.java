@@ -24,7 +24,7 @@ public class PlayCommand extends AbstractCommand {
 //        }
 //        sb2.append(list[list.length-1]);
 //        System.out.println(sb2.toString());
-        Path path = this.parsePath();
+        Path path = this.parseArgs();
         System.out.println(path.toString());
         if(path.toFile().exists()) try {
             desktop.open(path.toFile());

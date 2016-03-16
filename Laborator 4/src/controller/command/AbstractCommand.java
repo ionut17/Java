@@ -40,14 +40,18 @@ abstract public class AbstractCommand implements Command {
         this.args = args;
     }
 
-    public Path parsePath() {
+    /**
+     * Creates a Path object from the arguments
+     * @return Path
+     */
+    public Path parseArgs() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length - 1; i++) {
             sb.append(args[i]).append(" ");
         }
         sb.append(args[args.length - 1]);
         String[] list = sb.toString().split("\\\\");
-        StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder(attachedAudioManager.getCurrentDirectory().toString()+"\\");
         for (int i = 0; i < list.length - 1; i++) {
             sb2.append(list[i]).append("\\\\");
         }
