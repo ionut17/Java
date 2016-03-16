@@ -23,7 +23,6 @@ public class InfoCommand extends AbstractCommand {
 
     @Override
     public void execute() throws InvalidCommandException, FileNotFoundException, IOException {
-        System.out.println(attachedAudioManager.getCurrentDirectory().toString()+"\\"+parseArgs().toString());
         try (InputStream input = new FileInputStream(parseArgs().toFile());) {
 
             ContentHandler handler = new DefaultHandler();
@@ -34,9 +33,9 @@ public class InfoCommand extends AbstractCommand {
             
             // List all metadata
             String[] metadataNames = metadata.names();
-            for (String name : metadataNames) {
-//                System.out.println(name + ": " + metadata.get(name));
-            }
+//            for (String name : metadataNames) {
+//              System.out.println(name + ": " + metadata.get(name));
+//            }
             System.out.println("Title: " + metadata.get("title"));
             System.out.println("Artists: " + metadata.get("xmpDM:artist"));
             System.out.println("Genre: " + metadata.get("xmpDM:genre"));

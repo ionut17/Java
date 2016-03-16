@@ -19,7 +19,7 @@ public class FindCommand extends AbstractCommand {
         for (int i = 0; i < args.length - 1; i++) {
             sb.append(args[i]).append("(.*)");
         }
-        sb.append(args[args.length - 1]).append("\\.(mp3|flac|wav)");
+        sb.append(args[args.length - 1]).append("(.*)");
         try {
             SearchFileVisitor fv= new SearchFileVisitor();
             fv.setSearch(sb.toString());
@@ -28,5 +28,6 @@ public class FindCommand extends AbstractCommand {
             // if any error occurs
             e.printStackTrace();
         }
+
     }
 }

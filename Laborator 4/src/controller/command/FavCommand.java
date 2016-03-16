@@ -9,10 +9,11 @@ import view.exception.InvalidCommandException;
 
 
 public class FavCommand extends AbstractCommand {
-
+    
+    
     @Override
     public void execute() throws InvalidCommandException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }
