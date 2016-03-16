@@ -106,6 +106,9 @@ public class AudioManager {
             case "fav": 
                 myCommand=new FavCommand();
                 break;
+            case "report":
+                myCommand = new ReportCommand();
+                break;
             case "close":
                 throw new ExitCommandException();
             default:
