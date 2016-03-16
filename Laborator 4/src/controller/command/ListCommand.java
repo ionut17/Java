@@ -12,9 +12,6 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-//        if (args.length > 1) {
-//            throw new InvalidCommandException("list: too many arguments");
-//        }
         String[] targetPath;
         if (args.length == 0) {
             targetPath = attachedAudioManager.getCurrentDirectory().toFile().list();
@@ -23,7 +20,6 @@ public class ListCommand extends AbstractCommand {
             System.out.println(myPath.toString());
             targetPath = myPath.toFile().list();
         }
-
         try {
             for (String path : targetPath) {
                 // prints filename and directory name

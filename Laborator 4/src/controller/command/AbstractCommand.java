@@ -40,6 +40,10 @@ abstract public class AbstractCommand implements Command {
         this.args = args;
     }
 
+    /**
+     * Creates a Path object from the arguments
+     * @return Path
+     */
     public Path parseArgs() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length - 1; i++) {

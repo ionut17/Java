@@ -3,6 +3,7 @@ package controller;
 import view.ManagerObserver;
 import view.PrintObserver;
 import controller.command.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,12 +40,13 @@ public class AudioManager {
                 break;
             } catch (InvalidCommandException e) {
                 System.err.println(e.getMessage());
+            } catch (FileNotFoundException e) {
+                System.err.println("File not found..");
             } catch (IOException e) {
                 System.err.println("I/O Error..");
-            } //            catch (Exception e){
-            //                System.err.println("Something went wrong..");
-            //            }
-            finally {
+            } catch (Exception e) {
+                System.err.println("Something went wrong..");
+            } finally {
                 System.out.println();
             }
         }
@@ -81,6 +83,9 @@ public class AudioManager {
                 break;
             case "play":
                 myCommand = new PlayCommand();
+                break;
+            case "info":
+                myCommand = new InfoCommand();
                 break;
             case "find":
                 myCommand = new FindCommand();

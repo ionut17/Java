@@ -36,6 +36,6 @@ public interface Command {
     /**
      * Execute the command with the given arguments
      */
-    public void execute() throws InvalidCommandException;
+    public void execute() throws Exception;
     
 }
