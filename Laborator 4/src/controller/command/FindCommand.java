@@ -1,8 +1,12 @@
 package controller.command;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 import view.exception.InvalidCommandException;
 
 /**
@@ -12,7 +16,7 @@ import view.exception.InvalidCommandException;
 public class FindCommand extends AbstractCommand {
 
     @Override
-    public void execute() throws InvalidCommandException {
+    public void execute() throws InvalidCommandException, FileNotFoundException, IOException, SAXException, TikaException  {
         String[] targetPath;
         targetPath = attachedAudioManager.getCurrentDirectory().toFile().list();
         StringBuilder sb = new StringBuilder("(.*)");

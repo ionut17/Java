@@ -5,6 +5,7 @@ import view.PrintObserver;
 import controller.command.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -18,7 +19,7 @@ import view.exception.*;
  */
 public class AudioManager {
 
-    private Path currentDirectory = Paths.get("C:\\");
+    private Path currentDirectory = Paths.get("D:\\Dropbox\\Music");
     private final List<ManagerObserver> observerList = new ArrayList<>();
     private final Scanner sc = new Scanner(System.in);
 
@@ -48,6 +49,9 @@ public class AudioManager {
                 System.err.println("I/O Error..");
             } catch (SAXException | TikaException e){
                 System.err.println("SAX|Tika Error..");
+            }
+            catch (InvalidPathException | NullPointerException e){
+                System.err.println("Invalid path..");
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -98,6 +102,9 @@ public class AudioManager {
                 break;
             case "help":
                 myCommand = new HelpCommand();
+                break;
+            case "fav": 
+                myCommand=new FavCommand();
                 break;
             case "close":
                 throw new ExitCommandException();

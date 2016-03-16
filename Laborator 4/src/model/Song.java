@@ -1,9 +1,13 @@
 package model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.tika.exception.TikaException;
@@ -20,9 +24,13 @@ import view.exception.InvalidCommandException;
  *
  * @author Anca Adascalitei, Ionut Iacob
  */
-public class Song {
+public class Song implements Serializable {
 
     private Path songPath;
+    private String songName;
+    public Song() {
+
+    }
 
     public Song(String path) {
         songPath = Paths.get(path);
@@ -37,7 +45,7 @@ public class Song {
         parser.parse(input, handler, metadata, parseCtx);
         return metadata;
     }
-    
+
     public void printMetadata() throws InvalidCommandException, IOException, FileNotFoundException, SAXException, TikaException {
         Metadata metadata = this.getMetadata();
         // List all metadata
@@ -61,4 +69,25 @@ public class Song {
         this.songPath = songPath;
     }
 
+    public boolean isValid(Path p) {
+        if (Files.exists(p) == false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * @return the songName
+     */
+    public String getSongName() {
+        return songName;
+    }
+
+    /**
+     * @param songName the songName to set
+     */
+    public void setSongName(String songName) {
+        this.songName = songName;
+    }
 }
