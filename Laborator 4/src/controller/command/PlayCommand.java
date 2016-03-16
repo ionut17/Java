@@ -3,8 +3,6 @@ package controller.command;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import view.exception.InvalidCommandException;
 
 /**
@@ -14,7 +12,7 @@ import view.exception.InvalidCommandException;
 public class PlayCommand extends AbstractCommand {
 
     @Override
-    public void execute() throws InvalidCommandException {
+    public void execute() throws InvalidCommandException, IOException {
         Desktop desktop = Desktop.getDesktop();
         
 //        String[] list = str.split("\\\\");
@@ -25,10 +23,8 @@ public class PlayCommand extends AbstractCommand {
 //        sb2.append(list[list.length-1]);
 //        System.out.println(sb2.toString());
         Path path = this.parseArgs();
-        if(path.toFile().exists()) try {
+        if(path.toFile().exists()) {
             desktop.open(path.toFile());
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
         else {
             throw new InvalidCommandException("File doesn't exist!");

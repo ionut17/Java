@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 import view.exception.*;
 
 /**
@@ -44,7 +46,11 @@ public class AudioManager {
                 System.err.println("File not found..");
             } catch (IOException e) {
                 System.err.println("I/O Error..");
-            } catch (Exception e) {
+            } catch (SAXException | TikaException e){
+                System.err.println("SAX|Tika Error..");
+            }
+            catch (Exception e) {
+                e.printStackTrace();
                 System.err.println("Something went wrong..");
             } finally {
                 System.out.println();
@@ -89,6 +95,9 @@ public class AudioManager {
                 break;
             case "find":
                 myCommand = new FindCommand();
+                break;
+            case "help":
+                myCommand = new HelpCommand();
                 break;
             case "close":
                 throw new ExitCommandException();
