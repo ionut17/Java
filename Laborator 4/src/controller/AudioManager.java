@@ -99,6 +99,9 @@ public class AudioManager {
             case "help":
                 myCommand = new HelpCommand();
                 break;
+            case "report":
+                myCommand = new ReportCommand();
+                break;
             case "close":
                 throw new ExitCommandException();
             default:
