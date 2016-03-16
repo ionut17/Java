@@ -1,7 +1,6 @@
 package controller.command;
 
 import controller.AudioManager;
-import view.exception.InvalidCommandException;
 
 /**
  *
