@@ -25,7 +25,7 @@ public class SearchFileVisitor extends SimpleFileVisitor<Path> {
             System.out.println(file.toString());
         }
         Song currentSong = new Song();
-        currentSong.setSongPath(file);
+        currentSong.setSongPath(file.toString());
         try{ 
             Metadata metadata = currentSong.getMetadata();
             String[] metadataNames = metadata.names();

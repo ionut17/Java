@@ -26,18 +26,18 @@ import view.exception.InvalidCommandException;
  */
 public class Song implements Serializable {
 
-    private Path songPath;
+    private String songPath;
     private String songName;
     public Song() {
 
     }
 
     public Song(String path) {
-        songPath = Paths.get(path);
+        songPath = path;
     }
 
     public Metadata getMetadata() throws InvalidCommandException, FileNotFoundException, IOException, SAXException, TikaException {
-        InputStream input = new FileInputStream(songPath.toFile());
+        InputStream input = new FileInputStream(Paths.get(songPath).toFile());
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
         Parser parser = new Mp3Parser();
@@ -58,14 +58,14 @@ public class Song implements Serializable {
     /**
      * @return the songPath
      */
-    public Path getSongPath() {
+    public String getSongPath() {
         return songPath;
     }
 
     /**
      * @param songPath the songPath to set
      */
-    public void setSongPath(Path songPath) {
+    public void setSongPath(String songPath) {
         this.songPath = songPath;
     }
 

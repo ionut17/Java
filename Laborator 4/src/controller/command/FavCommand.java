@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import model.Song;
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
@@ -19,12 +20,12 @@ public class FavCommand extends AbstractCommand {
     @Override
     public void execute() throws InvalidCommandException, FileNotFoundException, IOException, SAXException, TikaException{
         Song addedSong = new Song();
-        addedSong.setSongPath(parseArgs());
+        addedSong.setSongPath(parseArgs().toString());
         if (addedSong.isValid(this.parseArgs()) == true) {
             try {
-                FileOutputStream fileOut = new FileOutputStream("/favorites.ser");
+                FileOutputStream fileOut = new FileOutputStream("favorites.ser");
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                addedSong.setSongName(addedSong.getSongPath().getFileName().toString());
+                addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
                 out.writeObject(addedSong);
                 out.close();
                 fileOut.close();

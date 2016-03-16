@@ -33,12 +33,12 @@ public class ReportCommand extends AbstractCommand {
 
         // Build the data-model
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("user", "Ionut");
+        data.put("user", "Anca, Ionut");
 
         //Deserialization
         Song[] songSer = null;
 
-        FileInputStream fileIn = new FileInputStream("/favorites.ser");
+        FileInputStream fileIn = new FileInputStream("favorites.ser");
         ObjectInputStream in = new ObjectInputStream(fileIn);
         songSer = (Song[]) in.readObject();
         in.close();
