@@ -41,11 +41,10 @@ public class AudioManager {
                 System.err.println(e.getMessage());
             } catch (IOException e) {
                 System.err.println("I/O Error..");
-            }
-//            catch (Exception e){
-//                System.err.println("Something went wrong..");
-//            }
-            finally{
+            } //            catch (Exception e){
+            //                System.err.println("Something went wrong..");
+            //            }
+            finally {
                 System.out.println();
             }
         }
@@ -82,6 +81,9 @@ public class AudioManager {
                 break;
             case "play":
                 myCommand = new PlayCommand();
+                break;
+            case "find":
+                myCommand = new FindCommand();
                 break;
             case "close":
                 throw new ExitCommandException();
