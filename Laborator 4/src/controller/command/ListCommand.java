@@ -19,7 +19,7 @@ public class ListCommand extends AbstractCommand {
         if (args.length == 0) {
             targetPath = attachedAudioManager.getCurrentDirectory().toFile().list();
         } else {
-            Path myPath = this.parsePath();
+            Path myPath = this.parseArgs();
             System.out.println(myPath.toString());
             targetPath = myPath.toFile().list();
         }
