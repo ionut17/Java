@@ -28,7 +28,6 @@ public class FavCommand extends AbstractCommand {
                 out.writeObject(addedSong);
                 out.close();
                 fileOut.close();
-                System.out.printf("Serialized data is saved in favorites.ser");
             } catch (IOException i) {
                 i.printStackTrace();
             }
