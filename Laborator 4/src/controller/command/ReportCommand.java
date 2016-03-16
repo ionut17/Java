@@ -9,20 +9,22 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.Song;
 
 public class ReportCommand extends AbstractCommand {
 
     @Override
-    public void execute() throws IOException, FileNotFoundException, TemplateException {
+    public void execute() throws IOException, FileNotFoundException, TemplateException, ClassNotFoundException {
         //Freemarker configuration object
         Configuration cfg = new Configuration();
 
@@ -33,12 +35,20 @@ public class ReportCommand extends AbstractCommand {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("user", "Ionut");
 
+        //Deserialization
+        Song[] songSer = null;
+
+        FileInputStream fileIn = new FileInputStream("/favorites.ser");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        songSer = (Song[]) in.readObject();
+        in.close();
+        fileIn.close();
+
         //List parsing 
         List<String> songs = new ArrayList<String>();
-        songs.add("Aerosmith - Dream on");
-        songs.add("The Police - Roxanne");
-        songs.add("Led Zeppelin - Black Dog");
-        songs.add("Red Hot Chili Peppers - Dani California");
+        for (Song s : songSer) {
+            songs.add(s.getSongName());
+        }
 
         data.put("songs", songs);
 
