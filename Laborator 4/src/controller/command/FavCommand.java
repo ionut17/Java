@@ -22,7 +22,7 @@ public class FavCommand extends AbstractCommand {
         addedSong.setSongPath(parseArgs());
         if (addedSong.isValid(this.parseArgs()) == true) {
             try {
-                FileOutputStream fileOut = new FileOutputStream("/favorites.ser");
+                FileOutputStream fileOut = new FileOutputStream("favorites.ser");
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
                 addedSong.setSongName(addedSong.getSongPath().getFileName().toString());
                 out.writeObject(addedSong);

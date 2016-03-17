@@ -38,7 +38,7 @@ public class ReportCommand extends AbstractCommand {
         //Deserialization
         Song[] songSer = null;
 
-        FileInputStream fileIn = new FileInputStream("/favorites.ser");
+        FileInputStream fileIn = new FileInputStream("favorites.ser");
         ObjectInputStream in = new ObjectInputStream(fileIn);
         songSer = (Song[]) in.readObject();
         in.close();

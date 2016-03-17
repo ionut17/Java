@@ -19,7 +19,10 @@ public class Main {
     /*
         Check for invalid directory
     TODO: Song class
+        verificare play - doar muzica
     */
+    
+    //Play: merge global (cale absoluta sau locala)
     
     
     /*
