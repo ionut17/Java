@@ -47,6 +47,7 @@ public class AudioManager {
                 System.err.println("File not found..");
             } catch (IOException e) {
                 System.err.println("I/O Error..");
+                e.printStackTrace();
             } catch (SAXException | TikaException e){
                 System.err.println("SAX|Tika Error..");
             }

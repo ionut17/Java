@@ -8,6 +8,7 @@ package controller.command;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +38,11 @@ public class ReportCommand extends AbstractCommand {
         data.put("user", "Anca, Ionut");
 
         //Deserialization
-        Song[] songSer = null;
+        List<Song> songSer = null;
 
         FileInputStream fileIn = new FileInputStream("favorites.ser");
         ObjectInputStream in = new ObjectInputStream(fileIn);
-        songSer = (Song[]) in.readObject();
+        songSer = (List<Song>) in.readObject();
         in.close();
         fileIn.close();
 
@@ -57,11 +59,19 @@ public class ReportCommand extends AbstractCommand {
 //            template.process(data, out);
 //            out.flush();
         // File output
-        Writer file = new FileWriter(new File(System.getProperty("user.dir") + "\\report.html"));
+        File outputFile = new File(System.getProperty("user.dir") + "\\report.html");
+        
+        Writer file = new FileWriter(outputFile);
         template.process(data, file);
         file.flush();
         file.close();
         System.out.println("Report file report.html created sucessfully..");
+        Desktop desktop = Desktop.getDesktop();
+        
+        if (outputFile.exists()) {
+            desktop.open(outputFile);
+        }
+                
     }
 
 }
