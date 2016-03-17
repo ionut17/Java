@@ -52,6 +52,7 @@ public class AudioManager {
             }
             catch (InvalidPathException | NullPointerException e){
                 System.err.println("Invalid path..");
+//                e.printStackTrace();
             }
             catch (Exception e) {
                 e.printStackTrace();
