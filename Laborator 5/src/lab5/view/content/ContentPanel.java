@@ -1,11 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab5.view.content;
 
+import java.awt.GridLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 
@@ -16,11 +14,21 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 public class ContentPanel extends JPanel{
     
     public ContentPanel(int width){
-        JPanel treePanel = new TreePanel();
-        JPanel detailPanel = new DetailPanel();
+        //Make content panel
+        //TreePane
+        JScrollPane treePanel = new JScrollPane();
+        JPanel p = new JPanel();
+        p.add(new JButton("Chestie"));
+        treePanel.getViewport().add(p);
+
+        //DetailPanel
+        DetailPanel detailPanel = new DetailPanel();
         
-        JSplitPane contentPanel = new JSplitPane(HORIZONTAL_SPLIT,treePanel,detailPanel);
-        contentPanel.setDividerLocation(width/4);
+        //Make the content panel
+        JSplitPane splitPanel = new JSplitPane(HORIZONTAL_SPLIT, treePanel, detailPanel);
+        splitPanel.setDividerLocation(width/3);
+        add(splitPanel);
+        setLayout(new GridLayout());
     }
     
 }
