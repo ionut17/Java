@@ -5,8 +5,13 @@
  */
 package lab5.view.content;
 
-import javax.swing.JButton;
+import java.awt.CardLayout;
+import java.util.List;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.ListModel;
+import lab4.controller.command.ListCommand;
 
 /**
  *
@@ -14,8 +19,33 @@ import javax.swing.JPanel;
  */
 public class DetailPanel extends JPanel {
 
+    List<String> content;
+
+    public void updateContent(String path) {
+        ListCommand list = new ListCommand();
+        String[] s = new String[1];
+        s[0] = path;
+        list.setArgs(s);
+        try {
+            list.execute();
+            content = list.getResults();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public DetailPanel() {
-        add(new JButton("Stop"));
+        if (content != null) {
+            System.out.println("Fired");
+            StringBuilder sb = new StringBuilder();
+            for (String s : content) {
+                sb.append(s).append("\n");
+            }
+
+            JTextArea text = new JTextArea(sb.toString());
+        }
+
+        setLayout(new CardLayout());
     }
 
 }

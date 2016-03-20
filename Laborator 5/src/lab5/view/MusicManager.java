@@ -10,7 +10,7 @@ public class MusicManager {
     static final int C_HEIGHT  = 800;
 
     public MusicManager() {
-        MainFrame container = new MainFrame(C_WIDTH, C_HEIGHT);
+        MainFrame container = new MainFrame(C_WIDTH,C_HEIGHT);
     }
 
 }
