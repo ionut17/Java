@@ -1,8 +1,19 @@
-package controller;
+package lab4.controller;
 
-import view.ManagerObserver;
-import view.PrintObserver;
-import controller.command.*;
+import lab4.view.exception.InvalidCommandException;
+import lab4.view.exception.ExitCommandException;
+import lab4.controller.command.Command;
+import lab4.controller.command.ReportCommand;
+import lab4.controller.command.FavCommand;
+import lab4.controller.command.CdCommand;
+import lab4.controller.command.InfoCommand;
+import lab4.controller.command.ListCommand;
+import lab4.controller.command.HelpCommand;
+import lab4.controller.command.FindCommand;
+import lab4.controller.command.PlayCommand;
+import lab4.controller.command.RmFavCommand;
+import lab4.view.ManagerObserver;
+import lab4.view.PrintObserver;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
@@ -11,7 +22,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
-import view.exception.*;
 
 /**
  *
@@ -47,7 +57,6 @@ public class AudioManager {
                 System.err.println("File not found..");
             } catch (IOException e) {
                 System.err.println("I/O Error..");
-                e.printStackTrace();
             } catch (SAXException | TikaException e){
                 System.err.println("SAX|Tika Error..");
             }
@@ -110,6 +119,9 @@ public class AudioManager {
                 break;
             case "report":
                 myCommand = new ReportCommand();
+                break;
+            case "rmfav":
+                myCommand = new RmFavCommand();
                 break;
             case "close":
                 throw new ExitCommandException();

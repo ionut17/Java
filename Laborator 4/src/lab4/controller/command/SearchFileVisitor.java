@@ -1,11 +1,11 @@
-package controller.command;
+package lab4.controller.command;
 
 import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import model.Song;
+import lab4.model.Song;
 import org.apache.tika.metadata.Metadata;
 
 /**

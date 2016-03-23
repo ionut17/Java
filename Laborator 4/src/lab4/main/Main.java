@@ -1,6 +1,6 @@
-package main;
+package lab4.main;
 
-import controller.AudioManager;
+import lab4.controller.AudioManager;
 
 /**
  *
@@ -16,14 +16,14 @@ public class Main {
         spotify.start();
     }
     
-    /*
-        Check for invalid directory
-    TODO: Song class
-        verificare play - doar muzica
-    */
-    
-    //Play: merge global (cale absoluta sau locala)
-    
+    //majoritatea comenzilor merg cu path relativ si absolut
+    //Find: dupa nume si dupa metadata (am folosit Apache Tika)
+    //Play: merge global (cale absoluta sau locala) (doar pt muzica)
+    //Fav: Serializare in fisier si deserializare melodie favorita
+    //Rmfav: sterge din fisierul de serializare melodia favorita
+    //Clasa Song cu un path si metadata
+    //Help command - afiseaza toate comenzile disponibile
+    //Report (face un raport dupa datele serializate) (am folosit Freemarker)
     
     /*
     Main: 2 linii de cod (instantiem, porneste aplicatia)

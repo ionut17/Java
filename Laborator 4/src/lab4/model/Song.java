@@ -1,4 +1,4 @@
-package model;
+package lab4.model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import org.apache.tika.parser.mp3.Mp3Parser;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 /**
  *

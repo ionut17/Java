@@ -1,9 +1,9 @@
-package controller.command;
+package lab4.controller.command;
 
 import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Path;
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 /**
  *

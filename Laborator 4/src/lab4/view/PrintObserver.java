@@ -1,6 +1,6 @@
-package view;
+package lab4.view;
 
-import controller.AudioManager;
+import lab4.controller.AudioManager;
 
 public class PrintObserver implements ManagerObserver {
     

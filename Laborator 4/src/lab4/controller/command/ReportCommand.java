@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.command;
+package lab4.controller.command;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import model.Song;
+import lab4.model.Song;
 
 public class ReportCommand extends AbstractCommand {
 
@@ -34,7 +34,7 @@ public class ReportCommand extends AbstractCommand {
         Template template = cfg.getTemplate("src/favorites.ftl");
 
         // Build the data-model
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("user", "Anca, Ionut");
 
         //Deserialization
@@ -66,8 +66,8 @@ public class ReportCommand extends AbstractCommand {
         file.flush();
         file.close();
         System.out.println("Report file report.html created sucessfully..");
+        //Open the report
         Desktop desktop = Desktop.getDesktop();
-        
         if (outputFile.exists()) {
             desktop.open(outputFile);
         }

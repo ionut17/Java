@@ -1,6 +1,6 @@
-package controller.command;
+package lab4.controller.command;
 
-import controller.AudioManager;
+import lab4.controller.AudioManager;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

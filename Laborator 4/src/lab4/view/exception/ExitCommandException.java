@@ -1,4 +1,4 @@
-package view.exception;
+package lab4.view.exception;
 
 /**
  *

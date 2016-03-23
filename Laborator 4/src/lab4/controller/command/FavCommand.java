@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.command;
+package lab4.controller.command;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,10 +15,10 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import model.Song;
+import lab4.model.Song;
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 public class FavCommand extends AbstractCommand {
 

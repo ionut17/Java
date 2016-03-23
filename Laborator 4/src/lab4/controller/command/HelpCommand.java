@@ -1,6 +1,6 @@
-package controller.command;
+package lab4.controller.command;
 
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 /**
  *
@@ -18,6 +18,7 @@ public class HelpCommand extends AbstractCommand {
             System.out.println("info: display the metadata of a specific file: songname, artist, album, year, etc");
             System.out.println("find: search for a song having a particular name, or artist, or album. etc");
             System.out.println("fav: add a specific file to the favorites list");
+            System.out.println("rmfav: removes a specific file from the favorites list");
             System.out.println("report: create a report containing the favorite songs");
             System.out.println("close: close the application");
             System.out.println("help: get info about commands");

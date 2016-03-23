@@ -1,12 +1,12 @@
-package controller.command;
+package lab4.controller.command;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import model.Song;
+import lab4.model.Song;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.xml.sax.SAXException;
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 /**
  *

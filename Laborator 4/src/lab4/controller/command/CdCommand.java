@@ -1,8 +1,8 @@
-package controller.command;
+package lab4.controller.command;
 
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import view.exception.InvalidCommandException;
+import lab4.view.exception.InvalidCommandException;
 
 /**
  *
@@ -15,9 +15,18 @@ public class CdCommand extends AbstractCommand {
         if (args.length == 0) {
             throw new InvalidCommandException("cd: not enough arguments");
         }
-        Path currentPath = parseArgs();
+        Path currentPath;
+        //Go back to parent folder
+        if (args.length == 1 && "..".equals(args[0])){
+            currentPath = attachedAudioManager.getCurrentDirectory().getParent();
+        }
+        //Go to specified folder
+        else {
+            currentPath = parseArgs();
+        }
+        //Set the new path
         if (currentPath.toFile().isDirectory()) {
-//            System.out.println(currentPath.toString());
+            System.out.println(currentPath.toString());
             attachedAudioManager.setCurrentDirectory(currentPath);
         }
         else {
