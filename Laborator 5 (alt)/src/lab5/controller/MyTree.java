@@ -1,7 +1,8 @@
 package lab5.controller;
 
 import java.io.File;
-import javax.swing.JPanel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -30,7 +31,11 @@ public class MyTree extends JTree {
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                target.setContent(e.getPath().toString());
+//                System.out.println(e.getPath().toString());
+                String[] splitedStrings = e.getPath().toString().split(", ");
+                String pathString = splitedStrings[splitedStrings.length-1];
+                Path path = Paths.get(pathString.substring(0,pathString.length()-1));
+                target.setLocation(path.toFile());
             }
         });
     }
