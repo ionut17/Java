@@ -1,12 +1,7 @@
 package lab5.controller;
 
 import java.awt.Desktop;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,23 +9,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
 import java.nio.file.Path;
 import javax.swing.JMenuItem;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import lab5.controller.content.DetailsPanel;
 import lab5.model.Song;
 
@@ -65,6 +58,7 @@ public class MyTree extends JTree {
 
         JPopupMenu menu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem(new AbstractAction("Open") {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Desktop desktop = Desktop.getDesktop();
                 Path path = target.currentLocation.toPath();
@@ -79,53 +73,88 @@ public class MyTree extends JTree {
         }
         );
         JMenuItem menuItem2 = new JMenuItem(new AbstractAction("Add to favorites") {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (target.currentLocation.toString().matches("(.*)\\.(mp3|flac|wav)")) {
-                Song addedSong = new Song(target.currentLocation.toString());
+                    Song addedSong = new Song(target.currentLocation.toString());
 
-                List<Song> songSer = new ArrayList<>();
+                    List<Song> songSer = new ArrayList<>();
 
-                File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
-                if (f.exists() == true && f.length() > 0) {
+                    File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
+                    if (f.exists() == true && f.length() > 0) {
 
-                    try {
-                        FileInputStream fileIn;
-                        fileIn = new FileInputStream("favorites.ser");
-                        ObjectInputStream in;
-                        in = new ObjectInputStream(fileIn);
-                        songSer = (List<Song>) in.readObject();
-                        in.close();
-                        fileIn.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            FileInputStream fileIn;
+                            fileIn = new FileInputStream("favorites.ser");
+                            ObjectInputStream in;
+                            in = new ObjectInputStream(fileIn);
+                            songSer = (List<Song>) in.readObject();
+                            in.close();
+                            fileIn.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                     }
 
+                    if (addedSong.isValid(target.currentLocation.toPath()) == true) {
+                        addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
+                        songSer.add(addedSong);
+                        try {
+                            FileOutputStream fileOut;
+                            fileOut = new FileOutputStream("favorites.ser");
+                            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                            out.writeObject(songSer);
+                            out.close();
+                            fileOut.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
-
-                if (addedSong.isValid(target.currentLocation.toPath()) == true) {
-                    addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
-                    songSer.add(addedSong);
-                    try {
-                        FileOutputStream fileOut;
-                        fileOut = new FileOutputStream("favorites.ser");
-                        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                        out.writeObject(songSer);
-                        out.close();
-                        fileOut.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } 
-            }}
+            }
         });
+
+        JMenuItem menuItem3 = new JMenuItem(new AbstractAction("Search Google") {
+            public void actionPerformed(ActionEvent e) {
+                FunnyCrawler obj = new FunnyCrawler();
+                String[] name = target.currentLocation.toString().split("\\\\");
+                String[] split = name[name.length - 1].split(" ");
+                String toSearch = new String();
+                int count = 0;
+                for (String s : split) {
+                    if (count < split.length - 1) {
+                        toSearch = toSearch + s + '+';
+                    }
+                    count++;
+                }
+                toSearch = toSearch + split[split.length - 1];
+                Set<String> result = obj.getDataFromGoogle(toSearch);
+                int openWindows = 0;
+                for (String temp : result) {
+                    openWindows++;
+                    if (openWindows < 7) {
+                        try {
+                            Desktop.getDesktop().browse(new URI(temp));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+                System.out.println(result.size());
+            }
+        }
+        );
+
         menu.add(menuItem1);
         menu.add(menuItem2);
+        menu.add(menuItem3);
         this.setComponentPopupMenu(menu);
     }
 
