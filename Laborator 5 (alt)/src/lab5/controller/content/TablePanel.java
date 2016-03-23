@@ -34,22 +34,27 @@ class TablePanel extends JTable {
     }
 
     public void updateTable() {
-        String[] nameList = parent.currentLocation.list(musicFilter);
-        String[][] musicList = new String[nameList.length][4];
-        //Adding filenames
-        for (int i = 0; i < nameList.length; i++) {
-            musicList[i][0] = nameList[i];
-            Song mySong = new Song(new File(parent.currentLocation, nameList[i]).toString());
-            //Adding metadata
-            DefaultListModel listModel = new DefaultListModel();
-            try {
-                Metadata metadata = mySong.getMetadata();
-                musicList[i][2] = metadata.get("xmpDM:artist");
-                musicList[i][1] = metadata.get("title");
-                musicList[i][3] = metadata.get("xmpDM:genre");
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        String[][] musicList;
+        if (parent.currentLocation.list(musicFilter) != null) {
+            String[] nameList = parent.currentLocation.list(musicFilter);
+            musicList = new String[nameList.length][4];
+            //Adding filenames
+            for (int i = 0; i < nameList.length; i++) {
+                musicList[i][0] = nameList[i];
+                Song mySong = new Song(new File(parent.currentLocation, nameList[i]).toString());
+                //Adding metadata
+                DefaultListModel listModel = new DefaultListModel();
+                try {
+                    Metadata metadata = mySong.getMetadata();
+                    musicList[i][2] = metadata.get("xmpDM:artist");
+                    musicList[i][1] = metadata.get("title");
+                    musicList[i][3] = metadata.get("xmpDM:genre");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+        } else {
+            musicList = new String[0][4];
         }
         //Column names
         String[] colNames = {"Filename", "Artist", "Title", "Genre"};

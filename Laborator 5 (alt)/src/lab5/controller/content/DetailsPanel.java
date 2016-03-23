@@ -35,19 +35,15 @@ public class DetailsPanel extends JPanel {
         currentLocation = target;
         update();
     }
-    
-    
 
     private void update() {
         CardLayout cl = (CardLayout) (this.getLayout());
-        if (currentLocation.isDirectory()) {
-            tablePanel.updateTable();
-            cl.show(this, TABLEPANEL);
-        } else if (currentLocation.isFile()) {
+        if (currentLocation.isFile()) {
             listPanel.updateList();
             cl.show(this, LISTPANEL);
         } else {
-            cl.show(this, EMPTYPANEL);
+            tablePanel.updateTable();
+            cl.show(this, TABLEPANEL);
         }
     }
 

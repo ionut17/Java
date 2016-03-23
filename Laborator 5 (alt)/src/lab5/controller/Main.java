@@ -21,6 +21,7 @@ public class Main {
     attach handler to exit button
     favorites things
     organize code to mvc
+    make xml/contextual menu
 */
 
 
