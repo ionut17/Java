@@ -1,5 +1,8 @@
 package lab5.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  *
  * @author Ionut
@@ -9,7 +12,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
         MainFrame spotify = new MainFrame(1000,800);
     }
     

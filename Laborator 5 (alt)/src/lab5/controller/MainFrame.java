@@ -1,6 +1,8 @@
 package lab5.controller;
 
 import java.awt.BorderLayout;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,14 +23,15 @@ public class MainFrame extends JFrame {
 
     //Top panel
     DetailsPanel detailsPanel = new DetailsPanel();
-    JScrollPane treeView = new JScrollPane(new MyTree(detailsPanel), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    JScrollPane treeView;
     JSplitPane contentPanel = new JSplitPane(HORIZONTAL_SPLIT, treeView, detailsPanel);
 
     //Bottom panel
     JPanel toolsPanel = new ToolsPanel();
 
-    public MainFrame(int width, int height) {
+    public MainFrame(int width, int height) throws IOException, FileNotFoundException, ClassNotFoundException {
         super("AudioManager");
+        this.treeView = new JScrollPane(new MyTree(detailsPanel), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setSize(width, height);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

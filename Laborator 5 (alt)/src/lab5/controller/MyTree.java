@@ -58,9 +58,9 @@ public class MyTree extends JTree {
             in.close();
             fileIn.close();
         }
-        for(Song s:songSer){
-            Path aux=Paths.get(s.getSongPath());
-           favorites.add(new DefaultMutableTreeNode(aux.toFile()));
+        for (Song s : songSer) {
+            Path aux = Paths.get(s.getSongPath());
+            favorites.add(new DefaultMutableTreeNode(aux.toFile()));
         }
         rooter.add(favorites);
         rooter.add(computer);
@@ -176,18 +176,28 @@ public class MyTree extends JTree {
         JMenuItem menuItem4 = new JMenuItem(new AbstractAction("Get XML") {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Song s=new Song();
+                    Song s = new Song();
                     s.setSongPath(target.currentLocation.toString());
-                    String[] split=target.currentLocation.toString().split("\\\\");
-                    s.setSongName(split[split.length-1]);
+                    String[] split = target.currentLocation.toString().split("\\\\");
+                    s.setSongName(split[split.length - 1]);
                     File file = new File("D:\\Dropbox\\FavoriteSongs.xml");
                     JAXBContext jaxbContext = JAXBContext.newInstance(Song.class);
                     Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
                     // output pretty printed
                     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    jaxbMarshaller.marshal(s, file);  
+                    jaxbMarshaller.marshal(s, file);
                     jaxbMarshaller.marshal(s, System.out);
+                    Desktop desktop = Desktop.getDesktop();
+
+                    Path path = file.toPath();
+                    if (path.toFile().exists()) {
+                        try {
+                            desktop.open(path.toFile());
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 } catch (JAXBException ex) {
                     Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -203,6 +213,7 @@ public class MyTree extends JTree {
     }
 
     @Override
+
     public String convertValueToText(Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus
     ) {
         if (value instanceof File) {
