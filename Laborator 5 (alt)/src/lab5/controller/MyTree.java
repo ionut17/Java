@@ -192,7 +192,7 @@ public class MyTree extends JTree {
                     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                     jaxbMarshaller.marshal(s, file);
                     jaxbMarshaller.marshal(s, System.out);
-                } catch (JAXBException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
