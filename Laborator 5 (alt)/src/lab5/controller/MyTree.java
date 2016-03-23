@@ -180,18 +180,36 @@ public class MyTree extends JTree {
         JMenuItem menuItem4 = new JMenuItem(new AbstractAction("Get XML") {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Song s = new Song();
-                    s.setSongPath(target.currentLocation.toString());
-                    String[] split = target.currentLocation.toString().split("\\\\");
-                    s.setSongName(split[split.length - 1]);
+                     List<Song> songSer = new ArrayList<>();
+
+                    File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
+                    if (f.exists() == true && f.length() > 0) {
+
+                        try {
+                            FileInputStream fileIn;
+                            fileIn = new FileInputStream("favorites.ser");
+                            ObjectInputStream in;
+                            in = new ObjectInputStream(fileIn);
+                            songSer = (List<Song>) in.readObject();
+                            in.close();
+                            fileIn.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
                     File file = new File("D:\\Dropbox\\FavoriteSongs.xml");
                     JAXBContext jaxbContext = JAXBContext.newInstance(Song.class);
                     Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
                     // output pretty printed
                     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    jaxbMarshaller.marshal(s, file);
-                    jaxbMarshaller.marshal(s, System.out);
+                    jaxbMarshaller.marshal(songSer, file);
+                    jaxbMarshaller.marshal(songSer, System.out);
+                    
                     Desktop desktop = Desktop.getDesktop();
 
                     Path path = file.toPath();
@@ -202,9 +220,13 @@ public class MyTree extends JTree {
                             Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    
+                    }
+                } catch (JAXBException ex) {
                     Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+           
         }
         );
         //Spotify integration :D
