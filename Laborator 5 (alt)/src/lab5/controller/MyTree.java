@@ -23,11 +23,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -71,6 +74,11 @@ public class MyTree extends JTree {
 
         setModel(new FileTreeModel(rooter));
         setRootVisible(false);
+        Icon leafIcon = new ImageIcon("src/music_icon.gif");
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.getCellRenderer();
+        renderer.setLeafIcon(leafIcon);
+
+        //Selection listener
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -230,22 +238,27 @@ public class MyTree extends JTree {
         }
         );
         //Spotify integration :D
-//        Api api = Api.DEFAULT_API;
+        Api api = Api.DEFAULT_API;
         JMenuItem menuItem5 = new JMenuItem(new AbstractAction("Open with Spotify") {
             public void actionPerformed(ActionEvent e) {
-//                if (target.currentLocation.isFile()) {
-//                    String songName = target.currentLocation.toString();
-//                    songName.replaceAll("-","");
-//                    
-//                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
-//
-//                    try {
-//                        final Page<Track> trackSearchResult = request.get();
+//                System.out.println("Spotify api fired..");
+                if (target.currentLocation.isFile()) {
+                    String songNameSource = target.currentLocation.getName();
+                    String songName = songNameSource.substring(0, songNameSource.lastIndexOf('.'));
+                    songName = songName.replaceAll("-", " ");
+//                    System.out.println(songName);
+
+                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
+
+                    try {
+                        final Page<Track> trackSearchResult = request.get();
+                        String link = trackSearchResult.getItems().get(0).getUri();
+                        Desktop.getDesktop().browse(new URI(link));
 //                        System.out.println("I got " + trackSearchResult.getTotal() + " results!");
-//                    } catch (Exception ex) {
-//                        System.out.println("Something went wrong!" + ex.getMessage());
-//                    }
-//                }
+                    } catch (Exception ex) {
+                        System.out.println("Something went wrong!" + ex.getMessage());
+                    }
+                }
             }
         }
         );
