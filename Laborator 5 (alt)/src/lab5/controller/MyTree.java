@@ -1,54 +1,51 @@
 package lab5.controller;
 
 import java.io.File;
+import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import lab5.controller.content.DetailsPanel;
 
 /**
  *
  * @author Ionut
  */
 public class MyTree extends JTree {
+    
+    DetailsPanel target;
 
-    public MyTree() {
+    public MyTree(DetailsPanel details) {
+        target = details;
         File rootPath = new File("C:\\");
         
-//        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("FileSystem");
-//        DefaultMutableTreeNode parent;
-//        File [] roots = File.listRoots();
-//        parent = new DefaultMutableTreeNode(roots);
-//        rooter.add(parent);
-//        
+        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("FileSystem");
+        File[] roots = File.listRoots();
+        for (int i = 0; i < roots.length; i++) {
+            rooter.add(new DefaultMutableTreeNode(roots[i]));
+        }
 
-        setModel(new FileTreeModel(rootPath));
-
-//        File[] roots = File.listRoots();
-//        System.out.println("Root directories in your system are:");
-//        for (int i = 0; i < roots.length; i++) {
-//            System.out.println(roots[i].toString());
-//        }
-
-//        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-//        final FileTreeModel myTreeModel = new FileTreeModel(rootPath);
-//        setModel(myTreeModel);
-
-//        DefaultMutableTreeNode node = new DefaultMutableTreeNode(new DefaultMutableTreeNode(rootPath));
-//        root.add(node);
-
-//        for (File file : rootPath.listFiles()) {
-//            if (file.isDirectory()) {
-//                node.add(new DefaultMutableTreeNode(new DefaultMutableTreeNode(file)));
-//            }
-//        }
-
+        setModel(new FileTreeModel(rooter));
+        this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                target.setContent(e.getPath().toString());
+            }
+        });
     }
 
     @Override
     public String convertValueToText(Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         if (value instanceof File) {
-            return ((File) value).getName();
+            if ( !"".equals(((File)value).getName()) ){
+                return ((File) value).getName();
+            }
+            else {
+                return ((File) value).getAbsolutePath();
+            }
         } else {
-            return "root";
+            return "My Computer";
         }
     }
 

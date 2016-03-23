@@ -10,7 +10,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MainFrame spotify = new MainFrame(800,600);
+        MainFrame spotify = new MainFrame(1000,800);
     }
     
 }

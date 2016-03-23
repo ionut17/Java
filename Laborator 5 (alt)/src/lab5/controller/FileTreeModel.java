@@ -3,7 +3,9 @@ package lab5.controller;
 import java.io.File;
 import java.io.FilenameFilter;
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 /**
@@ -12,16 +14,16 @@ import javax.swing.tree.TreePath;
  */
 public class FileTreeModel implements TreeModel {
 
-    File root;
+    DefaultMutableTreeNode root;
 
     FilenameFilter musicFilter = new FilenameFilter() {
         public boolean accept(File dir, String name) {
             String lowercaseName = name.toLowerCase();
-            return lowercaseName.endsWith(".mp3") || lowercaseName.endsWith(".wav") || lowercaseName.endsWith(".flac");
+            return lowercaseName.endsWith(".mp3") || lowercaseName.endsWith(".wav") || lowercaseName.endsWith(".flac") || new File(dir,name).isDirectory();
         }
     };
 
-    public FileTreeModel(File root) {
+    public FileTreeModel(DefaultMutableTreeNode root) {
         this.root = root;
     }
 
@@ -32,26 +34,39 @@ public class FileTreeModel implements TreeModel {
 
     @Override
     public Object getChild(Object parent, int i) {
-        String[] childs = ((File) parent).list();
-        if (childs == null || i >= childs.length) {
-            return null;
+        if (parent instanceof File) {
+            String[] childs = ((File) parent).list(musicFilter);
+            if (childs == null || i >= childs.length) {
+                return null;
+            }
+            return new File((File) parent, childs[i]);
+        } else {
+            return new File(((DefaultMutableTreeNode) parent).getChildAt(i).toString());
         }
-        return new File((File) parent, childs[i]);
     }
 
     @Override
-    public int getChildCount(Object o) {
-        String[] childs = ((File) o).list();
-        if (childs == null) {
-            return 0;
+    public int getChildCount(Object parent) {
+        if (parent instanceof File) {
+            String[] childs = ((File) parent).list(musicFilter);
+            if (childs == null) {
+                return 0;
+            }
+            return childs.length;
+        } else {
+            return ((DefaultMutableTreeNode) parent).getChildCount();
         }
-        return childs.length;
     }
 
     @Override
-    public boolean isLeaf(Object o) {
+    public boolean isLeaf(Object node) {
 //        return ((File) o).isFile() && ((File) o).toString().matches(".*\\.[mp3|wav|flac]");
-        return ((File) o).isFile();
+        if (node instanceof File) {
+            return ((File) node).isFile();
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
@@ -60,16 +75,21 @@ public class FileTreeModel implements TreeModel {
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
-        String[] childs = ((File) parent).list();
-        if (childs == null) {
+        if (parent instanceof File) {
+            String[] childs = ((File) parent).list(musicFilter);
+            if (childs == null) {
+                return -1;
+            }
+            for (int index = 0; index < childs.length; index++) {
+                if (childs[index].equals(((File) child).getName())) {
+                    return index;
+                }
+            }
             return -1;
         }
-        for (int index = 0; index < childs.length; index++) {
-            if (childs[index].equals(((File) child).getName())) {
-                return index;
-            }
+        else {
+            return ((DefaultMutableTreeNode) parent).getIndex((TreeNode) child);
         }
-        return -1;
     }
 
     @Override
