@@ -25,7 +25,7 @@ public class MainFrame extends JFrame {
     JSplitPane contentPanel = new JSplitPane(HORIZONTAL_SPLIT, treeView, detailsPanel);
 
     //Bottom panel
-    JPanel toolsPanel = new JPanel();
+    JPanel toolsPanel = new ToolsPanel();
 
     public MainFrame(int width, int height) {
         super("AudioManager");
@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
         
 
         //Building ToolsPanel
-        toolsPanel.add(new JButton("Exit"), BorderLayout.EAST);
+//        toolsPanel.add(new JButton("Exit"), BorderLayout.EAST);
 
         //Main Frame
         add(contentPanel, BorderLayout.CENTER);
