@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.nio.file.Path;
 import javax.swing.JMenuItem;
+import java.nio.file.Paths;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -41,7 +42,11 @@ public class MyTree extends JTree {
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                target.setContent(e.getPath().toString());
+//                System.out.println(e.getPath().toString());
+                String[] splitedStrings = e.getPath().toString().split(", ");
+                String pathString = splitedStrings[splitedStrings.length-1];
+                Path path = Paths.get(pathString.substring(0,pathString.length()-1));
+                target.setLocation(path.toFile());
             }
         });
 
