@@ -14,3 +14,11 @@ public class Main {
     }
     
 }
+
+
+/*
+    http://geosoft.no/software/filesystem/FileSystemModel.java.html
+    http://stackoverflow.com/questions/15149565/how-does-jtree-display-file-name
+    http://www.codejava.net/java-se/swing/jtree-basic-tutorial-and-examples
+    https://docs.oracle.com/javase/tutorial/uiswing/components/tree.html
+*/

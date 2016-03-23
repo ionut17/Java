@@ -12,28 +12,44 @@ public class MyTree extends JTree {
 
     public MyTree() {
         File rootPath = new File("C:\\");
+        
+//        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("FileSystem");
+//        DefaultMutableTreeNode parent;
+//        File [] roots = File.listRoots();
+//        parent = new DefaultMutableTreeNode(roots);
+//        rooter.add(parent);
+//        
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        final FileTreeModel myTreeModel = new FileTreeModel(rootPath);
-        setModel(myTreeModel);
+        setModel(new FileTreeModel(rootPath));
 
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode(new DefaultMutableTreeNode(rootPath));
-        root.add(node);
+//        File[] roots = File.listRoots();
+//        System.out.println("Root directories in your system are:");
+//        for (int i = 0; i < roots.length; i++) {
+//            System.out.println(roots[i].toString());
+//        }
 
-        for (File file : rootPath.listFiles()) {
-            if (file.isDirectory()) {
-                node.add(new DefaultMutableTreeNode(new DefaultMutableTreeNode(file)));
-            }
-        }
+//        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+//        final FileTreeModel myTreeModel = new FileTreeModel(rootPath);
+//        setModel(myTreeModel);
+
+//        DefaultMutableTreeNode node = new DefaultMutableTreeNode(new DefaultMutableTreeNode(rootPath));
+//        root.add(node);
+
+//        for (File file : rootPath.listFiles()) {
+//            if (file.isDirectory()) {
+//                node.add(new DefaultMutableTreeNode(new DefaultMutableTreeNode(file)));
+//            }
+//        }
 
     }
 
     @Override
     public String convertValueToText(Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;//get node from the value object
-        System.err.println(node.getUserObject());
-        File nodeObject = (File) node.getUserObject();// get your File object wrapped by this node
-        return nodeObject.getName();
+        if (value instanceof File) {
+            return ((File) value).getName();
+        } else {
+            return "root";
+        }
     }
 
 }
