@@ -24,7 +24,6 @@ public class MainFrame extends JFrame {
     //Top panel
     DetailsPanel detailsPanel = new DetailsPanel();
     JScrollPane treeView;
-    JSplitPane contentPanel = new JSplitPane(HORIZONTAL_SPLIT, treeView, detailsPanel);
 
     //Bottom panel
     JPanel toolsPanel = new ToolsPanel();
@@ -35,19 +34,22 @@ public class MainFrame extends JFrame {
         setSize(width, height);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
-        //Adding elements to other frames
-        //Building treePanel
-        contentPanel.setDividerLocation(width / 3);
 
-        //Building detailsPanel
-        
+        //Building elements
+        try {
+            JScrollPane treeView = new JScrollPane(new MyTree(detailsPanel), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            JSplitPane contentPanel = new JSplitPane(HORIZONTAL_SPLIT, treeView, detailsPanel);
+            //Adding elements to other frames
+            //Building treePanel
+            contentPanel.setDividerLocation(width / 3);
 
-        //Building ToolsPanel
-//        toolsPanel.add(new JButton("Exit"), BorderLayout.EAST);
-
-        //Main Frame
-        add(contentPanel, BorderLayout.CENTER);
+            //Building detailsPanel
+            //Building ToolsPanel
+            //Main Frame
+            add(contentPanel, BorderLayout.CENTER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         add(toolsPanel, BorderLayout.SOUTH);
         setVisible(true);
     }

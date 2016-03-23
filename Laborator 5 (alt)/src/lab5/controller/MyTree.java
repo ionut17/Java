@@ -1,5 +1,9 @@
 package lab5.controller;
 
+import com.wrapper.spotify.Api;
+import com.wrapper.spotify.methods.TrackSearchRequest;
+import com.wrapper.spotify.models.Page;
+import com.wrapper.spotify.models.Track;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -198,14 +202,35 @@ public class MyTree extends JTree {
                             Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                } catch (JAXBException ex) {
                     Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
         );
+        //Spotify integration :D
+//        Api api = Api.DEFAULT_API;
+        JMenuItem menuItem5 = new JMenuItem(new AbstractAction("Open with Spotify") {
+            public void actionPerformed(ActionEvent e) {
+//                if (target.currentLocation.isFile()) {
+//                    String songName = target.currentLocation.toString();
+//                    songName.replaceAll("-","");
+//                    
+//                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
+//
+//                    try {
+//                        final Page<Track> trackSearchResult = request.get();
+//                        System.out.println("I got " + trackSearchResult.getTotal() + " results!");
+//                    } catch (Exception ex) {
+//                        System.out.println("Something went wrong!" + ex.getMessage());
+//                    }
+//                }
+            }
+        }
+        );
 
+        //Adding items to pop-up menu
         menu.add(menuItem1);
+        menu.add(menuItem5);
         menu.add(menuItem2);
         menu.add(menuItem3);
         menu.add(menuItem4);
