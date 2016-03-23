@@ -28,7 +28,7 @@ class TablePanel extends JTable {
     public TablePanel(DetailsPanel source) {
         parent = source;
         setLayout(new BorderLayout());
-
+        myTable.setEnabled(false);
         add(myTable.getTableHeader(), BorderLayout.PAGE_START);
         add(myTable, BorderLayout.CENTER);
     }
