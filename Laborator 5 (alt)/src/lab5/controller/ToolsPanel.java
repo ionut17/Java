@@ -22,7 +22,7 @@ class ToolsPanel extends JPanel {
     public ToolsPanel() {
         this.setLayout(new BorderLayout());
         commandLine = new JTextArea(5, 70);
-//        commandLine.setBackground(Color.black);
+        commandLine.setBackground(new Color(222,222,222));
         this.add(commandLine,BorderLayout.CENTER);
         this.add(new JButton("Exit"),BorderLayout.EAST);
 //        AudioManager spotify = new AudioManager();

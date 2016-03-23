@@ -42,7 +42,10 @@ public class FileTreeModel implements TreeModel {
                 return null;
             }
             return new File((File) parent, childs[i]);
-        } else {
+        } else if (parent==root){
+            return ((DefaultMutableTreeNode) parent).getChildAt(i);
+        }
+        else {
             return new File(((DefaultMutableTreeNode) parent).getChildAt(i).toString());
         }
     }

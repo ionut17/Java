@@ -15,6 +15,14 @@ public class Main {
     
 }
 
+/*
+    iconite la melodii
+    command parser bottom
+    attach handler to exit button
+    favorites things
+    organize code to mvc
+*/
+
 
 /*
     http://geosoft.no/software/filesystem/FileSystemModel.java.html

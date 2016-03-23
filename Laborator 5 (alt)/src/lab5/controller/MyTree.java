@@ -38,13 +38,18 @@ public class MyTree extends JTree {
     public MyTree(DetailsPanel details) {
         target = details;
 
-        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("FileSystem");
+        DefaultMutableTreeNode rooter =  new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode favorites =  new DefaultMutableTreeNode("Favorites");
+        DefaultMutableTreeNode computer = new DefaultMutableTreeNode("My Computer");
         File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++) {
-            rooter.add(new DefaultMutableTreeNode(roots[i]));
+            computer.add(new DefaultMutableTreeNode(roots[i]));
         }
+        rooter.add(favorites);
+        rooter.add(computer);
 
         setModel(new FileTreeModel(rooter));
+        setRootVisible(false);
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -168,7 +173,7 @@ public class MyTree extends JTree {
                 return ((File) value).getAbsolutePath();
             }
         } else {
-            return "My Computer";
+            return value.toString();
         }
     }
 
