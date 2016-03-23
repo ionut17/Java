@@ -10,7 +10,6 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import lab4.controller.AudioManager;
 /**
  *
  * @author Anca

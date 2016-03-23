@@ -21,14 +21,14 @@ public class DetailsPanel extends JPanel {
     final static String LISTPANEL = "Card with JList";
     final static String EMPTYPANEL = "Card with nothing";
 
-    JTable tablePanel = new TablePanel(this);
+    TablePanel tablePanel = new TablePanel(this);
     ListPanel listPanel = new ListPanel(this);
 
     public DetailsPanel() {
         setLayout(new CardLayout());
         add(tablePanel, TABLEPANEL);
         add(listPanel, LISTPANEL);
-        add(new JLabel("No selection made"), LISTPANEL);
+        add(new JLabel("No selection made"), EMPTYPANEL);
     }
 
     public void setLocation(File target) {
@@ -38,7 +38,9 @@ public class DetailsPanel extends JPanel {
 
     private void update() {
         CardLayout cl = (CardLayout) (this.getLayout());
+        System.out.println(currentLocation.toString());
         if (currentLocation.isDirectory()) {
+            tablePanel.updateTable();
             cl.show(this, TABLEPANEL);
         } else if (currentLocation.isFile()) {
             listPanel.updateList();

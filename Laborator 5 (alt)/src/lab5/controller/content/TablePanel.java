@@ -33,10 +33,15 @@ class TablePanel extends JTable {
         add(myTable, BorderLayout.CENTER);
     }
     
-//    public void updateTable() {
-//        String[] musicList = parent.currentLocation.list(musicFilter);
-//        DefaultTableModel model = new DefaultTableModel(musicList, {"Filename"});
-//        myTable.setModel(model);
-//    }
+    public void updateTable() {
+        String[] nameList = parent.currentLocation.list(musicFilter);
+        String[][] musicList = new String[nameList.length][1];
+        for (int i=0;i<nameList.length;i++){
+            musicList[i][0] = nameList[i];
+        }
+        String[] colNames = {"File name"};
+        DefaultTableModel model = new DefaultTableModel(musicList, colNames);
+        myTable.setModel(model);
+    }
 
 }

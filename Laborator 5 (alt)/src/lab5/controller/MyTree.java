@@ -55,8 +55,8 @@ public class MyTree extends JTree {
                 KeyEvent.VK_T);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "This doesn't really do anything");
-         MouseListener popupListener = new PopupListener();
-         this.addMouseListener(popupListener);
+//         MouseListener popupListener = new PopupListener();
+//         this.addMouseListener(popupListener);
        
 //        Desktop desktop = Desktop.getDesktop();
 //        Path path = this.parseArgs();
