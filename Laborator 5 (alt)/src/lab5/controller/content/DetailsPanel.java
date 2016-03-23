@@ -35,10 +35,11 @@ public class DetailsPanel extends JPanel {
         currentLocation = target;
         update();
     }
+    
+    
 
     private void update() {
         CardLayout cl = (CardLayout) (this.getLayout());
-        System.out.println(currentLocation.toString());
         if (currentLocation.isDirectory()) {
             tablePanel.updateTable();
             cl.show(this, TABLEPANEL);
