@@ -1,5 +1,9 @@
 package lab5.controller;
 
+import com.wrapper.spotify.Api;
+import com.wrapper.spotify.methods.TrackSearchRequest;
+import com.wrapper.spotify.models.Page;
+import com.wrapper.spotify.models.Track;
 import java.awt.Desktop;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -45,8 +49,8 @@ public class MyTree extends JTree {
     public MyTree(DetailsPanel details) {
         target = details;
 
-        DefaultMutableTreeNode rooter =  new DefaultMutableTreeNode("Root");
-        DefaultMutableTreeNode favorites =  new DefaultMutableTreeNode("Favorites");
+        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode favorites = new DefaultMutableTreeNode("Favorites");
         DefaultMutableTreeNode computer = new DefaultMutableTreeNode("My Computer");
         File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++) {
@@ -86,51 +90,75 @@ public class MyTree extends JTree {
         JMenuItem menuItem2 = new JMenuItem(new AbstractAction("Add to favorites") {
             public void actionPerformed(ActionEvent e) {
                 if (target.currentLocation.toString().matches("(.*)\\.(mp3|flac|wav)")) {
-                Song addedSong = new Song(target.currentLocation.toString());
+                    Song addedSong = new Song(target.currentLocation.toString());
 
-                List<Song> songSer = new ArrayList<>();
+                    List<Song> songSer = new ArrayList<>();
 
-                File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
-                if (f.exists() == true && f.length() > 0) {
+                    File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
+                    if (f.exists() == true && f.length() > 0) {
 
-                    try {
-                        FileInputStream fileIn;
-                        fileIn = new FileInputStream("favorites.ser");
-                        ObjectInputStream in;
-                        in = new ObjectInputStream(fileIn);
-                        songSer = (List<Song>) in.readObject();
-                        in.close();
-                        fileIn.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            FileInputStream fileIn;
+                            fileIn = new FileInputStream("favorites.ser");
+                            ObjectInputStream in;
+                            in = new ObjectInputStream(fileIn);
+                            songSer = (List<Song>) in.readObject();
+                            in.close();
+                            fileIn.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                     }
 
+                    if (addedSong.isValid(target.currentLocation.toPath()) == true) {
+                        addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
+                        songSer.add(addedSong);
+                        try {
+                            FileOutputStream fileOut;
+                            fileOut = new FileOutputStream("favorites.ser");
+                            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                            out.writeObject(songSer);
+                            out.close();
+                            fileOut.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
-
-                if (addedSong.isValid(target.currentLocation.toPath()) == true) {
-                    addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
-                    songSer.add(addedSong);
-                    try {
-                        FileOutputStream fileOut;
-                        fileOut = new FileOutputStream("favorites.ser");
-                        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                        out.writeObject(songSer);
-                        out.close();
-                        fileOut.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } 
-            }}
+            }
         });
+        //Spotify integration :D
+//        Api api = Api.DEFAULT_API;
+        JMenuItem menuItem3 = new JMenuItem(new AbstractAction("Open with Spotify") {
+            public void actionPerformed(ActionEvent e) {
+//                if (target.currentLocation.isFile()) {
+//                    String songName = target.currentLocation.toString();
+//                    songName.replaceAll("-","");
+//                    
+//                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
+//
+//                    try {
+//                        final Page<Track> trackSearchResult = request.get();
+//                        System.out.println("I got " + trackSearchResult.getTotal() + " results!");
+//                    } catch (Exception ex) {
+//                        System.out.println("Something went wrong!" + ex.getMessage());
+//                    }
+//                }
+            }
+        }
+        );
+
+        //Adding items to pop-up menu
         menu.add(menuItem1);
         menu.add(menuItem2);
+        menu.add(menuItem3);
         this.setComponentPopupMenu(menu);
     }
 
