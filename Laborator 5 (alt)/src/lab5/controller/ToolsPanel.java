@@ -37,10 +37,10 @@ class ToolsPanel extends JPanel {
         this.add(commandLine,BorderLayout.CENTER);
         this.add(exit,BorderLayout.EAST);
         
-        String[] linesRead=commandLine.getText().split("\\n");
-        for(String s : linesRead){
-            System.out.println("command "+s);
-        }
+//        String[] linesRead=commandLine.getText().split("\\n");
+//        for(String s : linesRead){
+//            System.out.println("command "+s);
+//        }
     }
     
     

@@ -199,22 +199,27 @@ public class MyTree extends JTree {
         }
         );
         //Spotify integration :D
-//        Api api = Api.DEFAULT_API;
+        Api api = Api.DEFAULT_API;
         JMenuItem menuItem5 = new JMenuItem(new AbstractAction("Open with Spotify") {
             public void actionPerformed(ActionEvent e) {
-//                if (target.currentLocation.isFile()) {
-//                    String songName = target.currentLocation.toString();
-//                    songName.replaceAll("-","");
-//                    
-//                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
-//
-//                    try {
-//                        final Page<Track> trackSearchResult = request.get();
+//                System.out.println("Spotify api fired..");
+                if (target.currentLocation.isFile()) {
+                    String songNameSource = target.currentLocation.getName();
+                    String songName = songNameSource.substring(0, songNameSource.lastIndexOf('.'));
+                    songName = songName.replaceAll("-", " ");
+//                    System.out.println(songName);
+
+                    final TrackSearchRequest request = api.searchTracks(songName).market("US").build();
+
+                    try {
+                        final Page<Track> trackSearchResult = request.get();
+                        String link = trackSearchResult.getItems().get(0).getUri();
+                        Desktop.getDesktop().browse(new URI(link));
 //                        System.out.println("I got " + trackSearchResult.getTotal() + " results!");
-//                    } catch (Exception ex) {
-//                        System.out.println("Something went wrong!" + ex.getMessage());
-//                    }
-//                }
+                    } catch (Exception ex) {
+                        System.out.println("Something went wrong!" + ex.getMessage());
+                    }
+                }
             }
         }
         );
