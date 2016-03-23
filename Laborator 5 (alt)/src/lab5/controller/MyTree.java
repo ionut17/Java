@@ -24,6 +24,9 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import lab5.controller.content.DetailsPanel;
 import lab5.model.Song;
 
@@ -35,15 +38,29 @@ public class MyTree extends JTree {
 
     DetailsPanel target;
 
-    public MyTree(DetailsPanel details) {
+    public MyTree(DetailsPanel details) throws FileNotFoundException, IOException, ClassNotFoundException {
         target = details;
 
-        DefaultMutableTreeNode rooter =  new DefaultMutableTreeNode("Root");
-        DefaultMutableTreeNode favorites =  new DefaultMutableTreeNode("Favorites");
+        DefaultMutableTreeNode rooter = new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode favorites = new DefaultMutableTreeNode("Favorites");
         DefaultMutableTreeNode computer = new DefaultMutableTreeNode("My Computer");
         File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++) {
             computer.add(new DefaultMutableTreeNode(roots[i]));
+        }
+        List<Song> songSer = new ArrayList<>();
+
+        File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
+        if (f.exists() == true && f.length() > 0) {
+            FileInputStream fileIn = new FileInputStream("favorites.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            songSer = (List<Song>) in.readObject();
+            in.close();
+            fileIn.close();
+        }
+        for(Song s:songSer){
+            Path aux=Paths.get(s.getSongPath());
+           favorites.add(new DefaultMutableTreeNode(aux.toFile()));
         }
         rooter.add(favorites);
         rooter.add(computer);
@@ -156,10 +173,32 @@ public class MyTree extends JTree {
             }
         }
         );
+        JMenuItem menuItem4 = new JMenuItem(new AbstractAction("Get XML") {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Song s=new Song();
+                    s.setSongPath(target.currentLocation.toString());
+                    String[] split=target.currentLocation.toString().split("\\\\");
+                    s.setSongName(split[split.length-1]);
+                    File file = new File("D:\\Dropbox\\FavoriteSongs.xml");
+                    JAXBContext jaxbContext = JAXBContext.newInstance(Song.class);
+                    Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+                    // output pretty printed
+                    jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    jaxbMarshaller.marshal(s, file);  
+                    jaxbMarshaller.marshal(s, System.out);
+                } catch (JAXBException ex) {
+                    Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        );
 
         menu.add(menuItem1);
         menu.add(menuItem2);
         menu.add(menuItem3);
+        menu.add(menuItem4);
         this.setComponentPopupMenu(menu);
     }
 

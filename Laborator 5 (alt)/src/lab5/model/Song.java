@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -21,6 +23,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Anca Adascalitei, Ionut Iacob
  */
+@XmlRootElement
 public class Song implements Serializable {
 
     private String songPath;
@@ -62,6 +65,8 @@ public class Song implements Serializable {
     /**
      * @param songPath the songPath to set
      */
+    
+    @XmlElement
     public void setSongPath(String songPath) {
         this.songPath = songPath;
     }
@@ -84,6 +89,8 @@ public class Song implements Serializable {
     /**
      * @param songName the songName to set
      */
+    
+    @XmlElement
     public void setSongName(String songName) {
         this.songName = songName;
     }
