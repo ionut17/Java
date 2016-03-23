@@ -23,11 +23,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -71,6 +74,11 @@ public class MyTree extends JTree {
 
         setModel(new FileTreeModel(rooter));
         setRootVisible(false);
+        Icon leafIcon = new ImageIcon("src/music_icon.gif");
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.getCellRenderer();
+        renderer.setLeafIcon(leafIcon);
+
+        //Selection listener
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
