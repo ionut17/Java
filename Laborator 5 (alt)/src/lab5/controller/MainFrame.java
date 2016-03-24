@@ -40,11 +40,12 @@ public class MainFrame extends JFrame {
     JScrollPane treeView;
 
     //Bottom panel
-    JPanel toolsPanel = new ToolsPanel();
+    ToolsPanel toolsPanel = new ToolsPanel();
 
     public MainFrame(int width, int height) throws IOException, FileNotFoundException, ClassNotFoundException {
         super("AudioManager");
-        this.treeView = new JScrollPane(new MyTree(detailsPanel), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        MyTree mt=new MyTree(detailsPanel);
+        this.treeView = new JScrollPane(mt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setSize(width, height);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -123,6 +124,8 @@ public class MainFrame extends JFrame {
         }
         add(toolsPanel, BorderLayout.SOUTH);
         setVisible(true);
+        toolsPanel.setMyTree(mt);
+        toolsPanel.setDp(detailsPanel);
     }
 
 }

@@ -47,8 +47,10 @@ import org.xml.sax.SAXException;
  */
 public class MyTree extends JTree {
 
-    DetailsPanel target;
+    public DetailsPanel target;
 
+    public MyTree(){};
+    
     public MyTree(DetailsPanel details) throws FileNotFoundException, IOException, ClassNotFoundException {
         target = details;
 
@@ -229,6 +231,7 @@ public class MyTree extends JTree {
         menu.add(menuItem4);
         this.setComponentPopupMenu(menu);
     }
+
 
     @Override
 
