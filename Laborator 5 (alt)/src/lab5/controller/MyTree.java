@@ -36,6 +36,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import lab5.controller.content.DetailsPanel;
 import lab5.model.Song;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -136,7 +139,38 @@ public class MyTree extends JTree {
                     }
 
                     if (addedSong.isValid(target.currentLocation.toPath()) == true) {
-                        addedSong.setSongName(Paths.get(addedSong.getSongPath()).getFileName().toString());
+                        try {
+                            Metadata metadata;
+                            metadata = addedSong.getMetadata();
+                            // List all metadata
+                            String[] metadataNames = metadata.names();
+                            for (String name : metadataNames) {
+//                                System.out.println(name + ": " + metadata.get(name));
+                                switch (name) {
+                                    case "creator":
+                                        addedSong.setSongArtist(metadata.get(name));
+                                        break;
+                                    case "xmpDM:album":
+                                        addedSong.setSongAlbum(metadata.get(name));
+                                        break;
+                                    case "xmpDM:releaseDate":
+                                        addedSong.setSongYear(metadata.get(name));
+                                        break;
+                                    case "dc:title":
+                                        addedSong.setSongName(metadata.get(name));
+                                        break;
+                                    case "xmpDM:genre":
+                                        addedSong.setSongGenre(metadata.get(name));
+                                        break;
+                                }
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (SAXException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (TikaException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         songSer.add(addedSong);
                         try {
                             FileOutputStream fileOut;
@@ -185,10 +219,11 @@ public class MyTree extends JTree {
             }
         }
         );
-        JMenuItem menuItem4 = new JMenuItem(new AbstractAction("Get XML") {
+        JMenuItem menuItem4;
+        menuItem4 = new JMenuItem(new AbstractAction("Get XML") {
             public void actionPerformed(ActionEvent e) {
                 try {
-                     List<Song> songSer = new ArrayList<>();
+                    Favorites favorites = new Favorites();
 
                     File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
                     if (f.exists() == true && f.length() > 0) {
@@ -198,7 +233,7 @@ public class MyTree extends JTree {
                             fileIn = new FileInputStream("favorites.ser");
                             ObjectInputStream in;
                             in = new ObjectInputStream(fileIn);
-                            songSer = (List<Song>) in.readObject();
+                            favorites.setSongs((List<Song>) in.readObject());
                             in.close();
                             fileIn.close();
                         } catch (FileNotFoundException ex) {
@@ -208,33 +243,32 @@ public class MyTree extends JTree {
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                    File file = new File("D:\\Dropbox\\FavoriteSongs.xml");
-                    JAXBContext jaxbContext = JAXBContext.newInstance(Song.class);
-                    Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-                    // output pretty printed
-                    jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    jaxbMarshaller.marshal(songSer, file);
-                    jaxbMarshaller.marshal(songSer, System.out);
-                    
-                    Desktop desktop = Desktop.getDesktop();
+                        File file = new File("D:\\Dropbox\\FavoriteSongs.xml");
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Favorites.class);
+                        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-                    Path path = file.toPath();
-                    if (path.toFile().exists()) {
-                        try {
-                            desktop.open(path.toFile());
-                        } catch (IOException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        // output pretty printed
+                        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                        jaxbMarshaller.marshal(favorites, file);
+                        jaxbMarshaller.marshal(favorites, System.out);
+                        Desktop desktop = Desktop.getDesktop();
+
+                        Path path = file.toPath();
+                        if (path.toFile().exists()) {
+                            try {
+                                desktop.open(path.toFile());
+                            } catch (IOException ex) {
+                                Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    
+
                     }
                 } catch (JAXBException ex) {
                     Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-           
+
         }
         );
         //Spotify integration :D
