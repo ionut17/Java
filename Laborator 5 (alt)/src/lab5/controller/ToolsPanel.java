@@ -7,10 +7,12 @@ package lab5.controller;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 /**
  *
@@ -34,7 +36,7 @@ class ToolsPanel extends JPanel {
             }
         });
         
-        this.add(commandLine,BorderLayout.CENTER);
+        this.add(new JScrollPane(commandLine),BorderLayout.CENTER);
         this.add(exit,BorderLayout.EAST);
         
 //        String[] linesRead=commandLine.getText().split("\\n");

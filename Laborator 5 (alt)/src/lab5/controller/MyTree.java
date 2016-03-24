@@ -76,7 +76,8 @@ public class MyTree extends JTree {
         rooter.add(favorites);
         rooter.add(computer);
 
-        setModel(new FileTreeModel(rooter));
+        FileTreeModel myModel = new FileTreeModel(rooter);
+        setModel(myModel);
         setRootVisible(false);
         Icon leafIcon = new ImageIcon("src/music_icon.gif");
         DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.getCellRenderer();
@@ -110,89 +111,7 @@ public class MyTree extends JTree {
             }
         }
         );
-        JMenuItem menuItem2 = new JMenuItem(new AbstractAction("Add to favorites") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (target.currentLocation.toString().matches("(.*)\\.(mp3|flac|wav)")) {
-                    Song addedSong = new Song(target.currentLocation.toString());
-
-                    List<Song> songSer = new ArrayList<>();
-
-                    File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
-                    if (f.exists() == true && f.length() > 0) {
-
-                        try {
-                            FileInputStream fileIn;
-                            fileIn = new FileInputStream("favorites.ser");
-                            ObjectInputStream in;
-                            in = new ObjectInputStream(fileIn);
-                            songSer = (List<Song>) in.readObject();
-                            in.close();
-                            fileIn.close();
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }
-
-                    if (addedSong.isValid(target.currentLocation.toPath()) == true) {
-                        try {
-                            Metadata metadata;
-                            metadata = addedSong.getMetadata();
-                            // List all metadata
-                            String[] metadataNames = metadata.names();
-                            for (String name : metadataNames) {
-//                                System.out.println(name + ": " + metadata.get(name));
-                                switch (name) {
-                                    case "creator":
-                                        addedSong.setArtist(metadata.get(name));
-                                        break;
-                                    case "xmpDM:album":
-                                        addedSong.setAlbum(metadata.get(name));
-                                        break;
-                                    case "xmpDM:releaseDate":
-                                        addedSong.setYear(metadata.get(name));
-                                        break;
-                                    case "dc:title":
-                                        addedSong.setName(metadata.get(name));
-                                        break;
-                                    case "xmpDM:genre":
-                                        addedSong.setGenre(metadata.get(name));
-                                        break;
-                                }
-                            }
-                        } catch (IOException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SAXException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (TikaException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        songSer.add(addedSong);
-                        try {
-                            FileOutputStream fileOut;
-                            fileOut = new FileOutputStream("favorites.ser");
-                            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                            out.writeObject(songSer);
-                            out.close();
-                            fileOut.close();
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    DefaultTreeModel model = (DefaultTreeModel) getModel();
-                    DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-                    root.add(new DefaultMutableTreeNode("another_child"));
-                    model.reload(root);
-                }
-            }
-        });
+        JMenuItem menuItem2 = new JMenuItem(new AddToFavorites(myModel,favorites));
 
         JMenuItem menuItem3 = new JMenuItem(new AbstractAction("Search Google") {
             public void actionPerformed(ActionEvent e) {
@@ -324,6 +243,108 @@ public class MyTree extends JTree {
         } else {
             return value.toString();
         }
+    }
+    
+    class AddToFavorites extends AbstractAction{
+        
+        FileTreeModel myModel;
+        DefaultMutableTreeNode favorites;
+        
+        public AddToFavorites(FileTreeModel sourceModel, DefaultMutableTreeNode sourceFavorites){
+            super("Add to favorites");
+            myModel = sourceModel;
+            favorites = sourceFavorites;
+        }
+
+        @Override
+            public void actionPerformed(ActionEvent e) {
+                if (target.currentLocation.toString().matches("(.*)\\.(mp3|flac|wav)")) {
+                    Song addedSong = new Song(target.currentLocation.toString());
+
+                    Path aux = Paths.get(addedSong.getSongPath());
+                    DefaultMutableTreeNode newSong = new DefaultMutableTreeNode(aux.toFile());
+                    favorites.add(newSong);
+//                    myModel.nodeStructureChanged(favorites);
+                    
+//                myModel.nodeStructureChanged((TreeNode) favorites);
+
+                    List<Song> songSer = new ArrayList<>();
+
+                    File f = new File(System.getProperty("user.dir") + "\\favorites.ser");
+                    if (f.exists() == true && f.length() > 0) {
+
+                        try {
+                            FileInputStream fileIn;
+                            fileIn = new FileInputStream("favorites.ser");
+                            ObjectInputStream in;
+                            in = new ObjectInputStream(fileIn);
+                            songSer = (List<Song>) in.readObject();
+                            in.close();
+                            fileIn.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+
+                    if (addedSong.isValid(target.currentLocation.toPath()) == true) {
+                        try {
+                            Metadata metadata;
+                            metadata = addedSong.getMetadata();
+                            // List all metadata
+                            String[] metadataNames = metadata.names();
+                            for (String name : metadataNames) {
+//                                System.out.println(name + ": " + metadata.get(name));
+                                switch (name) {
+                                    case "creator":
+                                        addedSong.setArtist(metadata.get(name));
+                                        break;
+                                    case "xmpDM:album":
+                                        addedSong.setAlbum(metadata.get(name));
+                                        break;
+                                    case "xmpDM:releaseDate":
+                                        addedSong.setYear(metadata.get(name));
+                                        break;
+                                    case "dc:title":
+                                        addedSong.setName(metadata.get(name));
+                                        break;
+                                    case "xmpDM:genre":
+                                        addedSong.setGenre(metadata.get(name));
+                                        break;
+                                }
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (SAXException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (TikaException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        songSer.add(addedSong);
+                        try {
+                            FileOutputStream fileOut;
+                            fileOut = new FileOutputStream("favorites.ser");
+                            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                            out.writeObject(songSer);
+                            out.close();
+                            fileOut.close();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+//                    DefaultTreeModel model = (DefaultTreeModel) getModel();
+//                    DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+//                    root.add(new DefaultMutableTreeNode("another_child"));
+//                    model.reload(root);
+                }
+            }
+        
     }
 
 }
