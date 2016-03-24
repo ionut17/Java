@@ -29,9 +29,7 @@ import org.xml.sax.helpers.DefaultHandler;
 @XmlRootElement(name = "song")
 public class Song implements Serializable {
 
-    @XmlAttribute
     private String name;
-    @XmlAttribute
     private String artist;
     private String songPath;
     private String album;
