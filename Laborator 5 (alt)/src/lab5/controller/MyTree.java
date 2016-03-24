@@ -31,6 +31,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -148,19 +149,19 @@ public class MyTree extends JTree {
 //                                System.out.println(name + ": " + metadata.get(name));
                                 switch (name) {
                                     case "creator":
-                                        addedSong.setSongArtist(metadata.get(name));
+                                        addedSong.setArtist(metadata.get(name));
                                         break;
                                     case "xmpDM:album":
-                                        addedSong.setSongAlbum(metadata.get(name));
+                                        addedSong.setAlbum(metadata.get(name));
                                         break;
                                     case "xmpDM:releaseDate":
-                                        addedSong.setSongYear(metadata.get(name));
+                                        addedSong.setYear(metadata.get(name));
                                         break;
                                     case "dc:title":
-                                        addedSong.setSongName(metadata.get(name));
+                                        addedSong.setName(metadata.get(name));
                                         break;
                                     case "xmpDM:genre":
-                                        addedSong.setSongGenre(metadata.get(name));
+                                        addedSong.setGenre(metadata.get(name));
                                         break;
                                 }
                             }
@@ -185,6 +186,10 @@ public class MyTree extends JTree {
                             Logger.getLogger(MyTree.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    DefaultTreeModel model = (DefaultTreeModel) getModel();
+                    DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+                    root.add(new DefaultMutableTreeNode("another_child"));
+                    model.reload(root);
                 }
             }
         });

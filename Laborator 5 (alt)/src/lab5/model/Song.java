@@ -8,7 +8,9 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -23,13 +25,21 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Anca Adascalitei, Ionut Iacob
  */
-@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "song")
 public class Song implements Serializable {
 
+    @XmlAttribute
+    private String name;
+    @XmlAttribute
+    private String artist;
     private String songPath;
-    private String songName;
+    private String album;
+    private String year;
+    private String genre;
+    
+    
     public Song() {
-
     }
 
     public Song(String path) {
@@ -37,7 +47,7 @@ public class Song implements Serializable {
     }
 
     public Metadata getMetadata() throws FileNotFoundException, IOException, SAXException, TikaException {
-        InputStream input = new FileInputStream(Paths.get(songPath).toFile());
+        InputStream input = new FileInputStream(Paths.get(this.getSongPath()).toFile());
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
         Parser parser = new Mp3Parser();
@@ -55,22 +65,6 @@ public class Song implements Serializable {
         }
     }
 
-    /**
-     * @return the songPath
-     */
-    public String getSongPath() {
-        return songPath;
-    }
-
-    /**
-     * @param songPath the songPath to set
-     */
-    
-    @XmlElement
-    public void setSongPath(String songPath) {
-        this.songPath = songPath;
-    }
-
     public boolean isValid(Path p) {
         if (Files.exists(p) == false) {
             return false;
@@ -80,18 +74,87 @@ public class Song implements Serializable {
     }
 
     /**
-     * @return the songName
+     * @return the name
      */
-    public String getSongName() {
-        return songName;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param songName the songName to set
+     * @param name the name to set
      */
-    
-    @XmlElement
-    public void setSongName(String songName) {
-        this.songName = songName;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    /**
+     * @return the artist
+     */
+    public String getArtist() {
+        return artist;
+    }
+
+    /**
+     * @param artist the artist to set
+     */
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    /**
+     * @return the album
+     */
+    public String getAlbum() {
+        return album;
+    }
+
+    /**
+     * @param album the album to set
+     */
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    /**
+     * @return the year
+     */
+    public String getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    /**
+     * @return the genre
+     */
+    public String getGenre() {
+        return genre;
+    }
+
+    /**
+     * @param genre the genre to set
+     */
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    /**
+     * @return the path
+     */
+    public String getSongPath() {
+        return songPath;
+    }
+
+    /**
+     * @param path the path to set
+     */
+    public void setPath(String path) {
+        this.songPath = path;
+    }
+
 }
