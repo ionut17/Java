@@ -3,6 +3,7 @@ package lab6.controller;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -22,9 +23,12 @@ public class GraphFX extends Application {
         MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT);
         CanvasPane canvas = new CanvasPane(WIDTH, CANVAS_HEIGHT);
 
+        menu.setPrefSize(1000,100);
+        
         BorderPane root = new BorderPane();
         root.setTop(menu);
         root.setCenter(canvas);
+
 
         Scene scene = new Scene(root, WIDTH, MENU_HEIGHT + CANVAS_HEIGHT);
         scene.getStylesheets().add("styles.css");
