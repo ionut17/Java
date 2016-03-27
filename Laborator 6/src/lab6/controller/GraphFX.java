@@ -17,12 +17,14 @@ public class GraphFX extends Application {
     final static int WIDTH = 1000;
     final static int MENU_HEIGHT = 100;
     final static int CANVAS_HEIGHT = 700;
+    
+    Function myFunction = new Function();
 
     @Override
     public void start(Stage primaryStage) {
-        MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT);
-        CanvasPane canvas = new CanvasPane(WIDTH, CANVAS_HEIGHT);
-
+        CanvasPane canvas = new CanvasPane(WIDTH, CANVAS_HEIGHT, myFunction);
+        MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT, myFunction, canvas);
+        
         menu.setPrefSize(1000,100);
         
         BorderPane root = new BorderPane();

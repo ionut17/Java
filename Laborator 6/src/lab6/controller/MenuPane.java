@@ -10,10 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlContext;
-import org.apache.commons.jexl2.JexlEngine;
-import org.apache.commons.jexl2.MapContext;
 
 /**
  *
@@ -21,7 +17,7 @@ import org.apache.commons.jexl2.MapContext;
  */
 class MenuPane extends FlowPane {
 
-    public MenuPane(int width, int height){
+    public MenuPane(int width, int height, Function myFunction, CanvasPane canvas) {
         super();
         this.setPrefSize(width, height);
         this.setId("menu");
@@ -44,10 +40,8 @@ class MenuPane extends FlowPane {
                     System.out.println(function);
 //                    functionField.clear();
 
-                    Function f=new Function(function);
-                    
-                    System.out.println("* " + f.getValueOf(3).toString() + " *");
-
+                    myFunction.setFunction(function);
+                    canvas.drawShapes();
                 }
             }
         });
