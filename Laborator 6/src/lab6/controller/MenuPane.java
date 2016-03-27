@@ -21,8 +21,10 @@ import org.apache.commons.jexl2.MapContext;
  */
 class MenuPane extends FlowPane {
 
-    public MenuPane() {
+    public MenuPane(int width, int height){
         super();
+        this.setPrefSize(width, height);
+        this.setId("menu");
 
         Label f_label = new Label("f(X): ");
         TextField functionField = new TextField();
