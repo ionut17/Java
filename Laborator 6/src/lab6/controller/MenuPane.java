@@ -1,15 +1,17 @@
 package lab6.controller;
 
-import java.awt.Insets;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import static javafx.geometry.Pos.BASELINE_CENTER;
 import static javafx.geometry.Pos.TOP_RIGHT;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -76,10 +78,37 @@ class MenuPane extends FlowPane {
             }
         });
 
-        HBox hbox = new HBox(10);
+        final ToggleGroup group = new ToggleGroup();
+
+        ToggleButton tb1 = new ToggleButton("");
+        tb1.setToggleGroup(group);
+        ToggleButton tb2 = new ToggleButton("");
+        tb2.setToggleGroup(group);
+        ToggleButton tb3 = new ToggleButton("");
+        tb3.setToggleGroup(group);
+        ToggleButton tb4 = new ToggleButton("");
+        tb4.setToggleGroup(group);
+        ToggleButton tb5 = new ToggleButton("");
+        tb5.setToggleGroup(group);
+        
+        final ToggleGroup group2 = new ToggleGroup();
+
+        ToggleButton tb6 = new ToggleButton("1");
+        tb6.setToggleGroup(group2);
+        tb6.setSelected(true);
+        
+        ToggleButton tb7 = new ToggleButton("2");
+        tb7.setToggleGroup(group2);
+        
+        ToggleButton tb8 = new ToggleButton("3");
+        tb8.setToggleGroup(group2);
+
+
+        HBox hbox = new HBox();
+
 //        hbox.setPadding(new Insets(0, 20, 10, 20));
         hbox.setAlignment(TOP_RIGHT);
-        hbox.getChildren().addAll(f_label, functionField, graphicBtn, saveBtn, resetBtn, loadBtn);
+        hbox.getChildren().addAll(f_label, functionField, tb1, tb2, tb3, tb4, tb5,tb6, tb7, tb8, graphicBtn, saveBtn, resetBtn, loadBtn);
 
         System.out.println(functionField.getText());
         this.getChildren().add(hbox);
