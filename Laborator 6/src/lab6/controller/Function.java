@@ -10,7 +10,7 @@ import org.apache.commons.jexl2.MapContext;
  */
 public class Function {
 
-    String function;
+    private String function;
     
     public Function(){}
     
@@ -25,5 +25,12 @@ public class Function {
         mc.set("x", value);
         System.out.println("** " + e.evaluate(mc) + " *");
         return e.evaluate(mc);
+    }
+
+    /**
+     * @param function the function to set
+     */
+    public void setFunction(String function) {
+        this.function = function;
     }
 }
