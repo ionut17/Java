@@ -37,6 +37,8 @@ public class GraphFX extends Application {
 
         primaryStage.setTitle("GraphFX");
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(600);
         primaryStage.show();
     }
 

@@ -7,10 +7,17 @@
 #menu {
     -fx-background-color: #2c3e50;
     -fx-alignment: center;
+    -fx-padding: 0 30 0 30;
+}
+
+#menu .label{
+    -fx-text-fill: #ffffff;
+    -fx-font: bold 14px "Montseratt";
+    -fx-padding: 10 5 0 0;
 }
 
 #menu .text-field{
-    -fx-padding: 7;
+    -fx-padding: 9;
 }
 
 #menu .button{
@@ -19,8 +26,12 @@
     -fx-border-width: 2;
     -fx-border-color: #40B2FF;
     -fx-border-radius: 0;
-    -fx-padding: 5 15 5 15;
+    -fx-padding: 7 15 7 15;
     -fx-text-fill: #40B2FF;
+    -fx-font: bold 12px "Montseratt"; 
+    
+/*    -fx-background-radius: 15;
+    -fx-border-radius: 15;*/
 }
 
 #menu .button:hover{
@@ -32,3 +43,44 @@
 #menu .button:active{
     -fx-background-color: #308AC7;
 }
+
+/*Color toggles*/
+#menu .toggle-button{
+    -fx-padding: 9 12 9 12;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 3;
+    -fx-opacity: 0.5;
+}
+
+#menu .toggle-button:selected{
+    -fx-padding:6 9 6 9;
+    -fx-border-color: white;
+    -fx-opacity: 1;
+}
+
+#tb1{
+    -fx-background-color: #308AC7;
+    /*-fx-border-color: #308AC7;*/
+}
+
+#tb2{
+    -fx-background-color: #e74c3c;
+    /*-fx-border-color: #e74c3c;*/
+}
+
+#tb3{
+    -fx-background-color: #f39c12;
+    /*-fx-border-color: #f39c12;*/
+}
+
+#tb4{
+    -fx-background-color: #27ae60;
+    /*-fx-border-color: #27ae60;*/
+}
+
+#tb5{
+    -fx-background-color: #8e44ad;
+    /*-fx-border-color: #8e44ad;*/
+}
+
