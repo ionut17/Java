@@ -89,9 +89,9 @@ class MenuPane extends FlowPane {
         ToggleButton tb3 = new ToggleButton("");
         tb3.setToggleGroup(group);
         ToggleButton tb4 = new ToggleButton("");
-        tb3.setToggleGroup(group);
+        tb4.setToggleGroup(group);
         ToggleButton tb5 = new ToggleButton("");
-        tb3.setToggleGroup(group);
+        tb5.setToggleGroup(group);
         
         final ToggleGroup group2 = new ToggleGroup();
 
