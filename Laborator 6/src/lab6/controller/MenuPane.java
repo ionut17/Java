@@ -11,8 +11,10 @@ import javafx.scene.layout.FlowPane;
  */
 class MenuPane extends FlowPane{
     
-    public MenuPane(){
+    public MenuPane(int width, int height){
         super();
+        this.setPrefSize(width, height);
+        this.setId("menu");
         
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
