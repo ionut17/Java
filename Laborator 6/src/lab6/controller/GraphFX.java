@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -19,9 +20,12 @@ public class GraphFX extends Application {
         MenuPane menu = new MenuPane();
         CanvasPane canvas = new CanvasPane();
         
+        menu.setPrefSize(1000,100);
+        
         BorderPane root = new BorderPane();
         root.setTop(menu);
         root.setCenter(canvas);
+
         
         Scene scene = new Scene(root, 1000, 600);
         
