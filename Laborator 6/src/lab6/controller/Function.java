@@ -17,7 +17,7 @@ public class Function {
         Expression e = jexl.createExpression(getFunction());
         MapContext mc = new MapContext();
         mc.set("x", value);
-        System.out.println("** " + e.evaluate(mc) + " *");
+//        System.out.println("** " + e.evaluate(mc) + " *");
         return e.evaluate(mc);
     }
 

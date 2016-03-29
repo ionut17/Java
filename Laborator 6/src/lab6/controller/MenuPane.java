@@ -38,7 +38,7 @@ class MenuPane extends FlowPane {
         //Buttons-hbox
         HBox buttons = new HBox();
         buttons.setId("buttons-hbox");
-
+        
         Button graphicBtn = new Button();
         graphicBtn.setText("Graphic");
         graphicBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -74,7 +74,8 @@ class MenuPane extends FlowPane {
 
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Reset");
+                canvas.setIsReset(true);
+                canvas.reset();
             }
         });
 
@@ -92,9 +93,20 @@ class MenuPane extends FlowPane {
         buttons.setSpacing(5);
 
         //Color toggles
-        HBox toggles = new HBox();
+        HBox colorToggles = new HBox();
         final ToggleGroup group = new ToggleGroup();
+        
+        ToggleButton tb0 = new ToggleButton("");
+        tb0.setId("tb0");
+        tb0.setToggleGroup(group);
+        tb0.setSelected(true);
+        tb0.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent event) {
+                canvas.setAttachedColor("#000000");
+            }
+        });
         ToggleButton tb1 = new ToggleButton("");
         tb1.setId("tb1");
         tb1.setToggleGroup(group);
@@ -146,19 +158,46 @@ class MenuPane extends FlowPane {
             }
         });
         
-        toggles.getChildren().addAll(tb1,tb2,tb3,tb4,tb5);
+        colorToggles.getChildren().addAll(tb0,tb1,tb2,tb3,tb4,tb5);
 
+        HBox weightToggles = new HBox();
         final ToggleGroup group2 = new ToggleGroup();
 
         ToggleButton tb6 = new ToggleButton("1");
+        tb6.setId("tb6");
         tb6.setToggleGroup(group2);
-        tb6.setSelected(true);
+        tb6.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                canvas.setAttachedWeight(1);
+            }
+        });
 
         ToggleButton tb7 = new ToggleButton("2");
+        tb7.setId("tb7");
         tb7.setToggleGroup(group2);
+        tb7.setSelected(true);
+        tb7.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                canvas.setAttachedWeight(3);
+            }
+        });
 
         ToggleButton tb8 = new ToggleButton("3");
+        tb8.setId("tb6");
         tb8.setToggleGroup(group2);
+        tb8.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                canvas.setAttachedWeight(5);
+            }
+        });
+        
+        weightToggles.getChildren().addAll(tb6,tb7,tb8);
 
         //Main box
         HBox box = new HBox();
@@ -167,7 +206,7 @@ class MenuPane extends FlowPane {
 //        hbox.setPadding(new Insets(0, 20, 10, 20));
 //        hbox.setAlignment(TOP_RIGHT);
 //        hbox.getChildren().addAll(input, buttons);
-        box.getChildren().addAll(input, buttons, toggles);
+        box.getChildren().addAll(input, buttons, colorToggles, weightToggles);
 //        hbox.getChildren().addAll(f_label, functionField, tb1, tb2, tb3, tb4, tb5,tb6, tb7, tb8, graphicBtn, saveBtn, resetBtn, loadBtn);
 
         System.out.println(functionField.getText());

@@ -17,13 +17,19 @@ class CanvasPane extends Canvas {
 
     Function attachedFunction = new Function();
     private String attachedColor = "#000000";
+    private int attachedWeight = 3;
+    private final double gap = 0;
+    private boolean isReset = false;
     
+    private Map< Function, Map<String,Integer> > drawingSet = new HashMap<>();
+
     public CanvasPane(int width, int height, Function target) {
         super(width, height);
         attachedFunction = target;
-        
+
 //        this.widthProperty().addListener(observable -> drawShapes());
 //        this.heightProperty().addListener(observable -> drawShapes());
+        this.reset();
         drawShapes(attachedColor);
     }
 
@@ -31,7 +37,48 @@ class CanvasPane extends Canvas {
         GraphicsContext gc = this.getGraphicsContext2D();
         double width = gc.getCanvas().getWidth();
         double height = gc.getCanvas().getHeight();
-        double gap = 0;
+
+//        this.reset();
+
+        //Drawing function
+        gc.setStroke(Paint.valueOf(getAttachedColor()));
+        gc.setLineWidth(attachedWeight);
+        if (attachedFunction.getFunction() != null) {
+            isReset = false;
+            //Draw the function
+            //Adding main points
+            Map<Integer, Integer> pointSet = new HashMap<>();
+            for (int i = (int) -(width / 2); i <= (width / 2 - gap); i++) {
+                int xCoord = (int) ((width / 2) + i);
+                int yCoord = (int) ((height / 2)) - Integer.valueOf(attachedFunction.getValueOf(i).toString());
+                pointSet.put(xCoord, yCoord);
+                gc.fillRect(xCoord, yCoord, 1, 1);
+            }
+            //Drawing line between points
+            int xOld = (int) (width / 2);
+            int yOld = (int) (height / 2);
+            int count = 0;
+            for (Map.Entry<Integer, Integer> entry : pointSet.entrySet()) {
+                if (count == 0) {
+                    xOld = entry.getKey();
+                    yOld = entry.getValue();
+                } else {
+                    int xCoord = entry.getKey();
+                    int yCoord = entry.getValue();
+                    gc.strokeLine(xOld, yOld, xCoord, yCoord);
+                    xOld = xCoord;
+                    yOld = yCoord;
+                }
+                count++;
+            }
+            attachedFunction.setFunction(null);
+        }
+    }
+
+    public void reset() {
+        GraphicsContext gc = this.getGraphicsContext2D();
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
 
         //Settings
         gc.clearRect(0, 0, width, height);
@@ -57,37 +104,6 @@ class CanvasPane extends Canvas {
         for (int i = (int) -(height / 2); i <= height / 2; i += scale) {
             if (i / scale != 0 && i / scale != -1) {
                 gc.fillText(String.valueOf(i), width / 2 - 20, height / 2 - i * scale);
-            }
-        }
-
-        gc.setStroke(Paint.valueOf(getAttachedColor()));
-        if (attachedFunction.getFunction() != null) {
-            //Draw the function
-            //Adding main points
-            Map<Integer, Integer> pointSet = new HashMap<>();
-            for (int i = (int) -(width / 2); i <= (width / 2 - gap); i++) {
-                int xCoord = (int) ((width / 2) + i);
-                int yCoord = (int) ((height / 2)) - Integer.valueOf(attachedFunction.getValueOf(i).toString());
-                pointSet.put(xCoord, yCoord);
-                gc.fillRect(xCoord, yCoord, 1, 1);
-            }
-            //Drawing line between points
-            int xOld = (int) (width / 2);
-            int yOld = (int) (height / 2);
-            int count = 0;
-            for (Map.Entry<Integer, Integer> entry : pointSet.entrySet()) {
-                if (count == 0) {
-                    xOld = entry.getKey();
-                    yOld = entry.getValue();
-                } else {
-                    int xCoord = entry.getKey();
-                    int yCoord = entry.getValue();
-                    gc.setLineWidth(2);
-                    gc.strokeLine(xOld, yOld, xCoord, yCoord);
-                    xOld = xCoord;
-                    yOld = yCoord;
-                }
-                count++;
             }
         }
     }
@@ -126,7 +142,13 @@ class CanvasPane extends Canvas {
     public void resize(double width, double height) {
         super.setWidth(width);
         super.setHeight(height);
-        drawShapes(getAttachedColor());
+        if (isReset == false) {
+            drawShapes(getAttachedColor());
+        }
+        else {
+            reset();
+            isReset = false;
+        }
     }
 
     /**
@@ -141,6 +163,27 @@ class CanvasPane extends Canvas {
      */
     public void setAttachedColor(String attachedColor) {
         this.attachedColor = attachedColor;
+    }
+
+    /**
+     * @return the attachedWeight
+     */
+    public int getAttachedWeight() {
+        return attachedWeight;
+    }
+
+    /**
+     * @param attachedWeight the attachedWeight to set
+     */
+    public void setAttachedWeight(int attachedWeight) {
+        this.attachedWeight = attachedWeight;
+    }
+
+    /**
+     * @param isReset the isReset to set
+     */
+    public void setIsReset(boolean isReset) {
+        this.isReset = isReset;
     }
 
 }
