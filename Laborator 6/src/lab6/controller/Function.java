@@ -15,15 +15,17 @@ public class Function {
     private String function;
 
     public Object getValueOf(Integer value) {
+        ExpressionEvalFactory factoryEval = new ExpressionEvalFactory();
         Map<String, Object> functions = new HashMap<String, Object>();
         functions.put("math", Math.class);
-        JexlEngine jexl = new JexlEngine();
+        JexlEngine jexl = factoryEval.getInstance();
         jexl.setFunctions(functions);
         Expression e = jexl.createExpression(getFunction());
         MapContext mc = new MapContext();
         mc.set("x", value);
-        //        System.out.println("** " + e.evaluate(mc) + " *");
-        String returnValue=e.evaluate(mc).toString().split("\\.")[0];
+        Expression express=jexl.createExpression("sin(30)");
+        System.out.println("** " + express.evaluate(null) + " *");
+        String returnValue = e.evaluate(mc).toString().split("\\.")[0];
         return Integer.valueOf(returnValue);
     }
 
