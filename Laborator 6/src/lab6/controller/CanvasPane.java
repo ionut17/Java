@@ -1,9 +1,11 @@
 package lab6.controller;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -24,7 +26,7 @@ class CanvasPane extends Canvas {
     private boolean isReset = false;
     private Image canvasImage = null;
 
-    private Map< String, Map<String, Integer> > drawingSet = new HashMap<>();
+    private Map< String, Map<String, Integer>> drawingSet = new HashMap<>();
 
     public CanvasPane(int width, int height, Function target) {
         super(width, height);
@@ -34,6 +36,7 @@ class CanvasPane extends Canvas {
 //        this.heightProperty().addListener(observable -> drawShapes());
         this.reset();
         drawShapes(attachedColor);
+
     }
 
     public void drawShapes(String graphColor) {
@@ -74,13 +77,13 @@ class CanvasPane extends Canvas {
         int scale = 1;
         gc.setFont(new Font("Montseratt Bold", 12));
         for (int i = (int) -(width / 2); i <= width / 2; i += scale) {
-            if (i != 0 && i%40==0) {
+            if (i != 0 && i % 40 == 0) {
                 gc.fillRect(width / 2 + i * scale, height / 2 - 5, 1, 10);
                 gc.fillText(String.valueOf(i), width / 2 + i * scale - 8, height / 2 + 20);
             }
         }
         for (int i = (int) -(height / 2); i <= height / 2; i += scale) {
-            if (i / scale != 0 && i / scale != -1 && i%40==0) {
+            if (i / scale != 0 && i / scale != -1 && i % 40 == 0) {
                 gc.fillRect(width / 2 - 5, height / 2 - i * scale, 10, 1);
                 gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * scale + 5);
             }
@@ -93,8 +96,8 @@ class CanvasPane extends Canvas {
         double height = gc.getCanvas().getHeight();
 
         reset();
-        
-        if(canvasImage!=null){
+
+        if (canvasImage != null) {
             gc.drawImage(canvasImage, 0, 0, width, height);
         }
 
@@ -130,18 +133,58 @@ class CanvasPane extends Canvas {
                 count++;
             }
         }
+
+        //Draws a point where you click on the canvas
+        Map<Double, Double> mouseSet = new HashMap<>();
+        this.setOnMouseClicked(event -> {
+            double x = event.getX(), y = event.getY();
+            mouseSet.put(x - width / 2, height / 2 - y);
+            if (mouseSet.size() > 1) {
+                double xValues[] = new double[mouseSet.size()];
+                double yValues[] = new double[mouseSet.size()];
+                int i = 0;
+                for (Map.Entry<Double, Double> entry : mouseSet.entrySet()) {
+                    System.out.println(entry.getKey() + " " + entry.getValue());
+                    xValues[i] = entry.getKey();
+                    yValues[i] = entry.getValue();
+                    i++;
+                }
+                gc.fillRect(x, y, 1, 1);
+                PolynomialFunctionLagrangeForm p = new PolynomialFunctionLagrangeForm(xValues, yValues);
+                p.computeCoefficients();
+                double coefficients[] = p.getCoefficients();
+                int degree = p.degree();
+                System.out.println("** degree: " + degree);
+                String lagrangeFunction = "";
+                for (int t=coefficients.length-1;t>=0;t--){
+                    if (degree != 0) {
+                        lagrangeFunction += "math:pow(x," + String.valueOf(degree) + ")*" + ((Double) coefficients[t]).toString() + "+";
+                    } else {
+                        lagrangeFunction += ((Double) coefficients[t]).toString();
+                    }
+                    System.out.println("coef " + coefficients[t] + " ");
+                    degree--;
+                }
+                System.out.println("lagrange function: " + lagrangeFunction);
+                //Drawing the lagrange function
+                Map<String, Integer> stylesMap = new HashMap<>();
+                stylesMap.put(attachedColor, attachedWeight);
+                drawingSet.put(lagrangeFunction, stylesMap);
+                redraw();
+            }
+        });
     }
-    
-    public void drawImage(File target){
+
+    public void drawImage(File target) {
         GraphicsContext gc = this.getGraphicsContext2D();
         double width = gc.getCanvas().getWidth();
         double height = gc.getCanvas().getHeight();
-        
-        drawingSet.clear();        
+
+        drawingSet.clear();
         reset();
-        
+
         canvasImage = new Image(target.toURI().toString());
-        gc.drawImage(canvasImage, 0, 0, width, height) ;
+        gc.drawImage(canvasImage, 0, 0, width, height);
     }
 
     @Override
