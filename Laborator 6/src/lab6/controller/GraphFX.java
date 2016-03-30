@@ -1,11 +1,8 @@
 package lab6.controller;
 
 import javafx.application.Application;
-import javafx.geometry.HPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
@@ -23,7 +20,7 @@ public class GraphFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         CanvasPane canvas = new CanvasPane(WIDTH, CANVAS_HEIGHT, myFunction);
-        MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT, myFunction, canvas);
+        MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT, myFunction, canvas, primaryStage);
         
         menu.setPrefSize(1000,100);
         
@@ -37,7 +34,7 @@ public class GraphFX extends Application {
 
         primaryStage.setTitle("GraphFX");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(600);
+        primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.show();
     }

@@ -13,7 +13,7 @@
 #menu .label{
     -fx-text-fill: #ffffff;
     -fx-font: bold 14px "Montseratt";
-    -fx-padding: 10 5 0 0;
+    -fx-padding: 7 5 0 0;
 }
 
 #menu .text-field{
@@ -57,6 +57,10 @@
     -fx-padding:6 9 6 9;
     -fx-border-color: white;
     -fx-opacity: 1;
+}
+
+#tb0{
+    -fx-background-color: #000000;
 }
 
 #tb1{
