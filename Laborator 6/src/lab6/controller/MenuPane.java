@@ -1,5 +1,7 @@
 package lab6.controller;
 
+import java.io.File;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import static javafx.geometry.Pos.TOP_RIGHT;
@@ -11,24 +13,31 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author Anca Adascalitei, Ionut Iacob
  */
 class MenuPane extends FlowPane {
+    
+    Stage myStage;
 
-    public MenuPane(int width, int height, Function myFunction, CanvasPane canvas) {
+    public MenuPane(int width, int height, Function myFunction, CanvasPane canvas, Stage primaryStage) {
         super();
         this.setPrefSize(width, height);
         this.setId("menu");
+        myStage = primaryStage;
 
         //Input-hbox
         HBox input = new HBox();
         input.setId("input-hbox");
-        
+
         Label f_label = new Label("f(X): ");
         TextField functionField = new TextField();
         functionField.setPromptText("Enter a function.");
@@ -38,7 +47,7 @@ class MenuPane extends FlowPane {
         //Buttons-hbox
         HBox buttons = new HBox();
         buttons.setId("buttons-hbox");
-        
+
         Button graphicBtn = new Button();
         graphicBtn.setText("Graphic");
         graphicBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,6 +74,15 @@ class MenuPane extends FlowPane {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Save");
+                WritableImage wim = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+                canvas.snapshot(null, wim);
+                File file = new File("CanvasImage.png");
+                try {
+                    ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
+                    System.out.println("File saved succesfully to " + file.getName() + ".png");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -86,6 +104,12 @@ class MenuPane extends FlowPane {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Load");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Resource File");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.jpg,*.png,*.gif)", "*.jpg","*.png","*.gif");
+                fileChooser.getExtensionFilters().add(extFilter);
+                File selectedFile = fileChooser.showOpenDialog(myStage);
+                canvas.drawImage(selectedFile);
             }
         });
 
@@ -95,7 +119,7 @@ class MenuPane extends FlowPane {
         //Color toggles
         HBox colorToggles = new HBox();
         final ToggleGroup group = new ToggleGroup();
-        
+
         ToggleButton tb0 = new ToggleButton("");
         tb0.setId("tb0");
         tb0.setToggleGroup(group);
@@ -157,8 +181,8 @@ class MenuPane extends FlowPane {
                 canvas.setAttachedColor("#8e44ad");
             }
         });
-        
-        colorToggles.getChildren().addAll(tb0,tb1,tb2,tb3,tb4,tb5);
+
+        colorToggles.getChildren().addAll(tb0, tb1, tb2, tb3, tb4, tb5);
 
         HBox weightToggles = new HBox();
         final ToggleGroup group2 = new ToggleGroup();
@@ -196,8 +220,8 @@ class MenuPane extends FlowPane {
                 canvas.setAttachedWeight(5);
             }
         });
-        
-        weightToggles.getChildren().addAll(tb6,tb7,tb8);
+
+        weightToggles.getChildren().addAll(tb6, tb7, tb8);
 
         //Main box
         HBox box = new HBox();
