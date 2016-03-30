@@ -1,11 +1,14 @@
 package lab6.controller;
 
 import java.io.File;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import static javafx.geometry.Pos.TOP_RIGHT;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -15,6 +18,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,7 +29,7 @@ import javax.imageio.ImageIO;
  * @author Anca Adascalitei, Ionut Iacob
  */
 class MenuPane extends FlowPane {
-    
+
     Stage myStage;
 
     public MenuPane(int width, int height, Function myFunction, CanvasPane canvas, Stage primaryStage) {
@@ -79,7 +83,7 @@ class MenuPane extends FlowPane {
                 File file = new File("CanvasImage.png");
                 try {
                     ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
-                    System.out.println("File saved succesfully to " + file.getName() + ".png");
+                    System.out.println("File saved succesfully to " + file.getName());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -106,7 +110,7 @@ class MenuPane extends FlowPane {
                 System.out.println("Load");
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Open Resource File");
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.jpg,*.png,*.gif)", "*.jpg","*.png","*.gif");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.jpg,*.png,*.gif,*.svg)", "*.jpg", "*.png", "*.gif", "*.svg");
                 fileChooser.getExtensionFilters().add(extFilter);
                 File selectedFile = fileChooser.showOpenDialog(myStage);
                 canvas.drawImage(selectedFile);
@@ -119,6 +123,7 @@ class MenuPane extends FlowPane {
         //Color toggles
         HBox colorToggles = new HBox();
         final ToggleGroup group = new ToggleGroup();
+        Label label1 = new Label("Colors: ");
 
         ToggleButton tb0 = new ToggleButton("");
         tb0.setId("tb0");
@@ -182,7 +187,9 @@ class MenuPane extends FlowPane {
             }
         });
 
-        colorToggles.getChildren().addAll(tb0, tb1, tb2, tb3, tb4, tb5);
+        colorToggles.getChildren().addAll(label1, tb0, tb1, tb2, tb3, tb4, tb5);
+        
+        Label label2 = new Label("Weights: ");
 
         HBox weightToggles = new HBox();
         final ToggleGroup group2 = new ToggleGroup();
@@ -221,20 +228,38 @@ class MenuPane extends FlowPane {
             }
         });
 
-        weightToggles.getChildren().addAll(tb6, tb7, tb8);
+        weightToggles.getChildren().addAll(label2, tb6, tb7, tb8);
+
+        //drawSizes - Select how many clicks to draw a graph
+        HBox drawSizes = new HBox();
+        drawSizes.setId("drawSizes-hbox");
+
+        Label label3 = new Label("Draw points: ");
+        ObservableList<String> options = FXCollections.observableArrayList("2","3","4","5","6","7","8","9","10");
+        ComboBox combo = new ComboBox(options);
+        combo.setValue("2");
+        combo.setVisibleRowCount(5);
+        drawSizes.getChildren().addAll(label3, combo);
 
         //Main box
-        HBox box = new HBox();
-        box.setSpacing(5);
+        FlowPane mainBox = new FlowPane();
+        mainBox.prefWidthProperty().bind(myStage.widthProperty());
+        mainBox.setId("mainBox");
+        mainBox.setVgap(10);
+        mainBox.setHgap(20);
+        
+        HBox box1 = new HBox();
+        HBox box2 = new HBox();
+        box1.setSpacing(5);
+        box2.setSpacing(20);
 
-//        hbox.setPadding(new Insets(0, 20, 10, 20));
-//        hbox.setAlignment(TOP_RIGHT);
-//        hbox.getChildren().addAll(input, buttons);
-        box.getChildren().addAll(input, buttons, colorToggles, weightToggles);
-//        hbox.getChildren().addAll(f_label, functionField, tb1, tb2, tb3, tb4, tb5,tb6, tb7, tb8, graphicBtn, saveBtn, resetBtn, loadBtn);
+        box1.getChildren().addAll(input, buttons);
+        box2.getChildren().addAll(colorToggles, weightToggles, drawSizes);
+        
+        mainBox.getChildren().addAll(box1,box2);
 
         System.out.println(functionField.getText());
-        this.getChildren().add(box);
+        this.getChildren().add(mainBox);
     }
 
 }
