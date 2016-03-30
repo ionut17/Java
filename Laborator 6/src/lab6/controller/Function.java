@@ -22,8 +22,9 @@ public class Function {
         Expression e = jexl.createExpression(getFunction());
         MapContext mc = new MapContext();
         mc.set("x", value);
-//        System.out.println("** " + e.evaluate(mc) + " *");
-        return e.evaluate(mc);
+        //        System.out.println("** " + e.evaluate(mc) + " *");
+        String returnValue=e.evaluate(mc).toString().split("\\.")[0];
+        return Integer.valueOf(returnValue);
     }
 
     /**
