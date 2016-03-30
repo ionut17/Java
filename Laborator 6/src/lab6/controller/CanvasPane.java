@@ -27,6 +27,10 @@ class CanvasPane extends Canvas {
     private Image canvasImage = null;
 
     private Map< String, Map<String, Integer>> drawingSet = new HashMap<>();
+    private int pointsSize = 2;
+    
+    private String drawnFunction = null;
+    private String mouseLocation = null;
 
     public CanvasPane(int width, int height, Function target) {
         super(width, height);
@@ -96,6 +100,11 @@ class CanvasPane extends Canvas {
         double height = gc.getCanvas().getHeight();
 
         reset();
+        
+        if (drawnFunction!=null){
+            gc.setFill(Paint.valueOf("#000000"));
+            gc.fillText(drawnFunction, 20, height-20);
+        }
 
         if (canvasImage != null) {
             gc.drawImage(canvasImage, 0, 0, width, height);
@@ -133,13 +142,16 @@ class CanvasPane extends Canvas {
                 count++;
             }
         }
+        
 
         //Draws a point where you click on the canvas
         Map<Double, Double> mouseSet = new HashMap<>();
         this.setOnMouseClicked(event -> {
             double x = event.getX(), y = event.getY();
+            gc.setStroke(Paint.valueOf("878787"));
+            gc.strokeOval(x, y, 2, 2);
             mouseSet.put(x - width / 2, height / 2 - y);
-            if (mouseSet.size() > 1) {
+            if (mouseSet.size() >= getPointsSize()) {
                 double xValues[] = new double[mouseSet.size()];
                 double yValues[] = new double[mouseSet.size()];
                 int i = 0;
@@ -166,6 +178,7 @@ class CanvasPane extends Canvas {
                     degree--;
                 }
                 System.out.println("lagrange function: " + lagrangeFunction);
+                drawnFunction=lagrangeFunction;
                 //Drawing the lagrange function
                 Map<String, Integer> stylesMap = new HashMap<>();
                 stylesMap.put(attachedColor, attachedWeight);
@@ -264,6 +277,20 @@ class CanvasPane extends Canvas {
      */
     public void setIsReset(boolean isReset) {
         this.isReset = isReset;
+    }
+
+    /**
+     * @return the pointsSize
+     */
+    public int getPointsSize() {
+        return pointsSize;
+    }
+
+    /**
+     * @param pointsSize the pointsSize to set
+     */
+    public void setPointsSize(int pointsSize) {
+        this.pointsSize = pointsSize;
     }
 
 }

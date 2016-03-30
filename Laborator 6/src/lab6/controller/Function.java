@@ -23,8 +23,8 @@ public class Function {
         Expression e = jexl.createExpression(getFunction());
         MapContext mc = new MapContext();
         mc.set("x", value);
-        Expression express=jexl.createExpression("sin(30)");
-        System.out.println("** " + express.evaluate(null) + " *");
+//        Expression express=jexl.createExpression("sin(30)");
+//        System.out.println("** " + express.evaluate(null) + " *");
         String returnValue = e.evaluate(mc).toString().split("\\.")[0];
         return Integer.valueOf(returnValue);
     }

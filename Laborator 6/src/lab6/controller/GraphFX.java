@@ -52,8 +52,11 @@ public class GraphFX extends Application {
 
 }
 
+//TODO: afisare functie, afisare pozitie (x,y)
+//OPT: slider pentru scale
+
 
 //Add back functionality (removes last line)
 //Resizable in any way including the menu
-//Desenare in functie de numarul de puncte ales
+//Desenare in functie de numarul de puncte ales si totul e scalabil
 //Importare svg

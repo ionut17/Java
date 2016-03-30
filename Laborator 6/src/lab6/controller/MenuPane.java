@@ -239,6 +239,14 @@ class MenuPane extends FlowPane {
         ComboBox combo = new ComboBox(options);
         combo.setValue("2");
         combo.setVisibleRowCount(5);
+        combo.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                canvas.setPointsSize(Integer.valueOf(combo.getValue().toString()));
+                canvas.redraw();
+            }
+        });
         drawSizes.getChildren().addAll(label3, combo);
 
         //Main box
