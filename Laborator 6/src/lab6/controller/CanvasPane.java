@@ -1,8 +1,10 @@
 package lab6.controller;
 
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -17,14 +19,15 @@ class CanvasPane extends Canvas {
 
     Function attachedFunction = new Function();
     private String attachedColor = "#000000";
-    
+
     public CanvasPane(int width, int height, Function target) {
         super(width, height);
         attachedFunction = target;
-        
+
 //        this.widthProperty().addListener(observable -> drawShapes());
 //        this.heightProperty().addListener(observable -> drawShapes());
         drawShapes(attachedColor);
+
     }
 
     public void drawShapes(String graphColor) {
@@ -90,6 +93,35 @@ class CanvasPane extends Canvas {
                 count++;
             }
         }
+        
+        
+        
+        //Draws a point where you click on the canvas
+        Map<Double, Double> mouseSet = new HashMap<>();
+        this.setOnMouseClicked(event -> {
+            double x = event.getX(), y = event.getY();
+            mouseSet.put(x-width/2,height/2-y);
+            double xValues[]=new double[mouseSet.size()-1];
+            double yValues[]=new double[mouseSet.size()-1];
+            int i=0;
+            for(Map.Entry<Double, Double> entry : mouseSet.entrySet()){
+                System.out.println(entry.getKey()+" "+entry.getValue());
+                xValues[i]=entry.getKey();
+                yValues[i]=entry.getValue();
+                i++;
+            }
+            gc.fillRect(x, y, 1, 1);
+            if(event.getClickCount()>1){
+                PolynomialFunctionLagrangeForm p=new PolynomialFunctionLagrangeForm(xValues, yValues);
+                p.computeCoefficients();
+                double coefficients[]= p.getCoefficients();
+                int degree=p.degree();
+                System.out.println("**");
+                for(double c : coefficients){
+                    System.out.println(c+" ");
+                }
+            }
+        });
     }
 
     @Override
