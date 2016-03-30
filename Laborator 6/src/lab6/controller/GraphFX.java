@@ -1,5 +1,6 @@
 package lab6.controller;
 
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -19,6 +20,9 @@ public class GraphFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        //JavaFX SVG init
+        SvgImageLoaderFactory.install();
+        //Main code
         CanvasPane canvas = new CanvasPane(WIDTH, CANVAS_HEIGHT, myFunction);
         MenuPane menu = new MenuPane(WIDTH, MENU_HEIGHT, myFunction, canvas, primaryStage);
         
@@ -47,3 +51,9 @@ public class GraphFX extends Application {
     }
 
 }
+
+
+//Add back functionality (removes last line)
+//Resizable in any way including the menu
+//Desenare in functie de numarul de puncte ales
+//Importare svg
