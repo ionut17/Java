@@ -23,6 +23,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -188,7 +192,7 @@ class MenuPane extends FlowPane {
         });
 
         colorToggles.getChildren().addAll(label1, tb0, tb1, tb2, tb3, tb4, tb5);
-        
+
         Label label2 = new Label("Weights: ");
 
         HBox weightToggles = new HBox();
@@ -235,7 +239,7 @@ class MenuPane extends FlowPane {
         drawSizes.setId("drawSizes-hbox");
 
         Label label3 = new Label("Draw points: ");
-        ObservableList<String> options = FXCollections.observableArrayList("2","3","4","5","6","7","8","9","10");
+        ObservableList<String> options = FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8", "9", "10");
         ComboBox combo = new ComboBox(options);
         combo.setValue("2");
         combo.setVisibleRowCount(5);
@@ -255,7 +259,7 @@ class MenuPane extends FlowPane {
         mainBox.setId("mainBox");
         mainBox.setVgap(10);
         mainBox.setHgap(20);
-        
+
         HBox box1 = new HBox();
         HBox box2 = new HBox();
         box1.setSpacing(5);
@@ -263,8 +267,8 @@ class MenuPane extends FlowPane {
 
         box1.getChildren().addAll(input, buttons);
         box2.getChildren().addAll(colorToggles, weightToggles, drawSizes);
-        
-        mainBox.getChildren().addAll(box1,box2);
+
+        mainBox.getChildren().addAll(box1, box2);
 
         System.out.println(functionField.getText());
         this.getChildren().add(mainBox);

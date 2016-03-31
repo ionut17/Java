@@ -23,14 +23,16 @@ class CanvasPane extends Canvas {
     private String attachedColor = "#000000";
     private int attachedWeight = 3;
     private final double gap = 0;
-    private boolean isReset = false;
-    private Image canvasImage = null;
 
     private Map< String, Map<String, Integer>> drawingSet = new HashMap<>();
+    private boolean isReset = false;
+
+    private Image canvasImage = null;
     private int pointsSize = 2;
-    
+    private int scale = 10;
+
     private String drawnFunction = null;
-    private String mouseLocation = null;
+    private String[] mouseLocation = new String[2];
 
     public CanvasPane(int width, int height, Function target) {
         super(width, height);
@@ -52,6 +54,7 @@ class CanvasPane extends Canvas {
         //Drawing function
         Map<String, Integer> stylesMap = new HashMap<>();
         if (attachedFunction.getFunction() != null) {
+            drawnFunction = attachedFunction.getFunction();
             stylesMap.put(attachedColor, attachedWeight);
             drawingSet.put(attachedFunction.getFunction(), stylesMap);
             redraw();
@@ -78,16 +81,15 @@ class CanvasPane extends Canvas {
         gc.fillText("y", width / 2 + 10, 20);
 
         //Drawing background counts
-        int scale = 1;
         gc.setFont(new Font("Montseratt Bold", 12));
-        for (int i = (int) -(width / 2); i <= width / 2; i += scale) {
-            if (i != 0 && i % 40 == 0) {
+        for (int i = (int) -(width / 2) / scale; i <= (width / 2) / scale; i++) {
+            if (i * scale != 0 && i % scale == 0) {
                 gc.fillRect(width / 2 + i * scale, height / 2 - 5, 1, 10);
                 gc.fillText(String.valueOf(i), width / 2 + i * scale - 8, height / 2 + 20);
             }
         }
-        for (int i = (int) -(height / 2); i <= height / 2; i += scale) {
-            if (i / scale != 0 && i / scale != -1 && i % 40 == 0) {
+        for (int i = (int) -(height / 2) / scale; i <= (height / 2) / scale; i++) {
+            if (i * scale != 0 && i * scale != -1 && i % scale == 0) {
                 gc.fillRect(width / 2 - 5, height / 2 - i * scale, 10, 1);
                 gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * scale + 5);
             }
@@ -100,15 +102,17 @@ class CanvasPane extends Canvas {
         double height = gc.getCanvas().getHeight();
 
         reset();
-        
-        if (drawnFunction!=null){
-            gc.setFill(Paint.valueOf("#000000"));
-            gc.fillText(drawnFunction, 20, height-20);
+
+        if (drawnFunction != null) {
+            gc.setFill(Paint.valueOf("#525252"));
+            gc.fillText(drawnFunction, 20, height - 20);
         }
 
         if (canvasImage != null) {
             gc.drawImage(canvasImage, 0, 0, width, height);
         }
+
+        drawCoord();
 
         for (Map.Entry< String, Map<String, Integer>> entry : drawingSet.entrySet()) {
             gc.setStroke(Paint.valueOf(entry.getValue().entrySet().iterator().next().getKey()));
@@ -118,9 +122,9 @@ class CanvasPane extends Canvas {
             Map<Integer, Integer> pointSet = new HashMap<>();
             Function newFunction = new Function();
             newFunction.setFunction(entry.getKey());
-            for (int i = (int) -(width / 2); i <= (width / 2 - gap); i++) {
-                int xCoord = (int) ((width / 2) + i);
-                int yCoord = (int) ((height / 2)) - Integer.valueOf(newFunction.getValueOf(i).toString());
+            for (int i = (int) -(width / 2) / scale; i <= (width / 2 - gap) / scale; i++) {
+                int xCoord = (int) ((width / 2) + i * scale);
+                int yCoord = (int) ((height / 2)) - Integer.valueOf(newFunction.getValueOf(i).toString()) * scale;
                 pointSet.put(xCoord, yCoord);
                 gc.fillRect(xCoord, yCoord, 1, 1);
             }
@@ -142,7 +146,13 @@ class CanvasPane extends Canvas {
                 count++;
             }
         }
-        
+
+        this.setOnMouseMoved(event -> {
+            double x = event.getX(), y = event.getY();
+            mouseLocation[0] = String.valueOf((int) ((-width / 2) + x) / scale);
+            mouseLocation[1] = String.valueOf((int) ((height / 2) - y) / scale);
+            drawCoord();
+        });
 
         //Draws a point where you click on the canvas
         Map<Double, Double> mouseSet = new HashMap<>();
@@ -150,7 +160,10 @@ class CanvasPane extends Canvas {
             double x = event.getX(), y = event.getY();
             gc.setStroke(Paint.valueOf("878787"));
             gc.strokeOval(x, y, 2, 2);
-            mouseSet.put(x - width / 2, height / 2 - y);
+            double computedX = (x/scale - (width / 2));
+            double computedY = ((height / 2) - y/scale);
+            System.out.println("compX: "+computedX/scale+" compY:"+computedY/scale);
+            mouseSet.put(computedX/scale, computedY/scale);
             if (mouseSet.size() >= getPointsSize()) {
                 double xValues[] = new double[mouseSet.size()];
                 double yValues[] = new double[mouseSet.size()];
@@ -168,7 +181,7 @@ class CanvasPane extends Canvas {
                 int degree = p.degree();
                 System.out.println("** degree: " + degree);
                 String lagrangeFunction = "";
-                for (int t=coefficients.length-1;t>=0;t--){
+                for (int t = coefficients.length - 1; t >= 0; t--) {
                     if (degree != 0) {
                         lagrangeFunction += "math:pow(x," + String.valueOf(degree) + ")*" + ((Double) coefficients[t]).toString() + "+";
                     } else {
@@ -178,7 +191,7 @@ class CanvasPane extends Canvas {
                     degree--;
                 }
                 System.out.println("lagrange function: " + lagrangeFunction);
-                drawnFunction=lagrangeFunction;
+                drawnFunction = lagrangeFunction;
                 //Drawing the lagrange function
                 Map<String, Integer> stylesMap = new HashMap<>();
                 stylesMap.put(attachedColor, attachedWeight);
@@ -198,6 +211,17 @@ class CanvasPane extends Canvas {
 
         canvasImage = new Image(target.toURI().toString());
         gc.drawImage(canvasImage, 0, 0, width, height);
+    }
+
+    public void drawCoord() {
+        GraphicsContext gc = this.getGraphicsContext2D();
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+//        reset();
+        gc.clearRect(20, 10, 100, 20);
+        gc.setFill(Paint.valueOf("#525252"));
+        String s = "x: " + mouseLocation[0] + " y: " + mouseLocation[1];
+        gc.fillText(s, 20, 20);
     }
 
     @Override
@@ -239,6 +263,7 @@ class CanvasPane extends Canvas {
         } else {
             drawingSet.clear();
             canvasImage = null;
+            drawnFunction = null;
             reset();
             isReset = false;
         }
@@ -291,6 +316,20 @@ class CanvasPane extends Canvas {
      */
     public void setPointsSize(int pointsSize) {
         this.pointsSize = pointsSize;
+    }
+
+    /**
+     * @return the scale
+     */
+    public int getScale() {
+        return scale;
+    }
+
+    /**
+     * @param scale the scale to set
+     */
+    public void setScale(int scale) {
+        this.scale = scale;
     }
 
 }
