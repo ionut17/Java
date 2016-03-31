@@ -3,6 +3,7 @@ package lab6.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
@@ -167,12 +168,14 @@ class CanvasPane extends Canvas {
                 mousePositionToolTip.setText(f.getFunction());
 //                System.out.println("* "+mouseLocation[1]+" = "+f.getValueOf(Integer.valueOf(mouseLocation[0])));
                 if (mouseLocation[1].matches(f.getValueOf(Integer.valueOf(mouseLocation[0])).toString())) {
-                    if (tooltipDisplay.get(f.getFunction()) == 0) {
-                        Node node = (Node) event.getSource();
-                        mousePositionToolTip.hide();
-                        mousePositionToolTip.show(node, event.getScreenX() + 5, event.getScreenY());
-                        tooltipDisplay.replace(f.getFunction(), 1);
-                    }
+//                    if (tooltipDisplay.get(f.getFunction()) == 0) {
+//                        Node node = (Node) event.getSource();
+//                        mousePositionToolTip.show(node, event.getScreenX() + 5, event.getScreenY());
+//                        mousePositionToolTip.hide();
+//                        tooltipDisplay.replace(f.getFunction(), 1);
+//                    }
+                      drawnFunction = f.getFunction();
+                      redraw();
                 }
             }
         });
