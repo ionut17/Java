@@ -80,13 +80,13 @@ class CanvasPane extends Canvas {
         //Drawing background counts
         gc.setFont(new Font("Montseratt Bold", 12));
         for (int i = (int) -(width / 2) / globalScale; i <= (width / 2) / globalScale; i++) {
-            if (i * globalScale != 0 && i % (100/globalScale) == 0) {
+            if (i * globalScale != 0 && i % (100 / globalScale) == 0) {
                 gc.fillRect(width / 2 + i * globalScale, height / 2 - 5, 1, 10);
                 gc.fillText(String.valueOf(i), width / 2 + i * globalScale - 8, height / 2 + 20);
             }
         }
         for (int i = (int) -(height / 2) / globalScale; i <= (height / 2) / globalScale; i++) {
-            if (i * globalScale != 0 && i * globalScale != -1 && i % (100/globalScale) == 0) {
+            if (i * globalScale != 0 && i * globalScale != -1 && i % (100 / globalScale) == 0) {
                 gc.fillRect(width / 2 - 5, height / 2 - i * globalScale, 10, 1);
                 gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * globalScale + 5);
             }
@@ -122,9 +122,11 @@ class CanvasPane extends Canvas {
             int scale = globalScale;
             for (int i = (int) -(width / 2) / scale; i <= (width / 2 - gap) / scale; i++) {
                 int xCoord = (int) ((width / 2) + i * scale);
-                int yCoord = (int) ((height / 2)) - Integer.valueOf(newFunction.getValueOf(i).toString()) * scale;
-                pointSet.put(xCoord, yCoord);
-                gc.fillRect(xCoord, yCoord, 1, 1);
+                if (newFunction.getValueOf(i) != null) {
+                    int yCoord = (int) ((height / 2)) - Integer.valueOf(newFunction.getValueOf(i).toString()) * scale;
+                    pointSet.put(xCoord, yCoord);
+                    gc.fillRect(xCoord, yCoord, 1, 1);
+                }
             }
             //Drawing line between points
             int xOld = (int) (width / 2);
@@ -158,9 +160,9 @@ class CanvasPane extends Canvas {
             double x = event.getX(), y = event.getY();
             gc.setStroke(Paint.valueOf("878787"));
             gc.strokeOval(x, y, 2, 2);
-            double computedX = (x/globalScale - (width / 2));
-            double computedY = ((height / 2) - y/globalScale);
-            System.out.println("compX: "+computedX/globalScale+" compY:"+computedY/globalScale);
+            double computedX = (x / globalScale - (width / 2));
+            double computedY = ((height / 2) - y / globalScale);
+            System.out.println("compX: " + computedX / globalScale + " compY:" + computedY / globalScale);
             mouseSet.put(computedX, computedY);
             if (mouseSet.size() >= getPointsSize()) {
                 double xValues[] = new double[mouseSet.size()];

@@ -15,6 +15,8 @@ public class Function {
     private String function;
 
     public Object getValueOf(Integer value) {
+        if (function.contains("sqrt") && value<0) return null;
+        if (function.contains("log") && value<=0) return null;
         ExpressionEvalFactory factoryEval = new ExpressionEvalFactory();
         Map<String, Object> functions = new HashMap<String, Object>();
         functions.put("math", Math.class);

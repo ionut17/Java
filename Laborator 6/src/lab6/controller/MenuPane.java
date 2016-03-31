@@ -105,6 +105,7 @@ class MenuPane extends FlowPane {
             public void handle(ActionEvent event) {
                 canvas.setIsReset(true);
                 canvas.reset();
+                functionField.setText("");
             }
         });
 
