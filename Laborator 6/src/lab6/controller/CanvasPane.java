@@ -26,7 +26,7 @@ class CanvasPane extends Canvas {
 
     private Image canvasImage = null;
     private int pointsSize = 2;
-    private int scale = 10;
+    private int globalScale = 1;
 
     private String drawnFunction = null;
     private String[] mouseLocation = new String[2];
@@ -79,16 +79,16 @@ class CanvasPane extends Canvas {
 
         //Drawing background counts
         gc.setFont(new Font("Montseratt Bold", 12));
-        for (int i = (int) -(width / 2) / scale; i <= (width / 2) / scale; i++) {
-            if (i * scale != 0 && i % scale == 0) {
-                gc.fillRect(width / 2 + i * scale, height / 2 - 5, 1, 10);
-                gc.fillText(String.valueOf(i), width / 2 + i * scale - 8, height / 2 + 20);
+        for (int i = (int) -(width / 2) / globalScale; i <= (width / 2) / globalScale; i++) {
+            if (i * globalScale != 0 && i % (100/globalScale) == 0) {
+                gc.fillRect(width / 2 + i * globalScale, height / 2 - 5, 1, 10);
+                gc.fillText(String.valueOf(i), width / 2 + i * globalScale - 8, height / 2 + 20);
             }
         }
-        for (int i = (int) -(height / 2) / scale; i <= (height / 2) / scale; i++) {
-            if (i * scale != 0 && i * scale != -1 && i % scale == 0) {
-                gc.fillRect(width / 2 - 5, height / 2 - i * scale, 10, 1);
-                gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * scale + 5);
+        for (int i = (int) -(height / 2) / globalScale; i <= (height / 2) / globalScale; i++) {
+            if (i * globalScale != 0 && i * globalScale != -1 && i % (100/globalScale) == 0) {
+                gc.fillRect(width / 2 - 5, height / 2 - i * globalScale, 10, 1);
+                gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * globalScale + 5);
             }
         }
     }
@@ -119,6 +119,7 @@ class CanvasPane extends Canvas {
             Map<Integer, Integer> pointSet = new HashMap<>();
             Function newFunction = new Function();
             newFunction.setFunction(entry.getKey());
+            int scale = globalScale;
             for (int i = (int) -(width / 2) / scale; i <= (width / 2 - gap) / scale; i++) {
                 int xCoord = (int) ((width / 2) + i * scale);
                 int yCoord = (int) ((height / 2)) - Integer.valueOf(newFunction.getValueOf(i).toString()) * scale;
@@ -146,8 +147,8 @@ class CanvasPane extends Canvas {
 
         this.setOnMouseMoved(event -> {
             double x = event.getX(), y = event.getY();
-            mouseLocation[0] = String.valueOf((int) ((-width / 2) + x) / scale);
-            mouseLocation[1] = String.valueOf((int) ((height / 2) - y) / scale);
+            mouseLocation[0] = String.valueOf((int) ((-width / 2) + x) / globalScale);
+            mouseLocation[1] = String.valueOf((int) ((height / 2) - y) / globalScale);
             drawCoord();
         });
 
@@ -157,10 +158,10 @@ class CanvasPane extends Canvas {
             double x = event.getX(), y = event.getY();
             gc.setStroke(Paint.valueOf("878787"));
             gc.strokeOval(x, y, 2, 2);
-            double computedX = (x/scale - (width / 2));
-            double computedY = ((height / 2) - y/scale);
-            System.out.println("compX: "+computedX/scale+" compY:"+computedY/scale);
-            mouseSet.put(computedX/scale, computedY/scale);
+            double computedX = (x/globalScale - (width / 2));
+            double computedY = ((height / 2) - y/globalScale);
+            System.out.println("compX: "+computedX/globalScale+" compY:"+computedY/globalScale);
+            mouseSet.put(computedX, computedY);
             if (mouseSet.size() >= getPointsSize()) {
                 double xValues[] = new double[mouseSet.size()];
                 double yValues[] = new double[mouseSet.size()];
@@ -319,14 +320,14 @@ class CanvasPane extends Canvas {
      * @return the scale
      */
     public int getScale() {
-        return scale;
+        return globalScale;
     }
 
     /**
      * @param scale the scale to set
      */
     public void setScale(int scale) {
-        this.scale = scale;
+        this.globalScale = scale;
     }
 
 }

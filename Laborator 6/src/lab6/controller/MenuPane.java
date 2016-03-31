@@ -1,6 +1,8 @@
 package lab6.controller;
 
 import java.io.File;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -10,6 +12,7 @@ import static javafx.geometry.Pos.TOP_RIGHT;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -253,6 +256,33 @@ class MenuPane extends FlowPane {
         });
         drawSizes.getChildren().addAll(label3, combo);
 
+        //Slider - scaling
+        HBox sliderBox = new HBox();
+        Label label4 = new Label("Scale: ");
+        Label scaleValue = new Label("1");
+        scaleValue.setId("scaleLabel");
+        Slider scalingSlider = new Slider();
+        scalingSlider.setId("scalingSlider");
+        scalingSlider.setMin(1);
+        scalingSlider.setMax(10);
+        scalingSlider.setValue(1);
+        scalingSlider.setShowTickLabels(false);
+        scalingSlider.setShowTickMarks(false);
+        scalingSlider.setMajorTickUnit(50);
+        scalingSlider.setMinorTickCount(5);
+        scalingSlider.setBlockIncrement(1);
+        scalingSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                Double db = new Double((double) newValue);
+                canvas.setScale(db.intValue());
+                scaleValue.setText(String.valueOf(db.intValue()));
+                canvas.redraw();
+            }
+        });
+        sliderBox.getChildren().addAll(label4, scalingSlider, scaleValue);
+
         //Main box
         FlowPane mainBox = new FlowPane();
         mainBox.prefWidthProperty().bind(myStage.widthProperty());
@@ -266,7 +296,7 @@ class MenuPane extends FlowPane {
         box2.setSpacing(20);
 
         box1.getChildren().addAll(input, buttons);
-        box2.getChildren().addAll(colorToggles, weightToggles, drawSizes);
+        box2.getChildren().addAll(colorToggles, weightToggles, drawSizes, sliderBox);
 
         mainBox.getChildren().addAll(box1, box2);
 
