@@ -3,8 +3,12 @@ package lab6.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -147,11 +151,30 @@ class CanvasPane extends Canvas {
             }
         }
 
+        Map<String, Integer> tooltipDisplay = new HashMap<>();
+        for (Map.Entry< String, Map<String, Integer>> e : drawingSet.entrySet()) {
+            tooltipDisplay.put(e.getKey(), 0);
+        }
         this.setOnMouseMoved(event -> {
             double x = event.getX(), y = event.getY();
             mouseLocation[0] = String.valueOf((int) ((-width / 2) + x) / globalScale);
             mouseLocation[1] = String.valueOf((int) ((height / 2) - y) / globalScale);
             drawCoord();
+            for (Map.Entry< String, Map<String, Integer>> e : drawingSet.entrySet()) {
+                Function f = new Function();
+                f.setFunction(e.getKey());
+                Tooltip mousePositionToolTip = new Tooltip("");
+                mousePositionToolTip.setText(f.getFunction());
+//                System.out.println("* "+mouseLocation[1]+" = "+f.getValueOf(Integer.valueOf(mouseLocation[0])));
+                if (mouseLocation[1].matches(f.getValueOf(Integer.valueOf(mouseLocation[0])).toString())) {
+                    if (tooltipDisplay.get(f.getFunction()) == 0) {
+                        Node node = (Node) event.getSource();
+                        mousePositionToolTip.hide();
+                        mousePositionToolTip.show(node, event.getScreenX() + 5, event.getScreenY());
+                        tooltipDisplay.replace(f.getFunction(), 1);
+                    }
+                }
+            }
         });
 
         //Draws a point where you click on the canvas
@@ -179,7 +202,6 @@ class CanvasPane extends Canvas {
                 //p.computeCoefficients();
                 double coefficients[] = p.getCoefficients();
                 int degree = p.degree();
-                System.out.println("** degree: " + degree);
                 String lagrangeFunction = "";
                 for (int t = coefficients.length - 1; t >= 0; t--) {
                     if (degree != 0) {

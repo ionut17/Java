@@ -26,7 +26,6 @@ public class Function {
         MapContext mc = new MapContext();
         mc.set("x", value);
 
-        System.out.println("expression: *" + e + "*");
 //        Expression express=jexl.createExpression("sin(30)");
 //        System.out.println("** " + express.evaluate(null) + " *");
         String returnValue = e.evaluate(mc).toString().split("\\.")[0];
