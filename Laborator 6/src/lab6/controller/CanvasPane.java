@@ -3,8 +3,12 @@ package lab6.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -26,7 +30,7 @@ class CanvasPane extends Canvas {
 
     private Image canvasImage = null;
     private int pointsSize = 2;
-    private int scale = 10;
+    private int scale = 1;
 
     private String drawnFunction = null;
     private String[] mouseLocation = new String[2];
@@ -80,13 +84,13 @@ class CanvasPane extends Canvas {
         //Drawing background counts
         gc.setFont(new Font("Montseratt Bold", 12));
         for (int i = (int) -(width / 2) / scale; i <= (width / 2) / scale; i++) {
-            if (i * scale != 0 && i % scale == 0) {
+            if (i * scale != 0 && i % 20 == 0) {
                 gc.fillRect(width / 2 + i * scale, height / 2 - 5, 1, 10);
                 gc.fillText(String.valueOf(i), width / 2 + i * scale - 8, height / 2 + 20);
             }
         }
         for (int i = (int) -(height / 2) / scale; i <= (height / 2) / scale; i++) {
-            if (i * scale != 0 && i * scale != -1 && i % scale == 0) {
+            if (i * scale != 0 && i * scale != -1 && i % 20 == 0) {
                 gc.fillRect(width / 2 - 5, height / 2 - i * scale, 10, 1);
                 gc.fillText(String.valueOf(i), width / 2 - 35, height / 2 - i * scale + 5);
             }
@@ -144,11 +148,30 @@ class CanvasPane extends Canvas {
             }
         }
 
+        Map<String, Integer> tooltipDisplay = new HashMap<>();
+        for (Map.Entry< String, Map<String, Integer>> e : drawingSet.entrySet()) {
+            tooltipDisplay.put(e.getKey(), 0);
+        }
         this.setOnMouseMoved(event -> {
             double x = event.getX(), y = event.getY();
             mouseLocation[0] = String.valueOf((int) ((-width / 2) + x) / scale);
             mouseLocation[1] = String.valueOf((int) ((height / 2) - y) / scale);
             drawCoord();
+            for (Map.Entry< String, Map<String, Integer>> e : drawingSet.entrySet()) {
+                Function f = new Function();
+                f.setFunction(e.getKey());
+                Tooltip mousePositionToolTip = new Tooltip("");
+                mousePositionToolTip.setText(f.getFunction());
+//                System.out.println("* "+mouseLocation[1]+" = "+f.getValueOf(Integer.valueOf(mouseLocation[0])));
+                if (mouseLocation[1].matches(f.getValueOf(Integer.valueOf(mouseLocation[0])).toString())) {
+                    if (tooltipDisplay.get(f.getFunction()) == 0) {
+                        Node node = (Node) event.getSource();
+                        mousePositionToolTip.hide();
+                        mousePositionToolTip.show(node, event.getScreenX() + 5, event.getScreenY());
+                        tooltipDisplay.replace(f.getFunction(), 1);
+                    }
+                }
+            }
         });
 
         //Draws a point where you click on the canvas
@@ -157,10 +180,10 @@ class CanvasPane extends Canvas {
             double x = event.getX(), y = event.getY();
             gc.setStroke(Paint.valueOf("878787"));
             gc.strokeOval(x, y, 2, 2);
-            double computedX = (x/scale - (width / 2));
-            double computedY = ((height / 2) - y/scale);
-            System.out.println("compX: "+computedX/scale+" compY:"+computedY/scale);
-            mouseSet.put(computedX/scale, computedY/scale);
+            double computedX = (x / scale - (width / 2));
+            double computedY = ((height / 2) - y / scale);
+            System.out.println("compX: " + computedX / scale + " compY:" + computedY / scale);
+            mouseSet.put(computedX / scale, computedY / scale);
             if (mouseSet.size() >= getPointsSize()) {
                 double xValues[] = new double[mouseSet.size()];
                 double yValues[] = new double[mouseSet.size()];
@@ -176,7 +199,6 @@ class CanvasPane extends Canvas {
                 //p.computeCoefficients();
                 double coefficients[] = p.getCoefficients();
                 int degree = p.degree();
-                System.out.println("** degree: " + degree);
                 String lagrangeFunction = "";
                 for (int t = coefficients.length - 1; t >= 0; t--) {
                     if (degree != 0) {
