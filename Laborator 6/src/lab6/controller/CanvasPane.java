@@ -1,17 +1,14 @@
 package lab6.controller;
 
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 
 /**
  *
@@ -176,7 +173,7 @@ class CanvasPane extends Canvas {
                 }
                 gc.fillRect(x, y, 1, 1);
                 PolynomialFunctionLagrangeForm p = new PolynomialFunctionLagrangeForm(xValues, yValues);
-                p.computeCoefficients();
+                //p.computeCoefficients();
                 double coefficients[] = p.getCoefficients();
                 int degree = p.degree();
                 System.out.println("** degree: " + degree);

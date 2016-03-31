@@ -23,6 +23,8 @@ public class Function {
         Expression e = jexl.createExpression(getFunction());
         MapContext mc = new MapContext();
         mc.set("x", value);
+
+        System.out.println("expression: *" + e + "*");
 //        Expression express=jexl.createExpression("sin(30)");
 //        System.out.println("** " + express.evaluate(null) + " *");
         String returnValue = e.evaluate(mc).toString().split("\\.")[0];
@@ -39,8 +41,25 @@ public class Function {
     /**
      * @param function the function to set
      */
-    public void setFunction(String function) {
-        this.function = function;
+    public void setFunction(String myFunction) {
+        String[] mathFunctions = {"sin", "toRadians", "cos", "abs", "acos", "asin", "atan", "ceil", "floor", "log", "log10", "max", "min", "pow", "random", "round", "sqrt", "tan", "toDegrees"};
+        for (String f: mathFunctions) {
+            myFunction = parseFunction(myFunction, f);
+        }
+        this.function = myFunction;
     }
 
+    private String parseFunction(String myFunction, String math) {
+        if (!myFunction.contains("math:" + math)) {
+            if (myFunction.contains(math)) {
+                String[] functionPieces = myFunction.split(math);
+                myFunction = "";
+                for (int i = 0; i < functionPieces.length - 1; i++) {
+                    myFunction += functionPieces[i] + "math:" + math;
+                }
+                myFunction += functionPieces[functionPieces.length - 1];
+            }
+        }
+        return myFunction;
+    }
 }
