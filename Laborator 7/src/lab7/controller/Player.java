@@ -1,6 +1,7 @@
 package lab7.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -12,10 +13,13 @@ public class Player implements Runnable {
     private String playerName;
     private int score = 0;
     private final LetterPack attachedLetterPack;
-
-    public Player(LetterPack lp, String name) {
+    private final HashSet<String> dictionary;
+    private ArrayList<Word> wordsFound=new ArrayList<>();
+    
+    public Player(LetterPack lp, HashSet<String> dictionary, String name) {
         this.playerName = name;
         this.attachedLetterPack = lp;
+        this.dictionary = dictionary;
     }
 
     @Override
@@ -29,7 +33,56 @@ public class Player implements Runnable {
         for (Tile letter : letters) {
             System.out.println(playerName + ": " + letter.toString());
         }
-        System.out.println("Pack size: "+attachedLetterPack.getPackSize());
+        System.out.println("Configuring words...");
+        this.getWord(letters, "",0);
+        int maxValue=0;
+        Word bestWord= new Word();
+        for(Word w: wordsFound){
+            if(w.getValue()>maxValue){
+                maxValue=w.getValue();
+                bestWord=w;
+            }
+        }
+        System.out.println("best word: "+bestWord.getWord()+" ("+bestWord.getValue()+")");
+        System.out.println("Pack size: " + attachedLetterPack.getPackSize());
+    }
+
+    private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
+        if(currentWord.length()>1 && dictionary.contains(currentWord)){
+            Word w=new Word();
+            w.setPlayer(this);
+            w.setWord(currentWord);
+            w.setValue(currentWordValue);
+            wordsFound.add(w);
+        }
+        if(currentWord.length()<7){
+            for(int i=0;i<letters.size();i++){
+                List<Tile> letters2=new ArrayList<Tile>(letters);
+                letters2.remove(letters2.get(i));
+                getWord(letters2, currentWord+letters.get(i).getLetter(), currentWordValue+letters.get(i).getValue());
+            }
+        }
+//        if (letters.size() > 0) {
+//            if (currentWord != "" && dictionary.contains(currentWord)) {
+//                wordsFound.add(currentWord);
+//            }
+//            if (position < letters.size()) {
+//                currentWord += letters.get(position).getLetter();
+//                letters.remove(letters.get(position));
+//            }
+//
+//            getWord(letters, currentWord, position + 1, wordsFound);
+//        } else {
+//            int maxLength = 0;
+//            String longestWord = new String();
+//            for (String s : wordsFound) {
+//                if (s.length() > maxLength) {
+//                    maxLength = s.length();
+//                    longestWord = s;
+//                }
+//            }
+//            System.out.println("longest word: " + longestWord);
+//        }
     }
 
     /**

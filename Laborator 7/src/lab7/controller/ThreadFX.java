@@ -5,6 +5,7 @@
  */
 package lab7.controller;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,7 +47,7 @@ public class ThreadFX extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        launch(args);
         //Code
         GameManager gm = new GameManager();
