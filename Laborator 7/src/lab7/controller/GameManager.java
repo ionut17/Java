@@ -8,6 +8,9 @@ package lab7.controller;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import javafx.application.Application;
+import java.io.IOException;
+import java.util.HashSet;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,6 +47,11 @@ public class GameManager extends Application {
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
+        Dictionary d = Dictionary.getDictionary();
+        HashSet<String> dt = d.getWords();
+
+        Player p1 = new Player(lp, dt, "Ionut");
+        Player p2 = new Player(lp, dt, "Anca");
 
             @Override
             public void handle(ActionEvent event) {
