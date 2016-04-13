@@ -1,0 +1,210 @@
+/*.button {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+    -fx-background-color: #CCFF99;
+}*/
+
+#timeCounter{
+    -fx-background-color: #2c3e50;
+    -fx-alignment: center;
+    -fx-padding: 10 0 10 0;
+}
+
+#timeCounter .label{
+    -fx-font: bold 14px "Montseratt";
+    -fx-text-fill: #ffffff;
+}
+
+/*#menu {
+    -fx-background-color: #2c3e50;
+    -fx-alignment: center;
+    -fx-padding: 0 0 0 0;
+}
+
+#menu .label{
+    -fx-text-fill: #ffffff;
+    -fx-font: bold 14px "Montseratt";
+    -fx-padding: 0 5 0 0;
+}
+
+#menu .text-field{
+    -fx-padding: 9;
+}
+
+#menu .button{
+    -fx-background-color: none;
+    -fx-background-radius: 0;
+    -fx-border-width: 2;
+    -fx-border-color: #40B2FF;
+    -fx-border-radius: 0;
+    -fx-padding: 7 15 7 15;
+    -fx-text-fill: #40B2FF;
+    -fx-font: bold 12px "Montseratt"; 
+    
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+}
+
+#menu .button:hover{
+    -fx-background-color: #40B2FF;
+    -fx-border-color: #40B2FF;
+    -fx-text-fill: #2c3e50;
+}
+
+#menu .button:active{
+    -fx-background-color: #308AC7;
+}
+
+Color toggles
+#menu .toggle-button{
+    -fx-padding: 9 12 9 12;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 3;
+    -fx-opacity: 0.5;
+}
+
+#menu .toggle-button:selected{
+    -fx-padding:6 9 6 9;
+    -fx-border-color: white;
+    -fx-opacity: 1;
+}
+
+#mainBox{
+    -fx-alignment: center;
+}
+
+HBox{
+    -fx-alignment: center;
+}
+
+#tb0{
+    -fx-background-color: #000000;
+}
+
+#tb1{
+    -fx-background-color: #308AC7;
+    -fx-border-color: #308AC7;
+}
+
+#tb2{
+    -fx-background-color: #e74c3c;
+    -fx-border-color: #e74c3c;
+}
+
+#tb3{
+    -fx-background-color: #f39c12;
+    -fx-border-color: #f39c12;
+}
+
+#tb4{
+    -fx-background-color: #27ae60;
+    -fx-border-color: #27ae60;
+}
+
+#tb5{
+    -fx-background-color: #8e44ad;
+}
+
+#tb6, #tb7, #tb8{
+    -fx-font: bold 12px "Montseratt"; 
+    -fx-background-color: #40B2FF;
+    -fx-background-color: #2c3e50;
+}
+
+#scalingSlider{
+    -fx-font-color: white;
+    -fx-padding: 0 0 0 0;
+}
+
+.slider .thumb {
+    -fx-background-color: #2c3e50;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 1.0em;  makes sure this remains circular 
+    -fx-padding: 0.583333em;  7 
+    -fx-border-width: 2;
+    -fx-border-color: #40B2FF;
+    -fx-border-radius: 1.0em;
+}
+
+.slider .thumb:hover{
+    -fx-background-color: #40B2FF;
+}
+
+.slider .axis {
+    -fx-tick-label-fill: #ffffff;
+}
+
+.slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: white;
+}
+
+.slider .track {
+    -fx-background-color: #3898D9;
+}
+
+#scaleLabel{
+    -fx-label-padding: 0 0 0 5;
+}*/
+
+/*.combo-box .list-cell 
+{
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: #40B2FF;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em; 
+}
+
+.combo-box .text-input:hover{
+    -fx-text-fill: #2c3e50;
+}
+
+.combo-box-popup .list-view 
+{
+    -fx-background-color: #40B2FF;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+    -fx-effect: null;
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-text-fill: #2c3e50;
+}
+
+.combo-box .list-view .list-cell:hover{
+    -fx-text-fill: #2c3e50;
+}
+
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+}
+*/
+
+.combo-box-base  
+{
+/*    -fx-background-color: #2c3e50;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-padding: 5;
+    -fx-border-width: 2;
+    -fx-border-color: #40B2FF;
+    -fx-text-fill: #ffffff;
+    -fx-font: bold 12px "Montseratt"; 
+    -fx-background-color: #40B2FF, #40B2FF, #40B2FF, #40B2FF;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-border-width: 2;
+    -fx-border-color: #47B5FF;
+    -fx-border-radius: 5, 5, 4, 3;
+    -fx-padding: 0;
+}
+.combo-box-base:hover
+{
+    -fx-background-color: #40B2FF;
+    -fx-text-fill: #2c3e50;
+}*/

@@ -12,6 +12,7 @@ public class LetterPack {
 
     private final int MAX_SIZE = 100;
     private Map<Tile, Integer> pack = new ConcurrentHashMap<>();
+    private boolean available = false;
 
     /**
      * @return the MAX_SIZE
@@ -42,17 +43,24 @@ public class LetterPack {
         return size;
     }
 
-    public Tile extractLetter() {
+    public synchronized Tile extractLetter() {
+//        while (!available) {
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         if (getPackSize() > 0) {
             Random rd = new Random();
             int ok = 0, index, k;
-            while (ok==0){
+            while (ok == 0) {
                 index = rd.nextInt(pack.size());
                 k = 0;
                 for (Map.Entry<Tile, Integer> entry : pack.entrySet()) {
-                    if (k == index && entry.getValue()>0) {
-                        ok=1;
-                        entry.setValue(entry.getValue()-1);
+                    if (k == index && entry.getValue() > 0) {
+                        ok = 1;
+                        entry.setValue(entry.getValue() - 1);
                         return entry.getKey();
                     }
                     k++;
@@ -66,7 +74,7 @@ public class LetterPack {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<Tile, Integer> entry : pack.entrySet()) {
-            sb.append(entry.getKey().getLetter()).append(" (" + entry.getValue() + ")").append(": " + entry.getKey().getValue() + " points").append("\n");
+            sb.append(entry.getValue()+"x ").append(entry.getKey().getLetter()).append("\n"); //.append(" (" + entry.getKey().getValue() + ")")
         }
         return sb.toString();
     }

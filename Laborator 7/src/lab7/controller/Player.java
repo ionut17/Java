@@ -2,6 +2,10 @@ package lab7.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
 /**
  *
@@ -12,24 +16,52 @@ public class Player implements Runnable {
     private String playerName;
     private int score = 0;
     private final LetterPack attachedLetterPack;
+    private List<Tile> playerLetters = new ArrayList<>();
+    private TextArea statusArea;
+    private TextArea packArea;
 
-    public Player(LetterPack lp, String name) {
+    public Player(LetterPack lp, String name, TextArea status, TextArea pack) {
         this.playerName = name;
         this.attachedLetterPack = lp;
+        this.statusArea = status;
+        this.packArea = pack;
     }
 
     @Override
     public void run() {
-        System.out.println("Player " + playerName + " is running...");
-        List<Tile> letters = new ArrayList<>();
-        System.out.println("Extracting...");
+
+        Platform.runLater(new Runnable() {
+            public void run() {
+                statusArea.appendText("Player " + playerName + " started...\n");
+            }
+        });
+
+        //Extract by turns
         for (int i = 0; i < 7; i++) {
-            letters.add(attachedLetterPack.extractLetter());
+            Tile extractedLetter = attachedLetterPack.extractLetter();
+            if (extractedLetter != null) {
+                playerLetters.add(extractedLetter);
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        packArea.setText(attachedLetterPack.toString());
+                    }
+                });
+            }
         }
-        for (Tile letter : letters) {
-            System.out.println(playerName + ": " + letter.toString());
+        for (Tile letter : playerLetters) {
+            String currentMove = playerName + ": " + letter.toString() + '\n';
+            Platform.runLater(new Runnable() {
+                public void run() {
+                    statusArea.appendText(currentMove);
+                }
+            });
         }
-        System.out.println("Pack size: "+attachedLetterPack.getPackSize());
+        String currentSize = "###" + playerName + " - Pack size: " + attachedLetterPack.getPackSize() + '\n';
+        Platform.runLater(new Runnable() {
+            public void run() {
+                statusArea.appendText(currentSize);
+            }
+        });
     }
 
     /**
