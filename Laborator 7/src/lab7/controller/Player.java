@@ -20,11 +20,10 @@ public class Player implements Runnable {
     private List<Tile> playerLetters = new ArrayList<>();
     private TextArea statusArea;
     private final HashSet<String> dictionary;
-    private ArrayList<Word> wordsFound=new ArrayList<>();
+    private ArrayList<Word> wordsFound = new ArrayList<>();
     private TextArea packArea;
-    
-    public Player(LetterPack lp, String name, TextArea status, TextArea pack) {
-    public Player(LetterPack lp, HashSet<String> dictionary, String name) {
+
+    public Player(LetterPack lp, HashSet<String> dictionary, String name, TextArea status, TextArea pack) {
         this.playerName = name;
         this.attachedLetterPack = lp;
         this.statusArea = status;
@@ -63,37 +62,39 @@ public class Player implements Runnable {
         }
         String currentSize = "###" + playerName + " - Pack size: " + attachedLetterPack.getPackSize() + '\n';
         Platform.runLater(new Runnable() {
-        System.out.println("Configuring words...");
-        this.getWord(letters, "",0);
-        int maxValue=0;
-        Word bestWord= new Word();
-        for(Word w: wordsFound){
-            if(w.getValue()>maxValue){
-                maxValue=w.getValue();
-                bestWord=w;
-            }
-        }
-        System.out.println("best word: "+bestWord.getWord()+" ("+bestWord.getValue()+")");
             public void run() {
-        System.out.println("Pack size: " + attachedLetterPack.getPackSize());
+                System.out.println("Pack size: " + attachedLetterPack.getPackSize());
                 statusArea.appendText(currentSize);
             }
         });
+
+        //Make words
+        System.out.println("Configuring words...");
+        this.getWord(playerLetters, "", 0);
+        int maxValue = 0;
+        Word bestWord = new Word();
+        for (Word w : wordsFound) {
+            if (w.getValue() > maxValue) {
+                maxValue = w.getValue();
+                bestWord = w;
+            }
+        }
+        System.out.println("best word: " + bestWord.getWord() + " (" + bestWord.getValue() + ")");
     }
 
     private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
-        if(currentWord.length()>1 && dictionary.contains(currentWord)){
-            Word w=new Word();
+        if (currentWord.length() > 1 && dictionary.contains(currentWord)) {
+            Word w = new Word();
             w.setPlayer(this);
             w.setWord(currentWord);
             w.setValue(currentWordValue);
             wordsFound.add(w);
         }
-        if(currentWord.length()<7){
-            for(int i=0;i<letters.size();i++){
-                List<Tile> letters2=new ArrayList<Tile>(letters);
+        if (currentWord.length() < 7) {
+            for (int i = 0; i < letters.size(); i++) {
+                List<Tile> letters2 = new ArrayList<Tile>(letters);
                 letters2.remove(letters2.get(i));
-                getWord(letters2, currentWord+letters.get(i).getLetter(), currentWordValue+letters.get(i).getValue());
+                getWord(letters2, currentWord + letters.get(i).getLetter(), currentWordValue + letters.get(i).getValue());
             }
         }
 //        if (letters.size() > 0) {

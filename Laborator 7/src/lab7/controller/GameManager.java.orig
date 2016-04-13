@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package lab7.controller;
 
 import java.util.concurrent.Executors;
@@ -8,12 +13,19 @@ import java.util.HashSet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -32,6 +44,21 @@ public class GameManager extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Button btn = new Button();
+        btn.setText("Say 'Hello World'");
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+        Dictionary d = Dictionary.getDictionary();
+        HashSet<String> dt = d.getWords();
+
+        Player p1 = new Player(lp, dt, "Ionut");
+        Player p2 = new Player(lp, dt, "Anca");
+
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Hello World!");
+            }
+        });
+
         //Timekeeper
         Label textLabel = new Label("Time elapsed: ");
         HBox timeCounter = new HBox();
@@ -41,11 +68,11 @@ public class GameManager extends Application {
         //Players Pane
         ObservableList<String> names = FXCollections.observableArrayList(players);
         ListView<String> listView = new ListView<String>(names);
-
+        
         listView.setPrefHeight(200);
         packArea.setPrefWidth(200);
         packArea.setPrefHeight(400);
-
+        
         BorderPane left = new BorderPane();
         left.setTop(listView);
         left.setCenter(packArea);
@@ -82,21 +109,13 @@ public class GameManager extends Application {
 
     public void play() {
 
-        try {
-            Dictionary d = Dictionary.getDictionary();
-            HashSet<String> dt = d.getWords();
-
-            TimeDaemon tdm = new TimeDaemon(timeLabel);
-            new Thread(tdm).start();
-
-            //Creating players
-            for (int i = 0; i < 5; i++) {
-                Player p = new Player(lp, dt, players[i % 5], statusArea, packArea);
-                executor.execute(p);
-            }
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        TimeDaemon tdm = new TimeDaemon(timeLabel);
+        new Thread(tdm).start();
+        
+        //Creating players
+        for (int i = 0; i < 5; i++) {
+            Player p = new Player(lp, players[i % 5], statusArea, packArea);
+            executor.execute(p);
         }
 
     }
