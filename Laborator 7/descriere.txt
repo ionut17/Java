@@ -1,0 +1,26 @@
+Fire de executie - Sincronizare
+- java.lnag: - Object: wait, notify
+	     - Thread, Runnable
+	- synchronized, volatile
+- java.util.concurent: ThreadPool  interesant, ForkJoinPool si mai interesant etc.
+- o resursa partajata comuna in care vor fi literele (saculetul cu litere) + un dictionar 
+- Thread1 (player1).. pornim mai multi jucatori.. 4, 10..nu cont
+- fiecrare ia (get) cate 7 caractere din multimea comuna si extragem caract din mult (le scoatem)
+- cu submit pt raspuns 
+- se pun punctaje 
+- class Tile care are un char, value etc.
+- saculetul cu litere: Map<Tile, Integer> -> synchronized (in Collections: este metoda synchronisedCollections 
+sau ConcurrentHashMap in java.util.Concurrent)
+- synchronized si pt tabela cu raspunsuri, care e List<Word>
+- class Word cu string, Player, value
+- ori nu se asteapta ori fac pe rand (pe pe rand: in fiecare thread un while(nu pot sa joc) astept)
+- class GameManager pt tabela, saculet si jucatori
+- interf graf: labeluri pt fiecar ejucator, un textarea in care avem ce litere mai sunt in sac si o lista de
+ cuvinte jucate
+- pt reprezentarea dictionarului: 
+	1) cu HashSet<String> (cautarea se face in timp constant)
+	2) la cautarea de cuvinte: verificam pt fiecare pas daca exista cuvinte cu prefixul obtinut; Tree (din 
+	radacina: fiecare litera a-z, nodurile in care avem bifa este end of word sau la fel si nodurile frunza)
+	3) DAWG (digraf aciclic pt cuvinte) pt a economisi spatiu
+
+-bonus: fiecare jucator se ajuta de fork join pool propriu

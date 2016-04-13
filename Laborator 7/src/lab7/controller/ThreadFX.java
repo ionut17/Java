@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author Ionut
  */
-public class ThreadScrabbleFX extends Application {
+public class ThreadFX extends Application {
     
     @Override
     public void start(Stage primaryStage) {
@@ -39,13 +39,18 @@ public class ThreadScrabbleFX extends Application {
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+//        launch(args);
+        //Code
+        GameManager gm = new GameManager();
+        gm.start();
     }
     
 }
