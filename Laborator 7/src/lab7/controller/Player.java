@@ -3,7 +3,7 @@ package lab7.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.Map;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -56,8 +56,21 @@ public class Player implements Runnable {
 //                        packArea.setText(attachedLetterPack.toString());
 //                    }
 //                });
+                } else {
+                    count--;
+                }
             }
+
+            StringBuilder sb0 = new StringBuilder(playerName + " first has letters: ");
+            for (Tile t : playerLetters) {
+                sb0.append(t.getLetter());
+            }
+            sb0.append("\n");
+            Platform.runLater(new Runnable() {
+                public void run() {
+                    statusArea.appendText(sb0.toString());
         }
+            });
 
         synchronized (this) {
             for (int i = 0; i < 5; i++) {
@@ -79,14 +92,48 @@ public class Player implements Runnable {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         statusArea.appendText(currentMove);
+                    StringBuilder ab = new StringBuilder();
+                    ab.append("now: ").append(attachedLetterPack.toString());
+                    packArea.appendText(ab.toString());
+                }
+            });
+
+            //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
+//        System.out.println("best word: " + bestWord.getWord() + " (" + bestWord.getValue() + ")");
+            String s = bestWord.getWord();
+            for (int i = 0; i < s.length(); i++) {
+
+                for (int k = 0; k < playerLetters.size(); k++) {
+                    if (playerLetters.get(k).getLetter() == s.charAt(i)) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(playerName).append(" removed: ").append(playerLetters.get(k).getLetter()).append("\n");
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                statusArea.appendText(sb.toString());
                         packArea.setText(attachedLetterPack.toString());
                     }
                 });
+                        playerLetters.remove(k);
+                        StringBuilder sb1 = new StringBuilder(playerName + " has letters: ");
+                        for (Tile t : playerLetters) {
+                            sb1.append(t.getLetter());
+                        }
 
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+                        sb1.append("\n");
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                statusArea.appendText(sb1.toString());
+                            }
+                        });
+
+                    }
+                }
+            }
+
                 }
             }
 
@@ -95,13 +142,30 @@ public class Player implements Runnable {
     }
 
     private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
-        if (currentWord.length() > 1 && dictionary.contains(currentWord)) {
-            Word w = new Word();
-            w.setPlayer(this);
-            w.setWord(currentWord);
-            w.setValue(currentWordValue);
-            wordsFound.add(w);
+        if (currentWord.length() > 1) {
+//            if (!currentWord.contains("@")) {
+                if (dictionary.contains(currentWord)) {
+                    Word w = new Word();
+                    w.setPlayer(this);
+                    w.setWord(currentWord);
+                    w.setValue(currentWordValue);
+                    wordsFound.add(w);
+                }
+//            } 
+//            else {
+//                String[] wordPieces = currentWord.split("@");
+//                for (Object key : dictionary.toArray()) {
+//                    if (key.toString().matches(wordPieces[0] + "[a-zA-Z]")) {
+//                        Word w1 = new Word();
+//                        w1.setPlayer(this);
+//                        w1.setWord(key.toString());
+//                        w1.setValue(currentWordValue);
+//                        wordsFound.add(w1);
+//                    }
+//                }
+//            }
         }
+
         if (currentWord.length() < 7) {
             for (int i = 0; i < letters.size(); i++) {
                 List<Tile> letters2 = new ArrayList<Tile>(letters);
@@ -109,27 +173,6 @@ public class Player implements Runnable {
                 getWord(letters2, currentWord + letters.get(i).getLetter(), currentWordValue + letters.get(i).getValue());
             }
         }
-//        if (letters.size() > 0) {
-//            if (currentWord != "" && dictionary.contains(currentWord)) {
-//                wordsFound.add(currentWord);
-//            }
-//            if (position < letters.size()) {
-//                currentWord += letters.get(position).getLetter();
-//                letters.remove(letters.get(position));
-//            }
-//
-//            getWord(letters, currentWord, position + 1, wordsFound);
-//        } else {
-//            int maxLength = 0;
-//            String longestWord = new String();
-//            for (String s : wordsFound) {
-//                if (s.length() > maxLength) {
-//                    maxLength = s.length();
-//                    longestWord = s;
-//                }
-//            }
-//            System.out.println("longest word: " + longestWord);
-//        }
     }
 
     /**
@@ -184,19 +227,3 @@ public class Player implements Runnable {
     }
 
 }
-
-//        for (Tile letter : playerLetters) {
-//            String currentMove = playerName + ": " + letter.toString() + '\n';
-//            Platform.runLater(new Runnable() {
-//                public void run() {
-//                    statusArea.appendText(currentMove);
-//                }
-//            });
-//        }
-//        String currentSize = "###" + playerName + " - Pack size: " + attachedLetterPack.getPackSize() + '\n';
-//        Platform.runLater(new Runnable() {
-//            public void run() {
-//                System.out.println("Pack size: " + attachedLetterPack.getPackSize());
-//                statusArea.appendText(currentSize);
-//            }
-//        });
