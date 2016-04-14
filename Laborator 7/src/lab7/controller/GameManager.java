@@ -34,13 +34,13 @@ public class GameManager extends Application {
     ObservableList<String> scoreboard = FXCollections.observableArrayList("");
     ListView<String> listView = new ListView<String>(scoreboard);
 
-    //Observers
-    ScoreObserver sc = new ScoreObserver(scoreboard);
-    private int turn = 0;
-
     TextArea statusArea = new TextArea();
     TextArea packArea = new TextArea(lp.toString());
     Label timeLabel = new Label("00:00");
+    
+    //Observers
+    ScoreObserver sc = new ScoreObserver(scoreboard, statusArea);
+    private int turn = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -51,8 +51,10 @@ public class GameManager extends Application {
         timeCounter.getChildren().addAll(textLabel, timeLabel);
 
         listView.setPrefHeight(200);
+        listView.setId("listView");
         packArea.setPrefWidth(200);
         packArea.setPrefHeight(400);
+        packArea.setId("packArea");
 
         BorderPane left = new BorderPane();
         left.setTop(listView);
@@ -62,6 +64,7 @@ public class GameManager extends Application {
         sc.updateScores();
 
         //Status Pane
+        statusArea.setId("statusArea");
         statusArea.setEditable(false);
         statusArea.setPrefRowCount(10);
         statusArea.setWrapText(true);
@@ -75,7 +78,7 @@ public class GameManager extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add("styles.css");
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("GameManager");
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -106,6 +109,7 @@ public class GameManager extends Application {
                 playerList.add(p);
                 executor.execute(p);
             }
+//            executor.shutdown();
 
 //            Turns
 //            for (int i = 0; i < 5; i++) {
@@ -124,7 +128,7 @@ public class GameManager extends Application {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
     }
 
 }

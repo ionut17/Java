@@ -134,6 +134,12 @@ public class Player implements Runnable {
                     ex.printStackTrace();
                 }
             }
+
+            Platform.runLater(new Runnable() {
+                public void run() {
+                    sc.updateWinner();
+                }
+            });
         }
     }
 

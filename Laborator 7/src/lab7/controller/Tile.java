@@ -4,7 +4,7 @@ package lab7.controller;
  *
  * @author Ionut
  */
-class Tile {
+public class Tile {
     
     private char letter;
     private int value;
