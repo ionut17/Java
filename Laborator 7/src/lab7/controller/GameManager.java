@@ -4,7 +4,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import javafx.application.Application;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,9 +23,9 @@ import javafx.stage.Stage;
  * @author Ionut
  */
 public class GameManager extends Application {
-    
+
     String[] players = {"Ionut", "Anca", "Stefan", "Eveline", "Dan"};
-    
+
     //Contents
     LetterPack lp = new LetterPackGenerator().getScrabblePack();
     ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(6);
@@ -31,9 +33,10 @@ public class GameManager extends Application {
     //Players Pane
     ObservableList<String> scoreboard = FXCollections.observableArrayList("");
     ListView<String> listView = new ListView<String>(scoreboard);
-    
+
     //Observers
     ScoreObserver sc = new ScoreObserver(scoreboard);
+    private int turn = 0;
 
     TextArea statusArea = new TextArea();
     TextArea packArea = new TextArea(lp.toString());
@@ -96,11 +99,27 @@ public class GameManager extends Application {
             new Thread(tdm).start();
 
             //Creating players
+            List<Player> playerList = new ArrayList<>();
             for (int i = 0; i < players.length; i++) {
-                Player p = new Player(lp, dt, players[i], statusArea, packArea, sc);
+                Player p = new Player(this, lp, dt, players[i], statusArea, packArea, sc);
                 sc.observePlayer(p);
+                playerList.add(p);
                 executor.execute(p);
             }
+
+//            Turns
+//            for (int i = 0; i < 5; i++) {
+//                statusArea.appendText("Turn "+i+'\n');
+//                for (Player p : playerList) {
+//                    executor.getQueue().element().notify();
+//                    try{
+//                        Thread.sleep(1000);
+//                    }
+//                    catch (InterruptedException ex){
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            }
 
         } catch (IOException ex) {
             ex.printStackTrace();

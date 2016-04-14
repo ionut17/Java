@@ -2,6 +2,7 @@ package lab7.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
 /**

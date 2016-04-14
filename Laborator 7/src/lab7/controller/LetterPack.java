@@ -12,7 +12,6 @@ public class LetterPack {
 
     private final int MAX_SIZE = 100;
     private Map<Tile, Integer> pack = new ConcurrentHashMap<>();
-    private boolean available = false;
 
     /**
      * @return the MAX_SIZE
@@ -44,13 +43,6 @@ public class LetterPack {
     }
 
     public synchronized Tile extractLetter() {
-//        while (!available) {
-//            try {
-//                wait();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
         if (getPackSize() > 0) {
             Random rd = new Random();
             int ok = 0, index, k;
