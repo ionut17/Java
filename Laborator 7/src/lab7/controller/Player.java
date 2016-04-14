@@ -46,35 +46,34 @@ public class Player implements Runnable {
             }
         });
 
-        //Extract by turns
-        while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
-            Tile extractedLetter = attachedLetterPack.extractLetter();
-            if (extractedLetter != null) {
-                playerLetters.add(extractedLetter);
+        synchronized (this) {
+            while (attachedLetterPack.getPackSize() > 0) {
+
+                //Extract by turns
+                while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
+                    Tile extractedLetter = attachedLetterPack.extractLetter();
+                    if (extractedLetter != null) {
+                        playerLetters.add(extractedLetter);
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                packArea.setText(attachedLetterPack.toString());
+                            }
+                        });
+                    }
+                }
+
+//                StringBuilder sb0 = new StringBuilder(playerName + " first has letters: ");
+//                for (Tile t : playerLetters) {
+//                    sb0.append(t.getLetter());
+//                }
+//                sb0.append("\n");
 //                Platform.runLater(new Runnable() {
 //                    public void run() {
-//                        packArea.setText(attachedLetterPack.toString());
+//                        statusArea.appendText(sb0.toString());
 //                    }
 //                });
-                } else {
-                    count--;
-                }
-            }
-
-            StringBuilder sb0 = new StringBuilder(playerName + " first has letters: ");
-            for (Tile t : playerLetters) {
-                sb0.append(t.getLetter());
-            }
-            sb0.append("\n");
-            Platform.runLater(new Runnable() {
-                public void run() {
-                    statusArea.appendText(sb0.toString());
-        }
-            });
-
-        synchronized (this) {
-            for (int i = 0; i < 5; i++) {
                 //Make words
+                wordsFound.clear();
                 this.getWord(playerLetters, "", 0);
                 int maxValue = 0;
                 Word bestWord = new Word();
@@ -84,6 +83,7 @@ public class Player implements Runnable {
                         bestWord = w;
                     }
                 }
+//                System.out.println("Tour: " + wordsFound.size());
 
                 //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
                 int wordPoints = bestWord.getValue();
@@ -92,65 +92,61 @@ public class Player implements Runnable {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         statusArea.appendText(currentMove);
-                    StringBuilder ab = new StringBuilder();
-                    ab.append("now: ").append(attachedLetterPack.toString());
-                    packArea.appendText(ab.toString());
-                }
-            });
-
-            //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
-//        System.out.println("best word: " + bestWord.getWord() + " (" + bestWord.getValue() + ")");
-            String s = bestWord.getWord();
-            for (int i = 0; i < s.length(); i++) {
-
-                for (int k = 0; k < playerLetters.size(); k++) {
-                    if (playerLetters.get(k).getLetter() == s.charAt(i)) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(playerName).append(" removed: ").append(playerLetters.get(k).getLetter()).append("\n");
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                statusArea.appendText(sb.toString());
-                        packArea.setText(attachedLetterPack.toString());
+//                        StringBuilder ab = new StringBuilder();
+//                        ab.append("now: ").append(attachedLetterPack.toString());
+//                        packArea.appendText(ab.toString());
                     }
                 });
-                        playerLetters.remove(k);
-                        StringBuilder sb1 = new StringBuilder(playerName + " has letters: ");
-                        for (Tile t : playerLetters) {
-                            sb1.append(t.getLetter());
-                        }
 
+                String s = bestWord.getWord();
+                for (int pos = 0; pos < s.length(); pos++) {
+
+                    for (int k = 0; k < playerLetters.size(); k++) {
+                        if (playerLetters.get(k).getLetter() == s.charAt(pos)) {
+                            StringBuilder sb = new StringBuilder();
+//                            sb.append(playerName).append(" removed: ").append(playerLetters.get(k).getLetter()).append("\n");
+//                            Platform.runLater(new Runnable() {
+//                                public void run() {
+//                                    statusArea.appendText(sb.toString());
+//                                    packArea.setText(attachedLetterPack.toString());
+//                                }
+//                            });
+                            playerLetters.remove(k);
+//                            StringBuilder sb1 = new StringBuilder(playerName + " has letters: ");
+//                            for (Tile t : playerLetters) {
+//                                sb1.append(t.getLetter());
+//                            }
+//
+//                            sb1.append("\n");
+//                            Platform.runLater(new Runnable() {
+//                                public void run() {
+//                                    statusArea.appendText(sb1.toString());
+//                                }
+//                            });
+
+                        }
+                    }
+
+                }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
-                        sb1.append("\n");
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                statusArea.appendText(sb1.toString());
-                            }
-                        });
-
-                    }
                 }
             }
-
-                }
-            }
-
         }
-
     }
 
     private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
         if (currentWord.length() > 1) {
 //            if (!currentWord.contains("@")) {
-                if (dictionary.contains(currentWord)) {
-                    Word w = new Word();
-                    w.setPlayer(this);
-                    w.setWord(currentWord);
-                    w.setValue(currentWordValue);
-                    wordsFound.add(w);
-                }
+            if (dictionary.contains(currentWord)) {
+                Word w = new Word();
+                w.setPlayer(this);
+                w.setWord(currentWord);
+                w.setValue(currentWordValue);
+                wordsFound.add(w);
+            }
 //            } 
 //            else {
 //                String[] wordPieces = currentWord.split("@");

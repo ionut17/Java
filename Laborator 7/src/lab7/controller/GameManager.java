@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  */
 public class GameManager extends Application {
 
-    String[] players = {"Ionut", "Anca", "Stefan", "Eveline", "Dan"};
+    String[] players = {"Ionut","Anca", "Stefan", "Eveline"}; //, "Anca", "Stefan", "Eveline", "Dan"
 
     //Contents
     LetterPack lp = new LetterPackGenerator().getScrabblePack();
