@@ -3,9 +3,8 @@ package lab7.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TextArea;
 
 /**
@@ -22,13 +21,15 @@ public class Player implements Runnable {
     private final HashSet<String> dictionary;
     private ArrayList<Word> wordsFound = new ArrayList<>();
     private TextArea packArea;
+    private ScoreObserver sc;
 
-    public Player(LetterPack lp, HashSet<String> dictionary, String name, TextArea status, TextArea pack) {
+    public Player(LetterPack lp, HashSet<String> dictionary, String name, TextArea status, TextArea pack, ScoreObserver tsc) {
         this.playerName = name;
         this.attachedLetterPack = lp;
         this.statusArea = status;
         this.dictionary = dictionary;
         this.packArea = pack;
+        this.sc = tsc;
     }
 
     @Override
@@ -40,46 +41,46 @@ public class Player implements Runnable {
             }
         });
 
-        //Extract by turns
-        for (int i = 0; i < 7; i++) {
-            Tile extractedLetter = attachedLetterPack.extractLetter();
-            if (extractedLetter != null) {
-                playerLetters.add(extractedLetter);
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        packArea.setText(attachedLetterPack.toString());
-                    }
-                });
+        int count = 0;
+        while (count<5) {
+            count++;
+            //Extract by turns
+            while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
+                Tile extractedLetter = attachedLetterPack.extractLetter();
+                if (extractedLetter != null) {
+                    playerLetters.add(extractedLetter);
+//                Platform.runLater(new Runnable() {
+//                    public void run() {
+//                        packArea.setText(attachedLetterPack.toString());
+//                    }
+//                });
+                }
             }
-        }
-        for (Tile letter : playerLetters) {
-            String currentMove = playerName + ": " + letter.toString() + '\n';
+
+            //Make words
+//        System.out.println("Configuring words...");
+            this.getWord(playerLetters, "", 0);
+            int maxValue = 0;
+            Word bestWord = new Word();
+            for (Word w : wordsFound) {
+                if (w.getValue() > maxValue) {
+                    maxValue = w.getValue();
+                    bestWord = w;
+                }
+            }
+            //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
+//        System.out.println("best word: " + bestWord.getWord() + " (" + bestWord.getValue() + ")");
+
+            int wordPoints = bestWord.getValue() * (bestWord.getWord().length());
+            this.addPoints(wordPoints);
+            String currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
             Platform.runLater(new Runnable() {
                 public void run() {
                     statusArea.appendText(currentMove);
+                    packArea.setText(attachedLetterPack.toString());
                 }
             });
         }
-        String currentSize = "###" + playerName + " - Pack size: " + attachedLetterPack.getPackSize() + '\n';
-        Platform.runLater(new Runnable() {
-            public void run() {
-                System.out.println("Pack size: " + attachedLetterPack.getPackSize());
-                statusArea.appendText(currentSize);
-            }
-        });
-
-        //Make words
-        System.out.println("Configuring words...");
-        this.getWord(playerLetters, "", 0);
-        int maxValue = 0;
-        Word bestWord = new Word();
-        for (Word w : wordsFound) {
-            if (w.getValue() > maxValue) {
-                maxValue = w.getValue();
-                bestWord = w;
-            }
-        }
-        System.out.println("best word: " + bestWord.getWord() + " (" + bestWord.getValue() + ")");
     }
 
     private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
@@ -148,8 +149,25 @@ public class Player implements Runnable {
         this.score = score;
     }
 
-    public void addToScore(int value) {
+    public void addPoints(int value) {
         this.score += value;
+        sc.updateScores();
     }
 
 }
+
+//        for (Tile letter : playerLetters) {
+//            String currentMove = playerName + ": " + letter.toString() + '\n';
+//            Platform.runLater(new Runnable() {
+//                public void run() {
+//                    statusArea.appendText(currentMove);
+//                }
+//            });
+//        }
+//        String currentSize = "###" + playerName + " - Pack size: " + attachedLetterPack.getPackSize() + '\n';
+//        Platform.runLater(new Runnable() {
+//            public void run() {
+//                System.out.println("Pack size: " + attachedLetterPack.getPackSize());
+//                statusArea.appendText(currentSize);
+//            }
+//        });

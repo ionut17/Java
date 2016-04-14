@@ -21,10 +21,19 @@ import javafx.stage.Stage;
  * @author Ionut
  */
 public class GameManager extends Application {
-
+    
+    String[] players = {"Ionut", "Anca", "Stefan", "Eveline", "Dan"};
+    
+    //Contents
     LetterPack lp = new LetterPackGenerator().getScrabblePack();
     ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(6);
-    String[] players = {"Ionut", "Anca", "Stefan", "Eveline", "Dan"};
+
+    //Players Pane
+    ObservableList<String> scoreboard = FXCollections.observableArrayList("");
+    ListView<String> listView = new ListView<String>(scoreboard);
+    
+    //Observers
+    ScoreObserver sc = new ScoreObserver(scoreboard);
 
     TextArea statusArea = new TextArea();
     TextArea packArea = new TextArea(lp.toString());
@@ -38,10 +47,6 @@ public class GameManager extends Application {
         timeCounter.setId("timeCounter");
         timeCounter.getChildren().addAll(textLabel, timeLabel);
 
-        //Players Pane
-        ObservableList<String> names = FXCollections.observableArrayList(players);
-        ListView<String> listView = new ListView<String>(names);
-
         listView.setPrefHeight(200);
         packArea.setPrefWidth(200);
         packArea.setPrefHeight(400);
@@ -51,6 +56,7 @@ public class GameManager extends Application {
         left.setCenter(packArea);
 
         this.play();
+        sc.updateScores();
 
         //Status Pane
         statusArea.setEditable(false);
@@ -90,11 +96,12 @@ public class GameManager extends Application {
             new Thread(tdm).start();
 
             //Creating players
-            for (int i = 0; i < 5; i++) {
-                Player p = new Player(lp, dt, players[i % 5], statusArea, packArea);
+            for (int i = 0; i < players.length; i++) {
+                Player p = new Player(lp, dt, players[i], statusArea, packArea, sc);
+                sc.observePlayer(p);
                 executor.execute(p);
             }
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -31,7 +31,7 @@ public class Dictionary {
             while ((line = br.readLine()) != null) {
                 if (!line.equals(line.toUpperCase()) && !line.contains("'")) {
                     getWords().add(line.toUpperCase());
-                    System.out.println(line);
+//                    System.out.println(line);
                 }
             }
         }
