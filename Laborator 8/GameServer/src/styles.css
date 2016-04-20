@@ -1,0 +1,28 @@
+/*.button {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+    -fx-background-color: #CCFF99;
+}*/
+
+#timeCounter{
+    -fx-background-color: #2c3e50;
+    -fx-alignment: center;
+    -fx-padding: 10 0 10 0;
+}
+
+#timeCounter .label{
+    -fx-font: normal 14px "Montseratt";
+    -fx-text-fill: #ffffff;
+}
+
+#packArea, #listView{
+    -fx-font: bold 13px "Montseratt";
+}
+
+#statusArea{
+    -fx-font: normal 13px "Montseratt";
+}
+
+#statusArea .content{
+    -fx-background-color: #E8E8E8;
+}

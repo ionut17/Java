@@ -1,4 +1,4 @@
-package lab7.controller;
+package lab8.server.controller;
 
 import java.io.BufferedReader;
 import java.io.File;

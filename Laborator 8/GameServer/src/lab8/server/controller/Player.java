@@ -1,4 +1,4 @@
-package lab7.controller;
+package lab8.server.controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
