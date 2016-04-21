@@ -12,12 +12,17 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -26,7 +31,7 @@ import javafx.stage.Stage;
  */
 public class GameManager extends Application {
 
-    String[] players = {"Ionut", "Anca", "Stefan", "Eveline"}; //, "Anca", "Stefan", "Eveline", "Dan"
+    String[] players = {"Ionut", "Anca"}; //"Anca", "Stefan", "Eveline", "Dan"
     public static final int PORT = 8100;
 
     //Contents
@@ -72,6 +77,12 @@ public class GameManager extends Application {
         statusArea.setPrefRowCount(10);
         statusArea.setWrapText(true);
 
+        //StartButton
+        Button startButton = new Button("Start Game");
+        BorderPane bp = new BorderPane();
+        bp.setCenter(startButton);
+        left.setBottom(bp);
+
         //Root pane
         BorderPane root = new BorderPane();
         root.setTop(timeCounter);
@@ -85,7 +96,7 @@ public class GameManager extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Runnable server = new GameServer(this, players,lp,executor,scoreboard,listView,statusArea,packArea,timeLabel,sc);
+        Runnable server = new GameServer(this, players, lp, executor, scoreboard, listView, statusArea, packArea, timeLabel, sc, startButton);
         new Thread(server).start();
     }
 

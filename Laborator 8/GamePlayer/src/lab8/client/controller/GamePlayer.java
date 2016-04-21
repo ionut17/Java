@@ -35,8 +35,7 @@ public class GamePlayer {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
             // Send a join request to the server
-            String request = "#join";
-            out.println(request);
+            String request;
 
             // While the game is on play it
             String response = null;
@@ -50,7 +49,7 @@ public class GamePlayer {
                     response = in.readLine();
                     playerLetters.clear();
                     System.out.println(response);
-                    if (response != null) {
+                    if (response != null && !response.equals("#finish")) {
                         for (int i = 0; i < response.length(); i++) {
                             playerLetters.add(new Tile(response.charAt(i), distribution[(int) (response.charAt(i) - 'A')]));
                         }

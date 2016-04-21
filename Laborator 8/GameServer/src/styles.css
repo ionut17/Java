@@ -26,3 +26,7 @@
 #statusArea .content{
     -fx-background-color: #E8E8E8;
 }
+
+#startButtonBox{
+    -fx-alignemnt: center;
+}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -42,11 +43,16 @@ public class Player implements Runnable {
 
         Platform.runLater(new Runnable() {
             public void run() {
-                statusArea.appendText("Player " + playerName + " started...\n");
+                statusArea.appendText("Player " + playerName + " has joined...\n");
             }
         });
 
         synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
             while (attachedLetterPack.getPackSize() > 0) {
 
                 extractLetters();
