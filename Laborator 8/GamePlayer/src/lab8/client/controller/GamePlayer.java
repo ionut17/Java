@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  *
@@ -14,9 +15,19 @@ import java.util.logging.Logger;
  */
 public class GamePlayer {
 
+    private HashSet<String> dictionary = null;
+    private ArrayList<Word> wordsFound = new ArrayList<>();
+    private List<Tile> playerLetters = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
+        GamePlayer gp = new GamePlayer();
+    }
+
+    public GamePlayer() throws IOException {
         String serverAddress = "127.0.0.1"; // The server's IP address
         int PORT = 8100; // The server's port
+        Dictionary d = Dictionary.getDictionary();
+        this.dictionary = d.getWords();
         try (
                 //Try resources
                 Socket socket = new Socket(serverAddress, PORT);
@@ -24,29 +35,35 @@ public class GamePlayer {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
             // Send a join request to the server
-            String request = "join";
+            String request = "#join";
             out.println(request);
 
-            System.out.println("begin reading");
             // While the game is on play it
             String response = null;
-            System.out.println("started playing");
-            while (response == null || !response.equals("finish")) {
+            response = in.readLine();
+            while (response == null || !response.equals("#finish")) {
                 try {
-                    System.out.println("make an extract request");
                     //Do things here
-                    request = "extract";
+                    request = "#extract";
                     out.println(request);
-                    System.out.println("extracting..");
-                    Thread.sleep(100);
-                    request = "word";
-                    out.println(request);
-                    System.out.println("making word..");
-                    //Thread sleep and check the server
-//                    Thread.sleep(1000);
-                    System.out.println("waiting server response");
+                    //Reading letters
                     response = in.readLine();
-                    System.out.println("got: "+response);
+                    playerLetters.clear();
+                    System.out.println(response);
+                    if (response != null) {
+                        for (int i = 0; i < response.length(); i++) {
+                            playerLetters.add(new Tile(response.charAt(i), distribution[(int) (response.charAt(i) - 'A')]));
+                        }
+                        Thread.sleep(100);
+                        //Sending word back to server
+                        request = this.makeWord().getWord();
+                        out.println(request);
+                        //Waiting next turn
+                        response = in.readLine();
+                    }
+                    else {
+                        break;
+                    }
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -57,4 +74,54 @@ public class GamePlayer {
             out.println(request);
         }
     }
+
+    private Word makeWord() {
+        wordsFound.clear();
+        this.getWord(playerLetters, "", 0);
+        int maxValue = 0;
+        Word bestWord = new Word();
+        for (Word w : wordsFound) {
+            if (w.getValue() > maxValue) {
+                maxValue = w.getValue();
+                bestWord = w;
+            }
+        }
+        return bestWord;
+    }
+
+    private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
+        if (currentWord.length() > 1) {
+//            if (!currentWord.contains("@")) {
+            if (dictionary.contains(currentWord)) {
+                Word w = new Word();
+                w.setPlayer(null);
+                w.setWord(currentWord);
+                w.setValue(currentWordValue);
+                wordsFound.add(w);
+            }
+//            } 
+//            else {
+//                String[] wordPieces = currentWord.split("@");
+//                for (Object key : dictionary.toArray()) {
+//                    if (key.toString().matches(wordPieces[0] + "[a-zA-Z]")) {
+//                        Word w1 = new Word();
+//                        w1.setPlayer(this);
+//                        w1.setWord(key.toString());
+//                        w1.setValue(currentWordValue);
+//                        wordsFound.add(w1);
+//                    }
+//                }
+//            }
+        }
+
+        if (currentWord.length() < 7) {
+            for (int i = 0; i < letters.size(); i++) {
+                List<Tile> letters2 = new ArrayList<Tile>(letters);
+                letters2.remove(letters2.get(i));
+                getWord(letters2, currentWord + letters.get(i).getLetter(), currentWordValue + letters.get(i).getValue());
+            }
+        }
+    }
+
+    int[] distribution = {9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1};
 }

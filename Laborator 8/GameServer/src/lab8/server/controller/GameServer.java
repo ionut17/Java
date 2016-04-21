@@ -73,7 +73,7 @@ class GameServer implements Runnable {
                     //Assign a new identifier
                     id++;
                     //Start a new thread
-                    new PlayerThread(socket, id, gm, lp, dt, String.valueOf("Player "+id), statusArea, packArea, sc).start();
+                    new PlayerThread(socket, id, gm, lp, String.valueOf("Player "+id), statusArea, packArea, sc).start();
                 }
             } catch (IOException e) {
                 System.err.println("Ooops... " + e);

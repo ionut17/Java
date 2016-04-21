@@ -28,22 +28,20 @@ class PlayerThread extends Thread {
     private String playerName;
     private int score = 0;
     private final LetterPack attachedLetterPack;
-    private List<Tile> playerLetters = new ArrayList<>();
+    private final LetterPackGenerator lpg = new LetterPackGenerator();
     private final TextArea statusArea;
-    private final HashSet<String> dictionary;
-    private ArrayList<Word> wordsFound = new ArrayList<>();
     private final TextArea packArea;
     private final ScoreObserver sc;
+    private List<Tile> playerLetters = new ArrayList<>();
 //    private boolean myTurn = false;
 
-    public PlayerThread(Socket socket, int tid, GameManager tgm, LetterPack lp, HashSet<String> dictionary, String name, TextArea status, TextArea pack, ScoreObserver tsc) {
+    public PlayerThread(Socket socket, int tid, GameManager tgm, LetterPack lp, String name, TextArea status, TextArea pack, ScoreObserver tsc) {
         this.socket = socket;
         this.id = tid;
         this.gm = tgm;
         this.playerName = name;
         this.attachedLetterPack = lp;
         this.statusArea = status;
-        this.dictionary = dictionary;
         this.packArea = pack;
         this.sc = tsc;
     }
@@ -60,7 +58,7 @@ class PlayerThread extends Thread {
                 System.out.println("Reading a new command...");
                 String request = in.readLine();
                 switch (request) {
-                    case "join":
+                    case "#join":
                         System.out.println("join");
                         statusArea.appendText("Player " + id + " has joined...\n");
 //                    Platform.runLater(new Runnable() {
@@ -68,14 +66,27 @@ class PlayerThread extends Thread {
 //                            statusArea.appendText("Player "+pcount+" has joined...\n");
 //                        }
 //                    });
+                        try {
+                            Thread.sleep(1000);
+                            System.out.println("next turn...");
+                            out.println("next");
+                            out.flush();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
-                    case "extract":
+                    case "#extract":
                         System.out.println("extracting...");
                         //Extract by turns
+                        StringBuilder letterString = new StringBuilder();
+                        for (int i=0;i<playerLetters.size();i++){
+                            letterString.append(playerLetters.get(i).getLetter());
+                        }
                         while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
                             Tile extractedLetter = attachedLetterPack.extractLetter();
                             if (extractedLetter != null) {
                                 playerLetters.add(extractedLetter);
+                                letterString.append(extractedLetter.getLetter());
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         packArea.setText(attachedLetterPack.toString());
@@ -83,22 +94,27 @@ class PlayerThread extends Thread {
                                 });
                             }
                         }
+                        out.println(letterString);
                         System.out.println(playerLetters.toString());
-                        break;
-                    case "word":
-                        System.out.println("making word...");
-                        wordsFound.clear();
-                        this.getWord(playerLetters, "", 0);
-                        int maxValue = 0;
-                        Word bestWord = new Word();
-                        for (Word w : wordsFound) {
-                            if (w.getValue() > maxValue) {
-                                maxValue = w.getValue();
-                                bestWord = w;
-                            }
+                        try {
+                            Thread.sleep(1000);
+                            System.out.println("next turn...");
+                            out.println("next");
+                            out.flush();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
                         }
+                        break;
+                    case "#exit":
+//                        isRunning = false;
+//                    String raspuns = "finish";
+//                    out.println(raspuns);
+//                    out.flush();
+                        break;
+                    default:
+                        int wordPoints = 0;
                         //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
-                        String s = bestWord.getWord();
+                        String s = request;
                         for (int pos = 0; pos < s.length(); pos++) {
                             for (int k = 0; k < playerLetters.size(); k++) {
                                 if (playerLetters.get(k).getLetter() == s.charAt(pos)) {
@@ -107,31 +123,17 @@ class PlayerThread extends Thread {
                                 }
                             }
                         }
-                        int wordPoints = bestWord.getValue();
+                        //Adding points
+                        for (int i = 0; i < request.length(); i++) {
+                            wordPoints += lpg.valueOf(request.charAt(i));
+                        }
                         this.addPoints(wordPoints);
-                        String currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
+                        String currentMove = playerName + " created " + request + " for " + wordPoints + " points\n";
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 statusArea.appendText(currentMove);
                             }
                         });
-                        break;
-                    case "exit":
-//                        isRunning = false;
-//                    String raspuns = "finish";
-//                    out.println(raspuns);
-//                    out.flush();
-                        break;
-                    default:
-                        System.out.println("default");
-                }
-                try {
-                    Thread.sleep(1000);
-                    System.out.println("next turn...");
-                    out.println("next");
-                    out.flush();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
                 }
             }
             String response = "finish";
@@ -147,40 +149,6 @@ class PlayerThread extends Thread {
                 socket.close(); // or use try-with-resources
             } catch (IOException e) {
                 System.err.println(e);
-            }
-        }
-    }
-
-    private void getWord(List<Tile> letters, String currentWord, int currentWordValue) {
-        if (currentWord.length() > 1) {
-//            if (!currentWord.contains("@")) {
-            if (dictionary.contains(currentWord)) {
-                Word w = new Word();
-                w.setPlayer(null);
-                w.setWord(currentWord);
-                w.setValue(currentWordValue);
-                wordsFound.add(w);
-            }
-//            } 
-//            else {
-//                String[] wordPieces = currentWord.split("@");
-//                for (Object key : dictionary.toArray()) {
-//                    if (key.toString().matches(wordPieces[0] + "[a-zA-Z]")) {
-//                        Word w1 = new Word();
-//                        w1.setPlayer(this);
-//                        w1.setWord(key.toString());
-//                        w1.setValue(currentWordValue);
-//                        wordsFound.add(w1);
-//                    }
-//                }
-//            }
-        }
-
-        if (currentWord.length() < 7) {
-            for (int i = 0; i < letters.size(); i++) {
-                List<Tile> letters2 = new ArrayList<Tile>(letters);
-                letters2.remove(letters2.get(i));
-                getWord(letters2, currentWord + letters.get(i).getLetter(), currentWordValue + letters.get(i).getValue());
             }
         }
     }
