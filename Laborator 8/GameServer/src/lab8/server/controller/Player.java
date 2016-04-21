@@ -1,5 +1,12 @@
 package lab8.server.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -72,13 +79,40 @@ public class Player implements Runnable {
 
                 int wordPoints = bestWord.getValue();
                 this.addPoints(wordPoints);
-                String currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        statusArea.appendText(currentMove);
-                    }
-                });
 
+                //Definition
+                URL def;
+                String currentMove;
+                try {
+                    def = new URL(" http://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + bestWord.getWord() + "?key=fc40ba93-ec7d-4335-895d-a6a293543113");
+                    URLConnection con = def.openConnection();
+                    InputStream is = con.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    String all_def = new String();
+                    while ((line = br.readLine()) != null) {
+                        all_def += line;
+                    }
+                    String[] pieces = all_def.split("<mc>");
+                    if (pieces.length > 1) {
+                        String[] pieces2 = pieces[1].split("</mc>");
+                        System.out.println("definition:" + pieces2[0]);
+                        currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\ndefinition: " + pieces2[0] + "\n\n";
+                    } else {
+                        currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
+                    }
+                    Platform.runLater(new Runnable() {
+                        public void run() {
+                            statusArea.appendText(currentMove);
+                        }
+                    });
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+//                String currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {

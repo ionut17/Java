@@ -2,9 +2,13 @@ package lab8.server.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -134,7 +138,29 @@ class PlayerThread extends Thread {
                                 wordPoints += lpg.valueOf(request.charAt(i));
                             }
                             this.addPoints(wordPoints);
-                            String currentMove = playerName + " created " + request + " for " + wordPoints + " points\n";
+                            
+                            //Definition
+                            URL def = new URL(" http://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + request + "?key=fc40ba93-ec7d-4335-895d-a6a293543113");
+                            URLConnection con = def.openConnection();
+                            InputStream is = con.getInputStream();
+                            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                            String line;
+                            String all_def = new String();
+                            while ((line = br.readLine()) != null) {
+                                all_def += line;
+                            }
+                            String[] pieces = all_def.split("<mc>");
+                            String currentMove;
+                            if (pieces.length > 1) {
+                                String[] pieces2 = pieces[1].split("</mc>");
+                                System.out.println("definition:" + pieces2[0]);
+                                currentMove = playerName + " created " + request + " for " + wordPoints + " points\ndefinition: "+ pieces2[0]+"\n\n";
+                            }
+                            else {
+                                currentMove = playerName + " created " + request + " for " + wordPoints + " points\n";
+                            }
+                            
+                            //View
                             attachedPlayer.setScore(this.getScore());
                             Platform.runLater(new Runnable() {
                                 public void run() {
@@ -160,7 +186,7 @@ class PlayerThread extends Thread {
                 System.err.println(e);
             }
         }
-    }
+    }   
 
     /**
      * @return the playerName
