@@ -70,8 +70,10 @@ class GameServer implements Runnable {
                     System.out.println("Waiting for a player ...");
                     Socket socket = serverSocket.accept();
                     // Execute the client's request in a new thread
+                    //Assign a new identifier
                     id++;
-                    new PlayerThread(socket, statusArea, id).start();
+                    //Start a new thread
+                    new PlayerThread(socket, id, gm, lp, dt, String.valueOf("Player "+id), statusArea, packArea, sc).start();
                 }
             } catch (IOException e) {
                 System.err.println("Ooops... " + e);

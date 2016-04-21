@@ -49,18 +49,7 @@ public class Player implements Runnable {
         synchronized (this) {
             while (attachedLetterPack.getPackSize() > 0) {
 
-                //Extract by turns
-                while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
-                    Tile extractedLetter = attachedLetterPack.extractLetter();
-                    if (extractedLetter != null) {
-                        playerLetters.add(extractedLetter);
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                packArea.setText(attachedLetterPack.toString());
-                            }
-                        });
-                    }
-                }
+                extractLetters();
 
 //                StringBuilder sb0 = new StringBuilder(playerName + " first has letters: ");
 //                for (Tile t : playerLetters) {
@@ -73,61 +62,17 @@ public class Player implements Runnable {
 //                    }
 //                });
                 //Make words
-                wordsFound.clear();
-                this.getWord(playerLetters, "", 0);
-                int maxValue = 0;
-                Word bestWord = new Word();
-                for (Word w : wordsFound) {
-                    if (w.getValue() > maxValue) {
-                        maxValue = w.getValue();
-                        bestWord = w;
-                    }
-                }
-//                System.out.println("Tour: " + wordsFound.size());
+                Word bestWord = this.getBestWord();
 
-                //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
                 int wordPoints = bestWord.getValue();
                 this.addPoints(wordPoints);
                 String currentMove = playerName + " created " + bestWord.getWord() + " for " + wordPoints + " points\n";
                 Platform.runLater(new Runnable() {
                     public void run() {
                         statusArea.appendText(currentMove);
-//                        StringBuilder ab = new StringBuilder();
-//                        ab.append("now: ").append(attachedLetterPack.toString());
-//                        packArea.appendText(ab.toString());
                     }
                 });
 
-                String s = bestWord.getWord();
-                for (int pos = 0; pos < s.length(); pos++) {
-
-                    for (int k = 0; k < playerLetters.size(); k++) {
-                        if (playerLetters.get(k).getLetter() == s.charAt(pos)) {
-                            StringBuilder sb = new StringBuilder();
-//                            sb.append(playerName).append(" removed: ").append(playerLetters.get(k).getLetter()).append("\n");
-//                            Platform.runLater(new Runnable() {
-//                                public void run() {
-//                                    statusArea.appendText(sb.toString());
-//                                    packArea.setText(attachedLetterPack.toString());
-//                                }
-//                            });
-                            playerLetters.remove(k);
-//                            StringBuilder sb1 = new StringBuilder(playerName + " has letters: ");
-//                            for (Tile t : playerLetters) {
-//                                sb1.append(t.getLetter());
-//                            }
-//
-//                            sb1.append("\n");
-//                            Platform.runLater(new Runnable() {
-//                                public void run() {
-//                                    statusArea.appendText(sb1.toString());
-//                                }
-//                            });
-
-                        }
-                    }
-
-                }
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
@@ -226,6 +171,48 @@ public class Player implements Runnable {
      */
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
+    }
+
+    public void extractLetters() {
+        //Extract by turns
+        while (playerLetters.size() < 7 && attachedLetterPack.getPackSize() > 0) {
+            Tile extractedLetter = attachedLetterPack.extractLetter();
+            if (extractedLetter != null) {
+                playerLetters.add(extractedLetter);
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        packArea.setText(attachedLetterPack.toString());
+                    }
+                });
+            }
+        }
+    }
+
+    public Word getBestWord() {
+        wordsFound.clear();
+        this.getWord(playerLetters, "", 0);
+        int maxValue = 0;
+        Word bestWord = new Word();
+        for (Word w : wordsFound) {
+            if (w.getValue() > maxValue) {
+                maxValue = w.getValue();
+                bestWord = w;
+            }
+        }
+//                System.out.println("Tour: " + wordsFound.size());
+
+        //REMOVE BEST WORD LETTERS FROM PLAYER LETTERS
+        String s = bestWord.getWord();
+        for (int pos = 0; pos < s.length(); pos++) {
+            for (int k = 0; k < playerLetters.size(); k++) {
+                if (playerLetters.get(k).getLetter() == s.charAt(pos)) {
+                    playerLetters.remove(k);
+                    break;
+                }
+            }
+
+        }
+        return bestWord;
     }
 
 }
