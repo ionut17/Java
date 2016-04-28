@@ -46,7 +46,6 @@ class DatabaseManager {
         frame.setLayout(new BorderLayout());
 
         //Add the ubiquitous "Hello World" label.
-
         JPanel queries = new JPanel();
         queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
 
@@ -57,28 +56,28 @@ class DatabaseManager {
         String[] types = null;
 
         ArrayList<String> metadata = new ArrayList<>();
-        
+
         ResultSet tables = databaseMetaData.getTables(catalog, schemaPattern, namePattern, types);
         while (tables.next()) {
-           metadata.add(tables.getString("TABLE_SCHEM") + ", " + tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
+            metadata.add(tables.getString("TABLE_SCHEM") + ", " + tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
         }
 
         ResultSet functions = databaseMetaData.getFunctions(catalog, schemaPattern, namePattern);
         while (functions.next()) {
-            metadata.add(functions.getString("FUNCTION_SCHEM") + ", " + functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE")+", FUNCTION");
+            metadata.add(functions.getString("FUNCTION_SCHEM") + ", " + functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE") + ", FUNCTION");
         }
 
         ResultSet procedures = databaseMetaData.getProcedures(catalog, schemaPattern, namePattern);
         while (procedures.next()) {
-            metadata.add(procedures.getString("PROCEDURE_SCHEM") + ", " + procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE")+", PROCEDURE");
+            metadata.add(procedures.getString("PROCEDURE_SCHEM") + ", " + procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE") + ", PROCEDURE");
         }
 
         String[] array_metadata = new String[metadata.size()];
-        array_metadata=metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
-        for(String s : array_metadata){
-            System.out.println("* "+s);
-        }
-        
+        array_metadata = metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
+//        for(String s : array_metadata){
+//            System.out.println("* "+s);
+//        }
+
         queries.add(new JLabel("Table 1"));
         queries.add(new JLabel("Table 2"));
         queries.add(new JLabel("Table 3"));
@@ -100,30 +99,26 @@ class DatabaseManager {
         frame.setVisible(true);
     }
 
-    public void generateReport() throws SQLException {
+    public void generateReport(String[] cols, ArrayList<ArrayList<String>> values) throws SQLException {
 
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT nr_matricol, nume, prenume FROM studenti ");
+//        Statement stmt = con.createStatement();
+//        ResultSet rs = stmt.executeQuery("SELECT nr_matricol, nume, prenume FROM studenti ");
+//
+//        int count = 0;
+//        while (rs.next()) {
+//            ArrayList<String> row = new ArrayList<>();
+//            String nr_matricol = rs.getString("nr_matricol");
+//            String nume = rs.getString("nume");
+//            String prenume = rs.getString("prenume");
+//            row.add(nr_matricol);
+//            row.add(nume);
+//            row.add(prenume);
+//            values.add(row);
+////            System.out.println("& " + row.get(0) + " " + row.get(1) + " " + row.get(2));
+//        }
 
-        ArrayList<ArrayList<String>> values = new ArrayList<>();
-        ArrayList<String> row = new ArrayList<>();
-
-        int count = 0;
-        while (rs.next()) {
-            row.clear();
-            String nr_matricol = rs.getString("nr_matricol");
-            String nume = rs.getString("nume");
-            String prenume = rs.getString("prenume");
-            row.add(nr_matricol);
-            row.add(nume);
-            row.add(prenume);
-            values.add(row);
-//            System.out.println(nr_matricol+" "+nume+" "+prenume);
-        }
-
-        String[] cols = {"nr_matricol", "nume", "prenume"};
-
-//        SimpleAdhocReport arp = new SimpleAdhocReport(cols, values);
+//        String[] cols = {"nr_matricol", "nume", "prenume"};
+        SimpleAdhocReport arp = new SimpleAdhocReport(cols, values);
     }
 
     public ResultSet executeStatement(String target) throws SQLException {
@@ -150,7 +145,7 @@ class DatabaseManager {
                 if (i + 1 < metadata.getColumnCount()) {
                     row.append(", ");
                 }
-                values[rowcount][i] = rs.getString(i + 1).trim(); 
+                values[rowcount][i] = rs.getString(i + 1).trim();
             }
             rowcount++;
             System.out.println(row.toString());
@@ -158,6 +153,17 @@ class DatabaseManager {
 
         rTable = new JTable(values, colNames.toArray());
         createGUI();
+        ArrayList<ArrayList<String>> my_values = new ArrayList<>();
+        for (int i = 0; i < total; i++) {
+            ArrayList<String> my_s = new ArrayList<>();
+            for (int j = 0; j < metadata.getColumnCount(); j++) {
+                my_s.add(values[i][j]);
+            }
+            my_values.add(my_s);
+        }
+        String[] aux = new String[colNames.size()];
+        aux = colNames.toArray(aux);
+        generateReport(aux, my_values);
         return rs;
     }
 

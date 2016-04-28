@@ -39,34 +39,34 @@ import net.sf.dynamicreports.report.exception.DRException;
  * @author Ricardo Mariaca (r.mariaca@dynamicreports.org)
  */
 public class SimpleAdhocReport {
-
+    
     String[] cols;
     ArrayList<ArrayList<String>> values;
-
+    
     public SimpleAdhocReport(String[] tcols, ArrayList<ArrayList<String>> tvalues) {
         this.cols = tcols;
         this.values = tvalues;
         build();
     }
-
+    
     private void build() {
         AdhocConfiguration configuration = new AdhocConfiguration();
         AdhocReport report = new AdhocReport();
         configuration.setReport(report);
-
+        
         for (int i = 0; i < cols.length; i++) {
             AdhocColumn column = new AdhocColumn();
             column.setName(cols[i]);
             report.addColumn(column);
         }
-
+        
         try {
             //The following code stores the configuration to an xml file
             AdhocManager.saveConfiguration(configuration, new FileOutputStream("configuration.xml"));
             @SuppressWarnings("unused")
             //The following code loads a configuration from an xml file
             AdhocConfiguration loadedConfiguration = AdhocManager.loadConfiguration(new FileInputStream("configuration.xml"));
-
+            
             JasperReportBuilder reportBuilder = AdhocManager.createReport(configuration.getReport());
             reportBuilder.setDataSource(createDataSource());
             reportBuilder.show();
@@ -76,14 +76,17 @@ public class SimpleAdhocReport {
             e.printStackTrace();
         }
     }
-
+    
     private JRDataSource createDataSource() {
-        DRDataSource dataSource = new DRDataSource("nr_matricol", "nume", "prenume");
+        DRDataSource dataSource = new DRDataSource(cols);
         for (int i = 0; i < values.size(); i++) {
-            dataSource.add(values.get(i).get(0), values.get(i).get(1), values.get(i).get(2));
-//            for (int j = 0; j< values.get(i).size(); j++){
-//                                dataSource.add(values.get(i).get(0), values.get(i).get(1), values.get(i).get(2));
-//            }
+            ArrayList<String> aux=new ArrayList<>();
+            for (int j = 0; j < values.get(i).size(); j++) {
+                aux.add(values.get(i).get(j));
+            }
+            String[] aux2=new String[aux.size()];
+            aux2=aux.toArray(aux2);
+            dataSource.add((Object[]) aux2);
         }
         return dataSource;
     }
