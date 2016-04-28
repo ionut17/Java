@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,11 +42,15 @@ class DatabaseManager {
 
     //Interface
     private static JTable rTable = new JTable();
+    
+    //Metadata
+    private static String[] arrayMetadata;
 
     public DatabaseManager() throws IOException, ClassNotFoundException, SQLException {
         //Making a connection
         ConnectionManager cm = new ConnectionManager();
         con = cm.getConnection();
+        arrayMetadata = this.getMetadata();
         createGUI();
     }
 
@@ -55,57 +61,37 @@ class DatabaseManager {
         frame.setPreferredSize(new Dimension(800, 600));
         frame.setLayout(new BorderLayout());
 
-        //Metadata
-
-        DatabaseMetaData databaseMetaData = con.getMetaData();
-        String catalog = null;
-        String schemaPattern = "STUDENT";
-        String namePattern = null;
-        String[] types = null;
-
-        ArrayList<String> metadata = new ArrayList<>();
-
-        String user;
-        int ok = 0;
-        ResultSet tables = databaseMetaData.getTables(catalog, schemaPattern, namePattern, types);
-        while (tables.next()) {
-            if (ok == 0) {
-                ok = 1;
-                user = tables.getString("TABLE_SCHEM");
-                metadata.add(user);
-            }
-            metadata.add(/*tables.getString("TABLE_SCHEM") + ", " + */tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
-        }
-
-        ResultSet functions = databaseMetaData.getFunctions(catalog, schemaPattern, namePattern);
-        while (functions.next()) {
-            metadata.add(/*functions.getString("FUNCTION_SCHEM") + ", " +*/functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE") + ", FUNCTION");
-        }
-
-        ResultSet procedures = databaseMetaData.getProcedures(catalog, schemaPattern, namePattern);
-        while (procedures.next()) {
-            metadata.add(/*procedures.getString("PROCEDURE_SCHEM") + ", " +*/procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE") + ", PROCEDURE");
-        }
-
-        String[] array_metadata = new String[metadata.size()];
-        array_metadata = metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
-        for (String s : array_metadata) {
-            System.out.println("* " + s);
-        }
-
         //Elements
-        JList queries = new JList(array_metadata);
+        JList queries = new JList(arrayMetadata);
+        ListSelectionListener queriesListener = new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                String value = queries.getSelectedValue().toString();
+                String tableName = value.split(",")[0];
+                String type = value.split(",")[1];
+                if (type.trim().toUpperCase().equals("TABLE")) {
+                    String query = "SELECT * FROM " + tableName.trim();
+                    try {
+                        executeStatement(query);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        };
+        queries.addListSelectionListener(queriesListener);
 //        queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
 //        queries.add(new JLabel("Table 1"));
 //        queries.add(new JLabel("Table 2"));
 //        queries.add(new JLabel("Table 3"));
 
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new FlowLayout());
+        inputPanel.setLayout(new BorderLayout());
         JTextField input = new JTextField();
         input.setSize(100, 50);
-        input.setPreferredSize(new Dimension(400, 30));
-        inputPanel.add(input);
+        input.setPreferredSize(new Dimension(500, 40));
+        input.setMaximumSize(new Dimension(1000,40));
+        inputPanel.add(input,BorderLayout.CENTER);
 
         JButton executor = new JButton("Execute");
         executor.addActionListener(new ActionListener() {
@@ -120,7 +106,7 @@ class DatabaseManager {
                 }
             }
         });
-        inputPanel.add(executor);
+        inputPanel.add(executor,BorderLayout.LINE_END);
 
         frame.add(new JScrollPane(queries), BorderLayout.LINE_START);
         frame.add(inputPanel, BorderLayout.PAGE_START);
@@ -191,6 +177,46 @@ class DatabaseManager {
 //        createGUI();
 
         return rs;
+    }
+
+    private static String[] getMetadata() throws SQLException {
+        //Metadata
+        DatabaseMetaData databaseMetaData = con.getMetaData();
+        String catalog = null;
+        String schemaPattern = "STUDENT";
+        String namePattern = null;
+        String[] types = null;
+
+        ArrayList<String> metadata = new ArrayList<>();
+
+        String user;
+        int ok = 0;
+        ResultSet tables = databaseMetaData.getTables(catalog, schemaPattern, namePattern, types);
+        while (tables.next()) {
+            if (ok == 0) {
+                ok = 1;
+                user = tables.getString("TABLE_SCHEM");
+                metadata.add(user);
+            }
+            metadata.add(/*tables.getString("TABLE_SCHEM") + ", " + */tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
+        }
+
+        ResultSet functions = databaseMetaData.getFunctions(catalog, schemaPattern, namePattern);
+        while (functions.next()) {
+            metadata.add(/*functions.getString("FUNCTION_SCHEM") + ", " +*/functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE") + ", FUNCTION");
+        }
+
+        ResultSet procedures = databaseMetaData.getProcedures(catalog, schemaPattern, namePattern);
+        while (procedures.next()) {
+            metadata.add(/*procedures.getString("PROCEDURE_SCHEM") + ", " +*/procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE") + ", PROCEDURE");
+        }
+
+        String[] arrayMetadata = new String[metadata.size()];
+        arrayMetadata = metadata.toArray(arrayMetadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
+        for (String s : arrayMetadata) {
+            System.out.println("* " + s);
+        }
+        return arrayMetadata;
     }
 
 }
