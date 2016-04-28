@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+import java.awt.List;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -25,7 +27,7 @@ import javax.swing.JTextField;
  */
 class DatabaseManager {
 
-    Connection con = null;
+    static Connection con = null;
 
     //Interface
     private static JTable rTable = new JTable();
@@ -36,7 +38,7 @@ class DatabaseManager {
         con = cm.getConnection();
     }
 
-    private static void createGUI() {
+    private static void createGUI() throws SQLException {
         //Create and set up the window.
         JFrame frame = new JFrame("DatabaseManager");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,9 +46,39 @@ class DatabaseManager {
         frame.setLayout(new BorderLayout());
 
         //Add the ubiquitous "Hello World" label.
+
         JPanel queries = new JPanel();
         queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
 
+        DatabaseMetaData databaseMetaData = con.getMetaData();
+        String catalog = null;
+        String schemaPattern = "STUDENT";
+        String namePattern = null;
+        String[] types = null;
+
+        ArrayList<String> metadata = new ArrayList<>();
+        
+        ResultSet tables = databaseMetaData.getTables(catalog, schemaPattern, namePattern, types);
+        while (tables.next()) {
+           metadata.add(tables.getString("TABLE_SCHEM") + ", " + tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
+        }
+
+        ResultSet functions = databaseMetaData.getFunctions(catalog, schemaPattern, namePattern);
+        while (functions.next()) {
+            metadata.add(functions.getString("FUNCTION_SCHEM") + ", " + functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE")+", FUNCTION");
+        }
+
+        ResultSet procedures = databaseMetaData.getProcedures(catalog, schemaPattern, namePattern);
+        while (procedures.next()) {
+            metadata.add(procedures.getString("PROCEDURE_SCHEM") + ", " + procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE")+", PROCEDURE");
+        }
+
+        String[] array_metadata = new String[metadata.size()];
+        array_metadata=metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
+        for(String s : array_metadata){
+            System.out.println("* "+s);
+        }
+        
         queries.add(new JLabel("Table 1"));
         queries.add(new JLabel("Table 2"));
         queries.add(new JLabel("Table 3"));
@@ -55,6 +87,7 @@ class DatabaseManager {
         inputPanel.setLayout(new FlowLayout());
         JTextField input = new JTextField();
         input.setSize(100, 50);
+        input.setText("jkah");
         input.setPreferredSize(new Dimension(400, 30));
         inputPanel.add(input);
 
@@ -98,7 +131,6 @@ class DatabaseManager {
         System.out.println(target);
         ResultSet rs = stmt.executeQuery(target);
         ResultSetMetaData metadata = rs.getMetaData();
-
         ArrayList<String> colNames = new ArrayList<>();
         for (int i = 0; i < metadata.getColumnCount(); i++) {
             colNames.add(metadata.getColumnName(i + 1));
