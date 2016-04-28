@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -14,12 +16,19 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -36,6 +45,7 @@ class DatabaseManager {
         //Making a connection
         ConnectionManager cm = new ConnectionManager();
         con = cm.getConnection();
+        createGUI();
     }
 
     private static void createGUI() throws SQLException {
@@ -45,10 +55,7 @@ class DatabaseManager {
         frame.setPreferredSize(new Dimension(800, 600));
         frame.setLayout(new BorderLayout());
 
-        //Add the ubiquitous "Hello World" label.
-
-        JPanel queries = new JPanel();
-        queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
+        //Metadata
 
         DatabaseMetaData databaseMetaData = con.getMetaData();
         String catalog = null;
@@ -57,43 +64,67 @@ class DatabaseManager {
         String[] types = null;
 
         ArrayList<String> metadata = new ArrayList<>();
-        
+
+        String user;
+        int ok = 0;
         ResultSet tables = databaseMetaData.getTables(catalog, schemaPattern, namePattern, types);
         while (tables.next()) {
-           metadata.add(tables.getString("TABLE_SCHEM") + ", " + tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
+            if (ok == 0) {
+                ok = 1;
+                user = tables.getString("TABLE_SCHEM");
+                metadata.add(user);
+            }
+            metadata.add(/*tables.getString("TABLE_SCHEM") + ", " + */tables.getString("TABLE_NAME") + ", " + tables.getString("TABLE_TYPE"));
         }
 
         ResultSet functions = databaseMetaData.getFunctions(catalog, schemaPattern, namePattern);
         while (functions.next()) {
-            metadata.add(functions.getString("FUNCTION_SCHEM") + ", " + functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE")+", FUNCTION");
+            metadata.add(/*functions.getString("FUNCTION_SCHEM") + ", " +*/functions.getString("FUNCTION_NAME") + ", " + functions.getString("FUNCTION_TYPE") + ", FUNCTION");
         }
 
         ResultSet procedures = databaseMetaData.getProcedures(catalog, schemaPattern, namePattern);
         while (procedures.next()) {
-            metadata.add(procedures.getString("PROCEDURE_SCHEM") + ", " + procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE")+", PROCEDURE");
+            metadata.add(/*procedures.getString("PROCEDURE_SCHEM") + ", " +*/procedures.getString("PROCEDURE_NAME") + ", " + procedures.getString("PROCEDURE_TYPE") + ", PROCEDURE");
         }
 
         String[] array_metadata = new String[metadata.size()];
-        array_metadata=metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
-        for(String s : array_metadata){
-            System.out.println("* "+s);
+        array_metadata = metadata.toArray(array_metadata);  // in array_metadata ai string-uri cu metadatele fiecarui obiect din baza de date :* 
+        for (String s : array_metadata) {
+            System.out.println("* " + s);
         }
-        
-        queries.add(new JLabel("Table 1"));
-        queries.add(new JLabel("Table 2"));
-        queries.add(new JLabel("Table 3"));
+
+        //Elements
+        JList queries = new JList(array_metadata);
+//        queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
+//        queries.add(new JLabel("Table 1"));
+//        queries.add(new JLabel("Table 2"));
+//        queries.add(new JLabel("Table 3"));
 
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout());
         JTextField input = new JTextField();
         input.setSize(100, 50);
-        input.setText("jkah");
         input.setPreferredSize(new Dimension(400, 30));
         inputPanel.add(input);
 
-        frame.add(queries, BorderLayout.LINE_START);
+        JButton executor = new JButton("Execute");
+        executor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                // display/center the jdialog when the button is pressed
+                String currentStmt = input.getText();
+                try {
+                    executeStatement(currentStmt);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        inputPanel.add(executor);
+
+        frame.add(new JScrollPane(queries), BorderLayout.LINE_START);
         frame.add(inputPanel, BorderLayout.PAGE_START);
-        frame.add(rTable, BorderLayout.CENTER);
+        frame.add(new JScrollPane(rTable), BorderLayout.CENTER);
 
         //Display the window.
         frame.pack();
@@ -126,7 +157,7 @@ class DatabaseManager {
 //        SimpleAdhocReport arp = new SimpleAdhocReport(cols, values);
     }
 
-    public ResultSet executeStatement(String target) throws SQLException {
+    public static ResultSet executeStatement(String target) throws SQLException {
         Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println(target);
         ResultSet rs = stmt.executeQuery(target);
@@ -150,14 +181,15 @@ class DatabaseManager {
                 if (i + 1 < metadata.getColumnCount()) {
                     row.append(", ");
                 }
-                values[rowcount][i] = rs.getString(i + 1).trim(); 
+                values[rowcount][i] = rs.getString(i + 1).trim();
             }
             rowcount++;
-            System.out.println(row.toString());
+//            System.out.println(row.toString());
         }
 
-        rTable = new JTable(values, colNames.toArray());
-        createGUI();
+        rTable.setModel(new DefaultTableModel(values, colNames.toArray()));
+//        createGUI();
+
         return rs;
     }
 
