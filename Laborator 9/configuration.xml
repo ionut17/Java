@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:configuration xmlns:ns2="http://dynamicreports.sourceforge.net/schema/adhocconfiguration">
+    <report>
+        <column name="nr_matricol"/>
+        <column name="nume"/>
+        <column name="prenume"/>
+    </report>
+</ns2:configuration>
