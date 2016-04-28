@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -25,11 +27,13 @@ class DatabaseManager {
 
     Connection con = null;
 
+    //Interface
+    private static JTable rTable = new JTable();
+
     public DatabaseManager() throws IOException, ClassNotFoundException, SQLException {
         //Making a connection
         ConnectionManager cm = new ConnectionManager();
         con = cm.getConnection();
-        createGUI();
     }
 
     private static void createGUI() {
@@ -40,28 +44,23 @@ class DatabaseManager {
         frame.setLayout(new BorderLayout());
 
         //Add the ubiquitous "Hello World" label.
-        JPanel left = new JPanel();
-        left.setPreferredSize(new Dimension(300, 600));
-        left.setLayout(new BorderLayout());
-        
         JPanel queries = new JPanel();
-        queries.setLayout(new BoxLayout(queries,BoxLayout.PAGE_AXIS));
-        
+        queries.setLayout(new BoxLayout(queries, BoxLayout.PAGE_AXIS));
+
         queries.add(new JLabel("Table 1"));
         queries.add(new JLabel("Table 2"));
         queries.add(new JLabel("Table 3"));
-                
+
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout());
         JTextField input = new JTextField();
-        input.setText();
+        input.setSize(100, 50);
+        input.setPreferredSize(new Dimension(400, 30));
         inputPanel.add(input);
-        
-        left.add(queries, BorderLayout.PAGE_START);
-        left.add(inputPanel, BorderLayout.CENTER);
-        
-        frame.add(left, BorderLayout.CENTER);
-        frame.add(new JPanel(), BorderLayout.LINE_END);
+
+        frame.add(queries, BorderLayout.LINE_START);
+        frame.add(inputPanel, BorderLayout.PAGE_START);
+        frame.add(rTable, BorderLayout.CENTER);
 
         //Display the window.
         frame.pack();
@@ -92,7 +91,42 @@ class DatabaseManager {
         String[] cols = {"nr_matricol", "nume", "prenume"};
 
 //        SimpleAdhocReport arp = new SimpleAdhocReport(cols, values);
+    }
 
+    public ResultSet executeStatement(String target) throws SQLException {
+        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        System.out.println(target);
+        ResultSet rs = stmt.executeQuery(target);
+        ResultSetMetaData metadata = rs.getMetaData();
+
+        ArrayList<String> colNames = new ArrayList<>();
+        for (int i = 0; i < metadata.getColumnCount(); i++) {
+            colNames.add(metadata.getColumnName(i + 1));
+        }
+
+        rs.last();
+        int total = rs.getRow();
+        rs.beforeFirst();
+
+        String[][] values = new String[total][metadata.getColumnCount()];
+
+        int rowcount = 0;
+        while (rs.next()) {
+            StringBuilder row = new StringBuilder();
+            for (int i = 0; i < metadata.getColumnCount(); i++) {
+                row.append(rs.getString(i + 1).trim());
+                if (i + 1 < metadata.getColumnCount()) {
+                    row.append(", ");
+                }
+                values[rowcount][i] = rs.getString(i + 1).trim(); 
+            }
+            rowcount++;
+            System.out.println(row.toString());
+        }
+
+        rTable = new JTable(values, colNames.toArray());
+        createGUI();
+        return rs;
     }
 
 }
