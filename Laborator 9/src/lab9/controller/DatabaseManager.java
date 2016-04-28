@@ -131,7 +131,7 @@ class DatabaseManager {
         frame.setVisible(true);
     }
 
-    public void generateReport(String[] cols, ArrayList<ArrayList<String>> values) throws SQLException {
+    public static void generateReport(String[] cols, ArrayList<ArrayList<String>> values) throws SQLException {
 
 //        Statement stmt = con.createStatement();
 //        ResultSet rs = stmt.executeQuery("SELECT nr_matricol, nume, prenume FROM studenti ");
