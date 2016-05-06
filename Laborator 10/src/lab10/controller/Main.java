@@ -34,7 +34,8 @@ public class Main {
 
     //Main canvas
     private static JPanel canvas = new JPanel();
-
+    //Properties
+    private static JPanel properties = new JPanel();
     //Menu items
     private static JTextField menuInput = new JTextField();
     private static JButton menuButton = new JButton("Add Component");
@@ -47,12 +48,16 @@ public class Main {
 
 //        JPanel canvas = new JPanel();
         canvas.setLayout(null);
-        canvas.setPreferredSize(new Dimension(800, 600));
+        canvas.setPreferredSize(new Dimension(650, 600));
+
+        properties.setLayout(new FlowLayout());
+        properties.setPreferredSize(new Dimension(250, 600));
+        properties.setBackground(new Color(0,0,255,50)); //Setting light blue background
 
         //Menu
         JPanel menu = new JPanel();
         menu.setLayout(new GridBagLayout());
-        menu.setPreferredSize(new Dimension(800, 100));
+        menu.setPreferredSize(new Dimension(900, 100));
         menu.setBackground(new Color((float) 0, (float) 0, (float) 0, (float) 0.1)); //Setting light grey background
         //Menu Items
         JLabel menuLabel = new JLabel("Component name: ");
@@ -68,6 +73,7 @@ public class Main {
 
         //Display the window.
         frame.add(canvas, BorderLayout.CENTER);
+        frame.add(properties, BorderLayout.EAST);
         frame.add(menu, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
@@ -94,7 +100,7 @@ public class Main {
                         case "JButton":
                             compCounter[0]++;
                             JButton button = (JButton) cmpt;
-                            button.setText("Button "+compCounter[0]);
+                            button.setText("Button " + compCounter[0]);
                             button.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 30);
                             canvas.add(button);
                             break;
@@ -102,19 +108,19 @@ public class Main {
                             compCounter[1]++;
                             System.out.println("Added label");
                             JLabel label = (JLabel) cmpt;
-                            label.setText("Label "+compCounter[1]);
+                            label.setText("Label " + compCounter[1]);
                             label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
                             canvas.add(label);
                             break;
                         case "JTextField":
                             compCounter[2]++;
-                            System.out.println("Added JTextField "+compCounter[2]);
+                            System.out.println("Added JTextField " + compCounter[2]);
                             JTextField textField = (JTextField) cmpt;
-                            textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100,25);
+                            textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
                             canvas.add(textField);
                         default:
                             compCounter[3]++;
-                            System.out.println("Added component "+compCounter[3]);
+                            System.out.println("Added component " + compCounter[3]);
                             Component component = (Component) cmpt;
                             component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
                             canvas.add(component);
