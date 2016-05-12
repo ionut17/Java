@@ -27,6 +27,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -38,6 +43,7 @@ public class Main {
     private static Point mousePos = new Point();
     private static int[] compCounter = new int[10];
     private static ArrayList<Component> objectList = new ArrayList<>();
+    private static ObjectsXML objectsXML = new ObjectsXML();
 
     //Main canvas
     private static JPanel canvas = new JPanel();
@@ -47,6 +53,8 @@ public class Main {
     //Menu items
     private static JTextField menuInput = new JTextField();
     private static JButton menuButton = new JButton("Add Component");
+    private static JButton saveXMLButton = new JButton("Save as XML");
+    private static JButton loadXMLButton = new JButton("Load XML");
 
     private static void createAndShowGUI() {
         //Create and set up the window.
@@ -80,6 +88,10 @@ public class Main {
         menu.add(menuInput);
         menu.add(Box.createRigidArea(new Dimension(5, 0)));
         menu.add(menuButton);
+        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+        menu.add(saveXMLButton);
+        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+        menu.add(loadXMLButton);
 
         //Display the window.
         frame.add(canvas, BorderLayout.CENTER);
@@ -106,6 +118,13 @@ public class Main {
 
                     Class clazz = Class.forName(driverName);
                     Component cmpt = (Component) clazz.newInstance();
+
+                    ObjectXML myObjectXML = new ObjectXML();
+                    myObjectXML.setName(driverName);
+                    myObjectXML.setX((int) mousePos.getX());
+                    myObjectXML.setY((int) mousePos.getY());
+                    objectsXML.addObject(myObjectXML);
+
                     switch (driverName.split("\\.")[driverName.split("\\.").length - 1]) {
                         case "JButton":
                             compCounter[0]++;
@@ -148,6 +167,7 @@ public class Main {
                     }
                     canvas.repaint();
                     canvas.revalidate();
+
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 } catch (InstantiationException ex) {
@@ -155,6 +175,105 @@ public class Main {
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        saveXMLButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ac) {
+                try {
+                    File file = new File("D:\\Dropbox\\Java (github)\\Laborator 10\\file.xml");
+                    JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
+
+                    Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+                    // output pretty printed
+                    jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+                    jaxbMarshaller.marshal(objectsXML, file);
+                    jaxbMarshaller.marshal(objectsXML, System.out);
+
+                } catch (JAXBException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
+        loadXMLButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ac) {
+                try {
+
+                    File file = new File("D:\\Dropbox\\Java (github)\\Laborator 10\\file.xml");
+                    JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
+
+                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                    ObjectsXML loadedObjectsXML = (ObjectsXML) jaxbUnmarshaller.unmarshal(file);
+                    System.out.println(loadedObjectsXML);
+                    ArrayList<ObjectXML> loadedObjects = loadedObjectsXML.getObj();
+                    canvas.removeAll();
+                    for (int i = 0; i < compCounter.length; i++) {
+                        compCounter[i] = 0;
+                    }
+                    for (ObjectXML obj : loadedObjects) {
+
+                        Class clazz = Class.forName(obj.getName());
+                        Component cmpt = (Component) clazz.newInstance();
+
+                        switch (obj.getName().split("\\.")[obj.getName().split("\\.").length - 1]) {
+                            case "JButton":
+                                compCounter[0]++;
+                                JButton button = (JButton) cmpt;
+                                button.setText("Button " + compCounter[0]);
+                                button.setName("Button " + compCounter[0]);
+                                button.setBounds(obj.getX(), obj.getY(), 100, 30);
+                                objectList.add(button);
+                                addComponentListener(button, "JButton");
+                                canvas.add(button);
+                                break;
+                            case "JLabel":
+                                compCounter[1]++;
+                                System.out.println("Added label");
+                                JLabel label = (JLabel) cmpt;
+                                label.setText("Label " + compCounter[1]);
+                                label.setName("Label " + compCounter[1]);
+                                label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
+                                objectList.add(label);
+                                addComponentListener(label, "JLabel");
+                                canvas.add(label);
+                                break;
+                            case "JTextField":
+                                compCounter[2]++;
+                                System.out.println("Added JTextField " + compCounter[2]);
+                                JTextField textField = (JTextField) cmpt;
+                                textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
+                                objectList.add(textField);
+                                addComponentListener(textField, "JTextField");
+                                canvas.add(textField);
+                            default:
+                                compCounter[3]++;
+                                System.out.println("Added component " + compCounter[3]);
+                                Component component = (Component) cmpt;
+                                component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
+                                objectList.add(component);
+                                addComponentListener(component, "Component");
+                                canvas.add(component);
+                                break;
+                        }
+                        canvas.repaint();
+                        canvas.revalidate();
+                    }
+
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -180,6 +299,7 @@ public class Main {
                 properties.revalidate();
             }
         });
+
     }
 
     public static void main(String[] args) {
