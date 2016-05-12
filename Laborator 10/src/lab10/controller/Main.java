@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -88,7 +89,7 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private static void addHandlers() {
+    private static void addListeners() {
         canvas.addMouseListener(new MouseAdapter() {// provides empty implementation of all
             @Override
             public void mousePressed(MouseEvent e) {
@@ -96,29 +97,7 @@ public class Main {
                 System.out.println("Set new coords at: " + e.getX() + ' ' + e.getY());
             }
         });
-        
-        for (Component cmpt: objectList){
-            
-            cmpt.addMouseListener(new MouseAdapter() {// provides empty implementation of all
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    Object[] row = {"Name", cmpt.getName()};
-                    DefaultTableModel model = (DefaultTableModel) propertiesTable.getModel();
-                    model.addRow(row);
-                    propertiesTable = new JTable(model);
-                    properties.repaint();
-                    properties.revalidate();
-                }
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    propertiesTable = new JTable();
-                    properties.repaint();
-                    properties.revalidate();
-                }
-            });
-            
-        }
-        
+
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -132,8 +111,10 @@ public class Main {
                             compCounter[0]++;
                             JButton button = (JButton) cmpt;
                             button.setText("Button " + compCounter[0]);
+                            button.setName("Button " + compCounter[0]);
                             button.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 30);
                             objectList.add(button);
+                            addComponentListener(button, "JButton");
                             canvas.add(button);
                             break;
                         case "JLabel":
@@ -141,8 +122,10 @@ public class Main {
                             System.out.println("Added label");
                             JLabel label = (JLabel) cmpt;
                             label.setText("Label " + compCounter[1]);
+                            label.setName("Label " + compCounter[1]);
                             label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
                             objectList.add(label);
+                            addComponentListener(label, "JLabel");
                             canvas.add(label);
                             break;
                         case "JTextField":
@@ -151,6 +134,7 @@ public class Main {
                             JTextField textField = (JTextField) cmpt;
                             textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
                             objectList.add(textField);
+                            addComponentListener(textField, "JTextField");
                             canvas.add(textField);
                         default:
                             compCounter[3]++;
@@ -158,12 +142,12 @@ public class Main {
                             Component component = (Component) cmpt;
                             component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
                             objectList.add(component);
+                            addComponentListener(component, "Component");
                             canvas.add(component);
                             break;
                     }
                     canvas.repaint();
                     canvas.revalidate();
-                    addHandlers();
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 } catch (InstantiationException ex) {
@@ -175,8 +159,27 @@ public class Main {
         });
     }
 
-    private static void getClick() {
+    private static void addComponentListener(Component cmpt, String toCast) {
+        cmpt.addMouseListener(new MouseAdapter() {// provides empty implementation of all
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                System.out.println("Entered " + cmpt.getClass());
+                Object[] row = {"Name", cmpt.getName()};
+                DefaultTableModel model = (DefaultTableModel) propertiesTable.getModel();
+                model.addRow(row);
+                propertiesTable = new JTable(model);
+                properties.repaint();
+                properties.revalidate();
+            }
 
+            @Override
+            public void mouseExited(MouseEvent e) {
+                System.out.println("Exited " + cmpt.getName());
+                propertiesTable = new JTable();
+                properties.repaint();
+                properties.revalidate();
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -185,7 +188,7 @@ public class Main {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
-                addHandlers();
+                addListeners();
             }
         });
     }
