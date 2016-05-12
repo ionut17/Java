@@ -185,17 +185,27 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent ac) {
                 try {
-                    File file = new File("D:\\Dropbox\\Java (github)\\Laborator 10\\file.xml");
-                    JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
+                    JFileChooser chooser = new JFileChooser();
+                    int returnVal = chooser.showOpenDialog(loadXMLButton);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        String[] f = chooser.getSelectedFile().toString().split("\\\\");
+                        String g = new String();
+                        for (int i = 0; i < f.length - 1; i++) {
+                            g += f[i] + "\\\\";
+                        }
+                        g += f[f.length - 1];
+                        File file = new File(g);
+//                    File file = new File("D:\\Dropbox\\Java (github)\\Laborator 10\\file.xml");
+                        JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
 
-                    Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-                    // output pretty printed
-                    jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                        // output pretty printed
+                        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-                    jaxbMarshaller.marshal(objectsXML, file);
-                    jaxbMarshaller.marshal(objectsXML, System.out);
-
+                        jaxbMarshaller.marshal(objectsXML, file);
+                        jaxbMarshaller.marshal(objectsXML, System.out);
+                    }
                 } catch (JAXBException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -210,13 +220,13 @@ public class Main {
                     JFileChooser chooser = new JFileChooser();
                     int returnVal = chooser.showOpenDialog(loadXMLButton);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        String[] f=chooser.getSelectedFile().toString().split("\\\\");
-                        String g=new String();
-                        for(int i=0;i<f.length-1;i++){
-                            g+=f[i]+"\\\\";
+                        String[] f = chooser.getSelectedFile().toString().split("\\\\");
+                        String g = new String();
+                        for (int i = 0; i < f.length - 1; i++) {
+                            g += f[i] + "\\\\";
                         }
-                        g+=f[f.length-1];
-                        File file =new File(g);
+                        g += f[f.length - 1];
+                        File file = new File(g);
                         JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
 
                         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
