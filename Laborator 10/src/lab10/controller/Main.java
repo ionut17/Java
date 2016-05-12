@@ -13,14 +13,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -31,11 +36,13 @@ public class Main {
     //Variables
     private static Point mousePos = new Point();
     private static int[] compCounter = new int[10];
+    private static ArrayList<Component> objectList = new ArrayList<>();
 
     //Main canvas
     private static JPanel canvas = new JPanel();
     //Properties
     private static JPanel properties = new JPanel();
+    private static JTable propertiesTable = new JTable();
     //Menu items
     private static JTextField menuInput = new JTextField();
     private static JButton menuButton = new JButton("Add Component");
@@ -48,16 +55,18 @@ public class Main {
 
 //        JPanel canvas = new JPanel();
         canvas.setLayout(null);
-        canvas.setPreferredSize(new Dimension(650, 600));
+        canvas.setPreferredSize(new Dimension(700, 600));
 
-        properties.setLayout(new FlowLayout());
-        properties.setPreferredSize(new Dimension(250, 600));
-        properties.setBackground(new Color(0,0,255,50)); //Setting light blue background
+        properties.setLayout(new BorderLayout());
+        properties.setPreferredSize(new Dimension(300, 600));
+        properties.setBackground(new Color(0, 0, 255, 50)); //Setting light blue background
+        propertiesTable.setRowHeight(30);
+        properties.add(new JScrollPane(propertiesTable), BorderLayout.CENTER);
 
         //Menu
         JPanel menu = new JPanel();
         menu.setLayout(new GridBagLayout());
-        menu.setPreferredSize(new Dimension(900, 100));
+        menu.setPreferredSize(new Dimension(1000, 100));
         menu.setBackground(new Color((float) 0, (float) 0, (float) 0, (float) 0.1)); //Setting light grey background
         //Menu Items
         JLabel menuLabel = new JLabel("Component name: ");
@@ -87,7 +96,29 @@ public class Main {
                 System.out.println("Set new coords at: " + e.getX() + ' ' + e.getY());
             }
         });
-
+        
+        for (Component cmpt: objectList){
+            
+            cmpt.addMouseListener(new MouseAdapter() {// provides empty implementation of all
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    Object[] row = {"Name", cmpt.getName()};
+                    DefaultTableModel model = (DefaultTableModel) propertiesTable.getModel();
+                    model.addRow(row);
+                    propertiesTable = new JTable(model);
+                    properties.repaint();
+                    properties.revalidate();
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    propertiesTable = new JTable();
+                    properties.repaint();
+                    properties.revalidate();
+                }
+            });
+            
+        }
+        
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -102,6 +133,7 @@ public class Main {
                             JButton button = (JButton) cmpt;
                             button.setText("Button " + compCounter[0]);
                             button.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 30);
+                            objectList.add(button);
                             canvas.add(button);
                             break;
                         case "JLabel":
@@ -110,6 +142,7 @@ public class Main {
                             JLabel label = (JLabel) cmpt;
                             label.setText("Label " + compCounter[1]);
                             label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
+                            objectList.add(label);
                             canvas.add(label);
                             break;
                         case "JTextField":
@@ -117,17 +150,20 @@ public class Main {
                             System.out.println("Added JTextField " + compCounter[2]);
                             JTextField textField = (JTextField) cmpt;
                             textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
+                            objectList.add(textField);
                             canvas.add(textField);
                         default:
                             compCounter[3]++;
                             System.out.println("Added component " + compCounter[3]);
                             Component component = (Component) cmpt;
                             component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
+                            objectList.add(component);
                             canvas.add(component);
                             break;
                     }
                     canvas.repaint();
                     canvas.revalidate();
+                    addHandlers();
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 } catch (InstantiationException ex) {
