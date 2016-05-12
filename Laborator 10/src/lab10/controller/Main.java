@@ -107,10 +107,11 @@ public class Main {
         menu.add(Box.createRigidArea(new Dimension(5, 0)));
         menu.add(menuButton);
         menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(clearButton);
         menu.add(saveXMLButton);
         menu.add(Box.createRigidArea(new Dimension(5, 0)));
         menu.add(loadXMLButton);
+        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+        menu.add(clearButton);
 
         //Display the window.
         frame.add(canvas, BorderLayout.CENTER);
@@ -142,13 +143,15 @@ public class Main {
                     myObjectXML.setName(driverName);
                     myObjectXML.setX((int) mousePos.getX());
                     myObjectXML.setY((int) mousePos.getY());
-                    objectsXML.addObject(myObjectXML);
 
                     switch (driverName.split("\\.")[driverName.split("\\.").length - 1]) {
                         case "JButton":
                             compCounter[0]++;
                             JButton button = (JButton) cmpt;
                             button.setText("Button " + compCounter[0]);
+                            myObjectXML.setWidth(100);
+                            myObjectXML.setHeight(30);
+                            myObjectXML.setText("Button " + compCounter[0]);
 //                            button.setName("Button " + compCounter[0]);
                             button.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 30);
                             objectList.add(button);
@@ -161,6 +164,9 @@ public class Main {
                             JLabel label = (JLabel) cmpt;
                             label.setText("Label " + compCounter[1]);
 //                            label.setName("Label " + compCounter[1]);
+                            myObjectXML.setWidth(100);
+                            myObjectXML.setHeight(30);
+                            myObjectXML.setText("Label " + compCounter[1]);
                             label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 30);
                             label.setFont(new Font("Montseratt", Font.BOLD, 16));
                             objectList.add(label);
@@ -172,15 +178,22 @@ public class Main {
                             System.out.println("Added JTextField " + compCounter[2]);
                             JTextField textField = (JTextField) cmpt;
                             textField.setName("TextField " + compCounter[2]);
+                            myObjectXML.setWidth(100);
+                            myObjectXML.setHeight(25);
+                            myObjectXML.setText("TextField " + compCounter[2]);
                             textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
                             objectList.add(textField);
                             addComponentListener(textField, "javax.swing.JTextField");
                             canvas.add(textField);
+                            break;
                         default:
                             compCounter[3]++;
                             System.out.println("Added component " + compCounter[3]);
                             Component component = (Component) cmpt;
                             component.setName("Component " + compCounter[3]);
+                            myObjectXML.setWidth(50);
+                            myObjectXML.setHeight(50);
+                            myObjectXML.setText("Component " + compCounter[3]);
                             component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
                             objectList.add(component);
                             addComponentListener(component, "javax.awt.Component");
@@ -189,6 +202,8 @@ public class Main {
                     }
                     canvas.repaint();
                     canvas.revalidate();
+
+                    objectsXML.addObject(myObjectXML);
 
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
@@ -267,7 +282,8 @@ public class Main {
                                     JButton button = (JButton) cmpt;
                                     button.setText("Button " + compCounter[0]);
                                     button.setName("Button " + compCounter[0]);
-                                    button.setBounds(obj.getX(), obj.getY(), 100, 30);
+                                    button.setBounds(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
+                                    button.setText(obj.getText());
                                     objectList.add(button);
                                     addComponentListener(button, "JButton");
                                     canvas.add(button);
@@ -279,6 +295,7 @@ public class Main {
                                     label.setText("Label " + compCounter[1]);
                                     label.setName("Label " + compCounter[1]);
                                     label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
+                                    label.setText(obj.getText());
                                     objectList.add(label);
                                     addComponentListener(label, "JLabel");
                                     canvas.add(label);
@@ -288,6 +305,7 @@ public class Main {
                                     System.out.println("Added JTextField " + compCounter[2]);
                                     JTextField textField = (JTextField) cmpt;
                                     textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
+                                    textField.setText(obj.getText());
                                     objectList.add(textField);
                                     addComponentListener(textField, "JTextField");
                                     canvas.add(textField);
@@ -378,6 +396,12 @@ public class Main {
                                 String newName;
                                 newName = (String) model.getValueAt(0, 1);
                                 button.setText(newName);
+                                //XML save
+                                int index = objectList.indexOf(cmpt);
+                                System.out.println("INDEX: " + index);
+                                objectsXML.getObj().remove(index);
+                                String className = String.valueOf(cmpt.getClass()).split(" ")[1];
+                                objectsXML.addObject(new ObjectXML(className, newX, newY, newWidth, newHeight, newName));
                             }
                         });
 

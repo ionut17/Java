@@ -13,6 +13,22 @@ public class ObjectXML {
     private String name=new String();
     private int x;
     private int y;
+    private int width = 100;
+    private int height = 50;
+    private String text;
+    
+    public ObjectXML(String tname, int tx, int ty, int twidth, int theight, String ttext){
+        name = tname;
+        x = tx;
+        y = ty;
+        width = twidth;
+        height = theight;
+        text = ttext;
+    }
+    
+    public ObjectXML(){
+        
+    }
 
     /**
      * @return the name
@@ -54,6 +70,48 @@ public class ObjectXML {
      */
     public void setY(int y) {
         this.y = y;
+    }
+
+    /**
+     * @return the width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * @param width the width to set
+     */
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    /**
+     * @return the height
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * @param height the height to set
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * @param text the text to set
+     */
+    public void setText(String text) {
+        this.text = text;
     }
     
 }
