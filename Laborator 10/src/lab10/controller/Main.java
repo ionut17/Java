@@ -28,6 +28,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
+import javafx.stage.FileChooser;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -204,64 +207,74 @@ public class Main {
             public void actionPerformed(ActionEvent ac) {
                 try {
 
-                    File file = new File("D:\\Dropbox\\Java (github)\\Laborator 10\\file.xml");
-                    JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
-
-                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                    ObjectsXML loadedObjectsXML = (ObjectsXML) jaxbUnmarshaller.unmarshal(file);
-                    System.out.println(loadedObjectsXML);
-                    ArrayList<ObjectXML> loadedObjects = loadedObjectsXML.getObj();
-                    canvas.removeAll();
-                    for (int i = 0; i < compCounter.length; i++) {
-                        compCounter[i] = 0;
-                    }
-                    for (ObjectXML obj : loadedObjects) {
-
-                        Class clazz = Class.forName(obj.getName());
-                        Component cmpt = (Component) clazz.newInstance();
-
-                        switch (obj.getName().split("\\.")[obj.getName().split("\\.").length - 1]) {
-                            case "JButton":
-                                compCounter[0]++;
-                                JButton button = (JButton) cmpt;
-                                button.setText("Button " + compCounter[0]);
-                                button.setName("Button " + compCounter[0]);
-                                button.setBounds(obj.getX(), obj.getY(), 100, 30);
-                                objectList.add(button);
-                                addComponentListener(button, "JButton");
-                                canvas.add(button);
-                                break;
-                            case "JLabel":
-                                compCounter[1]++;
-                                System.out.println("Added label");
-                                JLabel label = (JLabel) cmpt;
-                                label.setText("Label " + compCounter[1]);
-                                label.setName("Label " + compCounter[1]);
-                                label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
-                                objectList.add(label);
-                                addComponentListener(label, "JLabel");
-                                canvas.add(label);
-                                break;
-                            case "JTextField":
-                                compCounter[2]++;
-                                System.out.println("Added JTextField " + compCounter[2]);
-                                JTextField textField = (JTextField) cmpt;
-                                textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
-                                objectList.add(textField);
-                                addComponentListener(textField, "JTextField");
-                                canvas.add(textField);
-                            default:
-                                compCounter[3]++;
-                                System.out.println("Added component " + compCounter[3]);
-                                Component component = (Component) cmpt;
-                                component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
-                                objectList.add(component);
-                                addComponentListener(component, "Component");
-                                canvas.add(component);
-                                break;
+                    JFileChooser chooser = new JFileChooser();
+                    int returnVal = chooser.showOpenDialog(loadXMLButton);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        String[] f=chooser.getSelectedFile().toString().split("\\\\");
+                        String g=new String();
+                        for(int i=0;i<f.length-1;i++){
+                            g+=f[i]+"\\\\";
                         }
-                        canvas.repaint();
-                        canvas.revalidate();
+                        g+=f[f.length-1];
+                        File file =new File(g);
+                        JAXBContext jaxbContext = JAXBContext.newInstance(ObjectsXML.class);
+
+                        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                        ObjectsXML loadedObjectsXML = (ObjectsXML) jaxbUnmarshaller.unmarshal(file);
+                        System.out.println(loadedObjectsXML);
+                        ArrayList<ObjectXML> loadedObjects = loadedObjectsXML.getObj();
+                        canvas.removeAll();
+                        for (int i = 0; i < compCounter.length; i++) {
+                            compCounter[i] = 0;
+                        }
+                        for (ObjectXML obj : loadedObjects) {
+
+                            Class clazz = Class.forName(obj.getName());
+                            Component cmpt = (Component) clazz.newInstance();
+
+                            switch (obj.getName().split("\\.")[obj.getName().split("\\.").length - 1]) {
+                                case "JButton":
+                                    compCounter[0]++;
+                                    JButton button = (JButton) cmpt;
+                                    button.setText("Button " + compCounter[0]);
+                                    button.setName("Button " + compCounter[0]);
+                                    button.setBounds(obj.getX(), obj.getY(), 100, 30);
+                                    objectList.add(button);
+                                    addComponentListener(button, "JButton");
+                                    canvas.add(button);
+                                    break;
+                                case "JLabel":
+                                    compCounter[1]++;
+                                    System.out.println("Added label");
+                                    JLabel label = (JLabel) cmpt;
+                                    label.setText("Label " + compCounter[1]);
+                                    label.setName("Label " + compCounter[1]);
+                                    label.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 30);
+                                    objectList.add(label);
+                                    addComponentListener(label, "JLabel");
+                                    canvas.add(label);
+                                    break;
+                                case "JTextField":
+                                    compCounter[2]++;
+                                    System.out.println("Added JTextField " + compCounter[2]);
+                                    JTextField textField = (JTextField) cmpt;
+                                    textField.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 100, 25);
+                                    objectList.add(textField);
+                                    addComponentListener(textField, "JTextField");
+                                    canvas.add(textField);
+                                default:
+                                    compCounter[3]++;
+                                    System.out.println("Added component " + compCounter[3]);
+                                    Component component = (Component) cmpt;
+                                    component.setBounds((int) mousePos.getX(), (int) mousePos.getY(), 50, 50);
+                                    objectList.add(component);
+                                    addComponentListener(component, "Component");
+                                    canvas.add(component);
+                                    break;
+                            }
+                            canvas.repaint();
+                            canvas.revalidate();
+                        }
                     }
 
                 } catch (ClassNotFoundException ex) {
