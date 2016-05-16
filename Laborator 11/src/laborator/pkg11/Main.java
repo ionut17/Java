@@ -31,6 +31,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -38,8 +40,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Currency;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.stage.FileChooser;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JTextArea;
@@ -58,71 +65,122 @@ import javax.xml.bind.Unmarshaller;
 public class Main {
 
     //Variables
+    //Language changing panel
+    private static JPanel languages = new JPanel();
+    private static String path = "D:\\Dropbox\\Java (github)\\Laborator 11\\MyResourcesFolder\\";
+    private static String file = "MyResources_";
+    private static JComboBox languagesList = new JComboBox();
     //Main canvas
     private static JPanel locales = new JPanel();
     //Properties
     private static JPanel info = new JPanel();
-    //Menu items
-    private static JTextField menuInput = new JTextField();
-    private static JButton menuButton = new JButton("Add Component");
-    private static JButton saveXMLButton = new JButton("Save as XML");
-    private static JButton loadXMLButton = new JButton("Load XML");
+    private static JLabel languagesListLabel = new JLabel();
+    private static JLabel localesLabel = new JLabel();
+    private static JLabel informationLabel = new JLabel();
 
-    private static void createAndShowGUI() {
+    private static Properties props = new Properties();
+//    //Menu items
+//    private static JTextField menuInput = new JTextField();
+//    private static JButton menuButton = new JButton("Add Component");
+//    private static JButton saveXMLButton = new JButton("Save as XML");
+//    private static JButton loadXMLButton = new JButton("Load XML");
+
+    private static void createAndShowGUI() throws IOException {
+        
         //Create and set up the window.
         JFrame frame = new JFrame("InterfaceBuilder v.0.0.1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
+        props.load(new FileReader(path + file + "en_US.properties"));
+        languagesListLabel.setText(props.getProperty("select"));
+        localesLabel.setText(props.getProperty("locales"));
+        informationLabel.setText(props.getProperty("information"));
+        
+        languages.setLayout(new FlowLayout());
+        languages.setPreferredSize(new Dimension(1000, 50));
+        Properties props = new Properties();
+        props.load(new FileReader("D:\\Dropbox\\Java (github)\\Laborator 11\\MyResourcesFolder\\LanguagesList.properties"));
+        for (int i = 0; i < props.size(); i++) {
+            languagesList.addItem(props.getProperty("language" + i));
+        }
+        languagesList.setSelectedIndex(0);
+        languages.add(languagesListLabel);
+        languages.add(languagesList);
+
 //        JPanel canvas = new JPanel();
         locales.setLayout(new BorderLayout());
         locales.setPreferredSize(new Dimension(350, 600));
         locales.setBackground(Color.white);
+        locales.add(localesLabel);
 
         info.setLayout(new BorderLayout());
-        info.setPreferredSize(new Dimension(650, 600));
+        info.setPreferredSize(new Dimension(450, 600));
+        info.add(informationLabel);
 //        properties.setBackground(new Color(0, 0, 255, 50)); //Setting light blue background
 //        propertiesTable.setRowHeight(30);
 //        properties.add(new JScrollPane(propertiesTable), BorderLayout.CENTER);
         JButton clearButton = new JButton("Clear All");
 
-        //Menu
-        JPanel menu = new JPanel();
-        menu.setLayout(new GridBagLayout());
-        menu.setPreferredSize(new Dimension(1000, 100));
-        menu.setBackground(new Color((float) 0, (float) 0, (float) 0, (float) 0.1)); //Setting light grey background
-        //Menu Items
-        JLabel menuLabel = new JLabel("Component name: ");
-//        JTextField menuInput = new JTextField();
-        menuInput.setPreferredSize(new Dimension(200, 30));
-//        JButton menuButton = new JButton("Add Component");
-        //Assembling parts
-        menu.add(menuLabel);
-        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(menuInput);
-        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(menuButton);
-        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(saveXMLButton);
-        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(loadXMLButton);
-        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-        menu.add(clearButton);
-
+//        //Menu
+//        JPanel menu = new JPanel();
+//        menu.setLayout(new GridBagLayout());
+//        menu.setPreferredSize(new Dimension(1000, 100));
+//        menu.setBackground(new Color((float) 0, (float) 0, (float) 0, (float) 0.1)); //Setting light grey background
+//        //Menu Items
+//        JLabel menuLabel = new JLabel("Component name: ");
+////        JTextField menuInput = new JTextField();
+//        menuInput.setPreferredSize(new Dimension(200, 30));
+////        JButton menuButton = new JButton("Add Component");
+//        //Assembling parts
+//        menu.add(menuLabel);
+//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+//        menu.add(menuInput);
+//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+//        menu.add(menuButton);
+//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+//        menu.add(saveXMLButton);
+//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+//        menu.add(loadXMLButton);
+//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
+//        menu.add(clearButton);
         //Display the window.
+        frame.add(languages, BorderLayout.NORTH);
         frame.add(locales, BorderLayout.CENTER);
         frame.add(info, BorderLayout.EAST);
-        frame.add(menu, BorderLayout.SOUTH);
+//        frame.add(menu, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
     }
 
-    private static void setData() {
+    private static void setData() throws IOException {
+        languagesList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    props.load(new FileReader(path + file + languagesList.getSelectedItem() + ".properties"));
+                    languagesListLabel.setText(props.getProperty("select"));
+                    languagesListLabel.revalidate();
+                    languagesListLabel.repaint();
+                    localesLabel.setText(props.getProperty("locales"));
+                    localesLabel.revalidate();
+                    localesLabel.repaint();
+                    informationLabel.setText(props.getProperty("information"));
+                    informationLabel.revalidate();
+                    informationLabel.repaint();
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
         ArrayList<String> arrayData = new ArrayList<>();
         Locale available[] = Locale.getAvailableLocales();
         for (Locale locale : available) {
-            arrayData.add(locale.toString());
-            System.out.println(locale.toString());
+            if (locale.toString().length() > 2) {
+                arrayData.add(locale.toString());
+                System.out.println(locale.toString());
+            }
         }
         String[] data = new String[arrayData.size()];
         data = arrayData.toArray(data);
@@ -140,27 +198,27 @@ public class Main {
                 StringBuilder sb = new StringBuilder();
                 for (Locale locale : available) {
                     if (target.equals(locale.toString())) {
-                        System.out.println("Selected: "+locale.toString());
+                        System.out.println("Selected: " + locale.toString());
                         LocalDateTime today = LocalDateTime.now();
                         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
                         DateFormatSymbols dfs = new DateFormatSymbols(locale);
                         Currency cr = Currency.getInstance(locale);
-                        sb.append("Country: ").append(locale.getDisplayCountry()).append("\n");
-                        sb.append("Language: ").append(locale.getDisplayLanguage()).append("\n");
-                        sb.append("Currency: ").append(cr.getSymbol()+" ("+cr.getDisplayName()+")").append("\n");
-                        sb.append("Week days: ");
+                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append("\n");
+                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append("\n");
+                        sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
+                        sb.append(props.getProperty("weekDays") + ": ");
                         String[] weekdays = dfs.getWeekdays();
-                        for (int i=0;i<weekdays.length;i++){
+                        for (int i = 1; i < weekdays.length - 1; i++) {
                             sb.append(weekdays[i]).append(" | ");
                         }
-                        sb.append("\n");
-                        sb.append("Months: ");
+                        sb.append(weekdays[weekdays.length - 1]).append("\n");
+                        sb.append(props.getProperty("months") + ": ");
                         String[] months = dfs.getMonths();
-                        for (int i=0;i<months.length;i++){
+                        for (int i = 0; i < months.length - 2; i++) {
                             sb.append(months[i]).append(" | ");
                         }
-                        sb.append("\n");
-                        sb.append("Today: ").append(today.format(formatter)).append("\n");
+                        sb.append(months[months.length - 2]).append("\n");
+                        sb.append(props.getProperty("today") + ": ").append(today.format(formatter)).append("\n");
                     }
                 }
                 System.out.println(sb.toString());
@@ -177,8 +235,16 @@ public class Main {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
-                setData();
+                try {
+                    createAndShowGUI();
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    setData();
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
