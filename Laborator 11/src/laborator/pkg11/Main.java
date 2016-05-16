@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -32,7 +34,6 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Properties;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -233,7 +234,7 @@ public class Main {
                         }
 
                         sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append("\n");
-                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append("\n");
+                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage(locale)).append(" ("+locale.getDisplayLanguage()+") ").append("\n");
                         try {
                             Currency cr = Currency.getInstance(locale);
                             sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
@@ -258,11 +259,11 @@ public class Main {
                         Image image = null;
                         try {
                             URL url_img = new URL(flag);
-//                            image = ImageIO.read(url_img);
-                            sb.append(props.getProperty("flag") + ": ").append("\n\n\n\n");
+                            image = ImageIO.read(url_img);
                             JLabel imgLabel = new JLabel(new ImageIcon(url_img));
-                            info.add(imgLabel);
-                            info.repaint();
+                            info.add(imgLabel, BorderLayout.NORTH);
+                            info.revalidate();
+                            info.repaint();   
                         } catch (MalformedURLException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IOException ex) {
