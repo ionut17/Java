@@ -232,9 +232,9 @@ public class Main {
                         } catch (IOException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
-                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append("\n");
-                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage(locale)).append(" ("+locale.getDisplayLanguage()+") ").append("\n");
+                        
+                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append(" ("+locale.getDisplayCountry(locale)+") ").append("\n");
+                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append(" ("+locale.getDisplayLanguage(locale)+") ").append("\n");
                         try {
                             Currency cr = Currency.getInstance(locale);
                             sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
@@ -279,7 +279,7 @@ public class Main {
                         sb.append(props.getProperty("continent") + ": ").append(continentName).append("\n");
                     }
                 }
-                System.out.println(sb.toString());
+//                System.out.println(sb.toString());
                 text.setText(sb.toString());
                 info.add(new JScrollPane(text), BorderLayout.CENTER);
                 info.revalidate();
