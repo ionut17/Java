@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,7 +65,7 @@ public class Main {
     private static JPanel informationPanel = new JPanel();
 
     private static Properties props = new Properties();
-    
+
     private static void createAndShowGUI() throws IOException {
 
         //Create and set up the window.
@@ -76,10 +77,10 @@ public class Main {
         languagesListLabel.setText(props.getProperty("select"));
         localesLabel.setText(props.getProperty("locales"));
         informationLabel.setText(props.getProperty("information"));
-        informationLabel.setPreferredSize(new Dimension(450, 50));
+        informationLabel.setPreferredSize(new Dimension(600, 50));
         informationLabel.setAlignmentY(0);
-        informationPanel.setLayout(new FlowLayout());
-        informationPanel.add(informationLabel);
+        informationPanel.setLayout(new BorderLayout());
+        informationPanel.add(informationLabel, BorderLayout.NORTH);
 
         languages.setLayout(new FlowLayout());
         languages.setPreferredSize(new Dimension(1000, 50));
@@ -94,22 +95,22 @@ public class Main {
 
 //        JPanel canvas = new JPanel();
         locales.setLayout(new BorderLayout());
-        locales.setPreferredSize(new Dimension(350, 600));
+        locales.setPreferredSize(new Dimension(450, 600));
         locales.setBackground(Color.white);
         localesLabel.setPreferredSize(new Dimension(350, 60));
         locales.add(localesLabel, BorderLayout.NORTH);
 
         info.setLayout(new BorderLayout());
-        info.setPreferredSize(new Dimension(450, 600));
+        info.setPreferredSize(new Dimension(600, 600));
         informationPanel.setBackground(Color.white);
         info.add(informationPanel, BorderLayout.NORTH);
-        
+
         JButton clearButton = new JButton("Clear All");
-        
+
         //Display the window.
         frame.add(languages, BorderLayout.NORTH);
-        frame.add(locales, BorderLayout.CENTER);
-        frame.add(info, BorderLayout.EAST);
+        frame.add(locales, BorderLayout.WEST);
+        frame.add(info, BorderLayout.CENTER);
 //        frame.add(menu, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
@@ -127,6 +128,12 @@ public class Main {
                     localesLabel.setText(props.getProperty("locales"));
                     localesLabel.revalidate();
                     localesLabel.repaint();
+                    info.remove(1);
+                    informationPanel.remove(1);
+                    informationPanel.revalidate();
+                    informationPanel.repaint();
+                    info.revalidate();
+                    info.repaint();
                     informationLabel.setText(props.getProperty("information"));
                     informationLabel.revalidate();
                     informationLabel.repaint();
@@ -153,6 +160,10 @@ public class Main {
         myList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent lse) {
+                informationPanel.removeAll();
+                informationPanel.add(informationLabel, BorderLayout.NORTH);
+                informationPanel.revalidate();
+                informationPanel.repaint();
                 info.removeAll();
                 info.add(informationPanel, BorderLayout.NORTH);
                 System.out.println("Entered listener");
@@ -241,9 +252,9 @@ public class Main {
                         } catch (IOException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append(" ("+locale.getDisplayCountry(locale)+") ").append("\n");
-                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append(" ("+locale.getDisplayLanguage(locale)+") ").append("\n");
+
+                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append(" (" + locale.getDisplayCountry(locale) + ") ").append("\n");
+                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append(" (" + locale.getDisplayLanguage(locale) + ") ").append("\n");
                         try {
                             Currency cr = Currency.getInstance(locale);
                             sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
@@ -268,17 +279,20 @@ public class Main {
                         Image image = null;
                         try {
                             URL url_img = new URL(flag);
+                            System.out.println("url: " + url_img);
                             image = ImageIO.read(url_img);
                             JLabel imgLabel = new JLabel(new ImageIcon(url_img));
-                            info.add(imgLabel, BorderLayout.NORTH);
-                            info.revalidate();
-                            info.repaint();   
+                            informationPanel.removeAll();
+                            informationPanel.add(informationLabel, BorderLayout.NORTH);
+                            informationPanel.add(imgLabel, BorderLayout.CENTER);
+                            informationPanel.revalidate();
+                            informationPanel.repaint();
                         } catch (MalformedURLException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IOException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
+
                         String continentName = new String();
                         for (Pair<String, String> p : continents) {
                             if (continentCode.matches(p.getKey())) {

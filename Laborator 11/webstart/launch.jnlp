@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>Regionalizer v.0.1</title>
+        <vendor>LR</vendor>
+        <homepage href=""/>
+        <description>Regionalizer v.0.1</description>
+        <description kind="short">Regionalizer v.0.1</description>
+    </information>
+    <update check="always"/>
+    <security>
+<all-permissions/>
+</security>
+    <resources>
+        <j2se version="1.8+"/>
+        <jar href="Laborator_11.jar" main="true"/>
+    </resources>
+    <application-desc main-class="laborator.pkg11.Main">
+    </application-desc>
+</jnlp>

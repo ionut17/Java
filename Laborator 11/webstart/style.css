@@ -1,0 +1,36 @@
+body{
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-image: url('bg.jpg');
+	background-position: center;
+	background-size: cover;
+}
+
+h3{
+	font-family: Raleway;
+	font-size: 40px;
+	font-weight: bold;
+	color: #262626;
+	margin-bottom: 30px;
+}
+
+a{
+	display: inline;
+	text-decoration: none;
+	background-color: #27ae60;
+	padding: 20px;
+	border-radius: 10px;
+	color: white;
+	font-family: Montserrat, sans-serif;
+	font-weight: bold;
+	text-transform: uppercase;	
+	font-size: 14px;
+}
+a:hover{
+	background-color: #2ecc71;
+}
