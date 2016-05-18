@@ -67,7 +67,8 @@ public class Main {
     //Variables
     //Language changing panel
     private static JPanel languages = new JPanel();
-    private static String path = "D:\\Dropbox\\Java (github)\\Laborator 11\\MyResourcesFolder\\";
+//    private static String path = "D:\\Dropbox\\Java (github)\\Laborator 11\\MyResourcesFolder\\";
+    private static String path = "C:\\Dropbox\\Facultate\\An II\\Semestrul II\\4. Java\\Labs (github)\\Laborator 11\\MyResourcesFolder\\";
     private static String file = "MyResources_";
     private static JComboBox languagesList = new JComboBox();
     //Main canvas
@@ -77,6 +78,7 @@ public class Main {
     private static JLabel languagesListLabel = new JLabel();
     private static JLabel localesLabel = new JLabel();
     private static JLabel informationLabel = new JLabel();
+    private static JPanel informationPanel = new JPanel();
 
     private static Properties props = new Properties();
 //    //Menu items
@@ -86,7 +88,7 @@ public class Main {
 //    private static JButton loadXMLButton = new JButton("Load XML");
 
     private static void createAndShowGUI() throws IOException {
-        
+
         //Create and set up the window.
         JFrame frame = new JFrame("InterfaceBuilder v.0.0.1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,11 +98,15 @@ public class Main {
         languagesListLabel.setText(props.getProperty("select"));
         localesLabel.setText(props.getProperty("locales"));
         informationLabel.setText(props.getProperty("information"));
-        
+        informationLabel.setPreferredSize(new Dimension(450, 50));
+        informationLabel.setAlignmentY(0);
+        informationPanel.setLayout(new FlowLayout());
+        informationPanel.add(informationLabel);
+
         languages.setLayout(new FlowLayout());
         languages.setPreferredSize(new Dimension(1000, 50));
         Properties props = new Properties();
-        props.load(new FileReader("D:\\Dropbox\\Java (github)\\Laborator 11\\MyResourcesFolder\\LanguagesList.properties"));
+        props.load(new FileReader(path + "LanguagesList.properties"));
         for (int i = 0; i < props.size(); i++) {
             languagesList.addItem(props.getProperty("language" + i));
         }
@@ -112,38 +118,19 @@ public class Main {
         locales.setLayout(new BorderLayout());
         locales.setPreferredSize(new Dimension(350, 600));
         locales.setBackground(Color.white);
-        locales.add(localesLabel);
+        localesLabel.setPreferredSize(new Dimension(350, 60));
+        locales.add(localesLabel, BorderLayout.NORTH);
 
         info.setLayout(new BorderLayout());
         info.setPreferredSize(new Dimension(450, 600));
-        info.add(informationLabel);
+        informationPanel.setBackground(Color.white);
+        info.add(informationPanel, BorderLayout.NORTH);
 //        properties.setBackground(new Color(0, 0, 255, 50)); //Setting light blue background
 //        propertiesTable.setRowHeight(30);
 //        properties.add(new JScrollPane(propertiesTable), BorderLayout.CENTER);
         JButton clearButton = new JButton("Clear All");
 
 //        //Menu
-//        JPanel menu = new JPanel();
-//        menu.setLayout(new GridBagLayout());
-//        menu.setPreferredSize(new Dimension(1000, 100));
-//        menu.setBackground(new Color((float) 0, (float) 0, (float) 0, (float) 0.1)); //Setting light grey background
-//        //Menu Items
-//        JLabel menuLabel = new JLabel("Component name: ");
-////        JTextField menuInput = new JTextField();
-//        menuInput.setPreferredSize(new Dimension(200, 30));
-////        JButton menuButton = new JButton("Add Component");
-//        //Assembling parts
-//        menu.add(menuLabel);
-//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-//        menu.add(menuInput);
-//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-//        menu.add(menuButton);
-//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-//        menu.add(saveXMLButton);
-//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-//        menu.add(loadXMLButton);
-//        menu.add(Box.createRigidArea(new Dimension(5, 0)));
-//        menu.add(clearButton);
         //Display the window.
         frame.add(languages, BorderLayout.NORTH);
         frame.add(locales, BorderLayout.CENTER);
@@ -192,6 +179,7 @@ public class Main {
             @Override
             public void valueChanged(ListSelectionEvent lse) {
                 info.removeAll();
+                info.add(informationPanel, BorderLayout.NORTH);
                 System.out.println("Entered listener");
                 JTextArea text = new JTextArea();
                 String target = myList.getSelectedValue();
