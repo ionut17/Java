@@ -2,61 +2,44 @@ package laborator.pkg11;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
-import java.awt.Point;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.image.ImageObserver;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormatSymbols;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Calendar;
 import java.util.Currency;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Set;
-import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -81,12 +64,7 @@ public class Main {
     private static JPanel informationPanel = new JPanel();
 
     private static Properties props = new Properties();
-//    //Menu items
-//    private static JTextField menuInput = new JTextField();
-//    private static JButton menuButton = new JButton("Add Component");
-//    private static JButton saveXMLButton = new JButton("Save as XML");
-//    private static JButton loadXMLButton = new JButton("Load XML");
-
+    
     private static void createAndShowGUI() throws IOException {
 
         //Create and set up the window.
@@ -125,12 +103,9 @@ public class Main {
         info.setPreferredSize(new Dimension(450, 600));
         informationPanel.setBackground(Color.white);
         info.add(informationPanel, BorderLayout.NORTH);
-//        properties.setBackground(new Color(0, 0, 255, 50)); //Setting light blue background
-//        propertiesTable.setRowHeight(30);
-//        properties.add(new JScrollPane(propertiesTable), BorderLayout.CENTER);
+        
         JButton clearButton = new JButton("Clear All");
-
-//        //Menu
+        
         //Display the window.
         frame.add(languages, BorderLayout.NORTH);
         frame.add(locales, BorderLayout.CENTER);
@@ -164,10 +139,10 @@ public class Main {
         ArrayList<String> arrayData = new ArrayList<>();
         Locale available[] = Locale.getAvailableLocales();
         for (Locale locale : available) {
-            if (locale.toString().length() > 2) {
-                arrayData.add(locale.toString());
-                System.out.println(locale.toString());
-            }
+//            if (locale.toString().length() > 2) {
+            arrayData.add(locale.toString());
+            System.out.println(locale.toString());
+//            }
         }
         String[] data = new String[arrayData.size()];
         data = arrayData.toArray(data);
@@ -184,16 +159,97 @@ public class Main {
                 JTextArea text = new JTextArea();
                 String target = myList.getSelectedValue();
                 StringBuilder sb = new StringBuilder();
+                String capital = new String();
+                String phoneCode = new String();
+                String continentCode = new String();
+                String flag = new String();
+                ArrayList<Pair<String, String>> continents = new ArrayList<>();
+
+                try {
+                    URL url;
+                    url = new URL("http://www.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/ListOfContinentsByName");
+                    URLConnection con = url.openConnection();
+                    InputStream is = con.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String l = new String();
+                    String code = new String();
+                    while ((l = br.readLine()) != null) {
+                        if (l.contains("<sCode>")) {
+                            code = l.split("<sCode>")[1].split("</sCode>")[0];
+                        } else if (l.contains("<sName>")) {
+                            Pair<String, String> p = new Pair<String, String>(code, l.split("<sName>")[1].split("</sName>")[0]);
+                            continents.add(p);
+                        }
+                    }
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 for (Locale locale : available) {
                     if (target.equals(locale.toString())) {
                         System.out.println("Selected: " + locale.toString());
                         LocalDateTime today = LocalDateTime.now();
                         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
                         DateFormatSymbols dfs = new DateFormatSymbols(locale);
-                        Currency cr = Currency.getInstance(locale);
-                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append("\n");
-                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append("\n");
-                        sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
+
+                        try {
+                            URL url1;
+                            url1 = new URL("http://www.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/CountryISOCode/JSON/debug?sCountryName=" + locale.getDisplayCountry().replaceAll(" ", "+"));
+                            URLConnection con1 = url1.openConnection();
+                            InputStream is1 = con1.getInputStream();
+                            BufferedReader br1 = new BufferedReader(new InputStreamReader(is1));
+                            String countryCode = br1.readLine().substring(1, 3);
+
+                            URL url2;
+                            url2 = new URL("http://www.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/FullCountryInfo/JSON/debug?sCountryISOCode=" + countryCode);
+                            URLConnection con2 = url2.openConnection();
+                            InputStream is2 = con2.getInputStream();
+                            BufferedReader br2 = new BufferedReader(new InputStreamReader(is2));
+                            String lines = new String();
+                            String line;
+                            while ((line = br2.readLine()) != null) {
+                                lines += line;
+                            }
+                            String[] forCapitalCity = lines.split("\",\"");
+                            for (String s : forCapitalCity) {
+                                if (s.contains("sCapitalCity")) {
+                                    if (s.split("\":\"").length > 1) {
+                                        capital = s.split("\":\"")[1];
+                                    }
+                                }
+                                if (s.contains("sPhoneCode")) {
+                                    if (s.split("\":\"").length > 1) {
+                                        phoneCode = s.split("\":\"")[1];
+                                    }
+                                }
+                                if (s.contains("sContinentCode")) {
+                                    if (s.split("\":\"").length > 1) {
+                                        continentCode = s.split("\":\"")[1];
+                                    }
+                                }
+                                if (s.contains("sCountryFlag")) {
+                                    if (s.split("\":\"").length > 1) {
+                                        flag = s.split("\":\"")[1];
+                                    }
+                                }
+                            }
+                            System.out.println("capital: " + capital + " phoneCode: " + phoneCode + " continentCode: " + continentCode);
+                            System.out.println("code 1: " + countryCode + " primit 2: " + lines);
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        sb.append(props.getProperty("country") + ": ").append(locale.getDisplayCountry()).append(" ("+locale.getDisplayCountry(locale)+") ").append("\n");
+                        sb.append(props.getProperty("language") + ": ").append(locale.getDisplayLanguage()).append(" ("+locale.getDisplayLanguage(locale)+") ").append("\n");
+                        try {
+                            Currency cr = Currency.getInstance(locale);
+                            sb.append(props.getProperty("currency") + ": ").append(cr.getSymbol() + " (" + cr.getDisplayName() + ")").append("\n");
+                        } catch (IllegalArgumentException i) {
+                            System.err.println(i);
+                        };
                         sb.append(props.getProperty("weekDays") + ": ");
                         String[] weekdays = dfs.getWeekdays();
                         for (int i = 1; i < weekdays.length - 1; i++) {
@@ -207,9 +263,32 @@ public class Main {
                         }
                         sb.append(months[months.length - 2]).append("\n");
                         sb.append(props.getProperty("today") + ": ").append(today.format(formatter)).append("\n");
+                        sb.append(props.getProperty("capital") + ": ").append(capital).append("\n");
+                        sb.append(props.getProperty("phoneCode") + ": ").append(phoneCode).append("\n");
+                        Image image = null;
+                        try {
+                            URL url_img = new URL(flag);
+                            image = ImageIO.read(url_img);
+                            JLabel imgLabel = new JLabel(new ImageIcon(url_img));
+                            info.add(imgLabel, BorderLayout.NORTH);
+                            info.revalidate();
+                            info.repaint();   
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        String continentName = new String();
+                        for (Pair<String, String> p : continents) {
+                            if (continentCode.matches(p.getKey())) {
+                                continentName = p.getValue();
+                            }
+                        }
+                        sb.append(props.getProperty("continent") + ": ").append(continentName).append("\n");
                     }
                 }
-                System.out.println(sb.toString());
+//                System.out.println(sb.toString());
                 text.setText(sb.toString());
                 info.add(new JScrollPane(text), BorderLayout.CENTER);
                 info.revalidate();
