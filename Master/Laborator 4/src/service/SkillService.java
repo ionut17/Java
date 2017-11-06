@@ -1,9 +1,6 @@
 package service;
 
-import model.Item;
 import model.ItemDto;
-import model.Skill;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;

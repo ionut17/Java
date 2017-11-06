@@ -1,7 +1,6 @@
 package view;
 
 import model.ItemDto;
-import model.Skill;
 import model.Student;
 import service.ItemService;
 import service.StudentService;
