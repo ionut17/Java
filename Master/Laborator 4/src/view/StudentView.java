@@ -1,6 +1,5 @@
 package view;
 
-import model.Skill;
 import model.Student;
 
 import javax.annotation.PostConstruct;
