@@ -15,4 +15,10 @@ public class ItemService<T extends Item> {
     public List<T> getItems() {
         return this.items;
     }
+
+    public T add(T item){
+        int x = 5;
+        int y = 4;
+        return null;
+    }
 }

@@ -29,5 +29,12 @@
 
     </p:dataTable>
 
+    <hr/>
+
+    <h:form>
+        <ui:include src="includes/form.xhtml"></ui:include>
+        <h:commandButton value="submit" action="#{studentView.addItem(item)}" />
+    </h:form>
+
 </h:body>
 </html>

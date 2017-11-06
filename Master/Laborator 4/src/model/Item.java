@@ -1,16 +1,18 @@
 package model;
 
+import javax.faces.bean.ManagedBean;
 import java.util.List;
 
-public abstract class Item {
+@ManagedBean(name="item", eager = true)
+public class Item {
 
     String name;
 
     List<Skill> skills;
 
-    Item(){}
+    public Item(){}
 
-    Item(String name, List<Skill> skills){
+    public Item(String name, List<Skill> skills){
         setName(name);
         setSkills(skills);
     }
