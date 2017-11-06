@@ -34,13 +34,13 @@ public class SolutionService {
             Map<String, Integer> preferredProjects = new HashMap<>();
             for(Project project : projects){
                 int projectScore = 0;
-                int projectSKillsNo = project.getSkills().size();
+                int projectSkillsNo = project.getSkills().size();
                 for(String skill : project.getSkills()){
                     if(student.getSkills().contains(skill)){
-                        projectScore += (projectSKillsNo+1) - project.getSkills().indexOf(skill);
+                        projectScore += (projectSkillsNo+1) - project.getSkills().indexOf(skill);
                     }
                 }
-                int maxProjectScore = projectSKillsNo*(projectSKillsNo+1)/2;
+                int maxProjectScore = projectSkillsNo*(projectSkillsNo+1)/2;
                 int projectPercentageScore = projectScore/maxProjectScore *100;
 
                 preferredProjects.put(project.getName(), projectPercentageScore);
