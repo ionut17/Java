@@ -3,23 +3,24 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Hello</title>
 </h:head>
 <h:body>
-    <h:form>
-        <h:outputLabel for="userName" value="Your name:"/>
-        <h:inputText id="userName"
-                     value="#{personBean.name}"
-                     required="true"/>
-        <h:commandButton id="submit"
-                         value="Submit"
-                         action="sayHello.xhtml"/>
-        <h:message id="errors" style="color: red"
-                   showSummary="true" showDetail="false"
-                   for="userName"/>
-    </h:form>
+
+    <p:dataTable var="item" value="#{dtBasicView.items}">
+        <p:column headerText="Name">
+            <h:outputText value="#{items.name}" />
+        </p:column>
+
+        <p:column headerText="Skills">
+            <h:outputText value="#{items.skills}" />
+        </p:column>
+
+    </p:dataTable>
+
 </h:body>
 </html>
