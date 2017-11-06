@@ -8,6 +8,8 @@ public abstract class Item {
 
     List<Skill> skills;
 
+    Item(){}
+
     Item(String name, List<Skill> skills){
         setName(name);
         setSkills(skills);
