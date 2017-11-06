@@ -2,9 +2,7 @@ package service;
 
 import model.Project;
 import model.Student;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SolutionService {
 
@@ -13,6 +11,8 @@ public class SolutionService {
     private List<Student> unengagedStudents;
     private Map<Student, Set<String>> preferredProjectsDictionary;
 
+    private Map<Student, Project> solution = new HashMap<>();
+
     public SolutionService(List<Project> projects, List<Student> students){
         this.projects = projects;
         this.unengagedStudents = students;
@@ -20,7 +20,7 @@ public class SolutionService {
         projects.forEach(project -> projectsMap.put(project.getName(), project));
     }
 
-    public Dictionary<Student, Project> solve(){
+    public Map<Student, Project> solve(){
         initializePreferredProjects();
 
         while(unengagedStudents.size() > 0){
@@ -63,9 +63,38 @@ public class SolutionService {
     }
 
     private void propose(Student student){
-        Set<String> preferredProjects = preferredProjectsDictionary.get(student);
-        for(String projectName: preferredProjects){
+        Project project = student.getProjects().get(0);
 
+        int projectScore = 0;
+        int projectSkillsNo = project.getSkills().size();
+        for(String skill : project.getSkills()){
+            if(student.getSkills().contains(skill)){
+                projectScore += (projectSkillsNo+1) - project.getSkills().indexOf(skill);
+            }
+        }
+        int maxProjectScore = projectSkillsNo*(projectSkillsNo+1)/2;
+        int projectPercentageScore = projectScore/maxProjectScore *100;
+
+        if(project.getStudents().size() < project.getQuota()){
+            project.addStudent(projectPercentageScore, student);
+        }
+        else{
+            int smallestScore = project.getStudents().get(project.getStudents().size() - 1).getKey();
+            if(smallestScore < projectPercentageScore){
+                project.replaceStudent(projectPercentageScore, student);
+                solution.put(student, project);
+                unengagedStudents.remove(student);
+            }
+            else{
+                if(student.getProjects().size()>0) {
+                    student.getProjects().remove(0);
+                    propose(student);
+                }
+                else{
+                    unengagedStudents.remove(student);
+                    unengagedStudents.add(student);
+                }
+            }
         }
     }
 }
