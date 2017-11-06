@@ -10,10 +10,10 @@ import java.util.List;
 
 public abstract class ItemView<T extends Item> implements Serializable {
 
-    private List<T> items;
+    protected List<T> items;
 
     @ManagedProperty("#{itemService}")
-    private ItemService<T> service;
+    protected ItemService<T> service;
 
     @PostConstruct
     public void init() {
