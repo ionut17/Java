@@ -9,17 +9,18 @@ import java.util.List;
 @ApplicationScoped
 public class SkillService {
 
-    private List<Skill> skills;
+    private List<String> skills;
 
     public SkillService(){
         skills = new ArrayList<>();
-        skills.add(new Skill("Programming"));
-        skills.add(new Skill("Design"));
-        skills.add(new Skill("Architecture"));
-        skills.add(new Skill("Problem Solving"));
+        skills.add("Programming");
+        skills.add("Design");
+        skills.add("Architecture");
+        skills.add("Problem Solving");
     }
 
-    public List<Skill> getSkills() {
+    public List<String> getSkills() {
+        int x =5;
         return this.skills;
     }
 }

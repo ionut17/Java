@@ -4,5 +4,18 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:p="http://primefaces.org/ui"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:inputText value="#{item.name}" required="true" />
+
+    <p:panel id="basic" header="Add Form" style="margin-bottom:20px;margin-top: 100px;">
+        <h:panelGrid columns="2" cellpadding="10">
+            <p:outputLabel for="name" value="Name:" />
+            <p:inputText id="name" value="#{item.name}" required="true"/>
+
+            <p:outputLabel for="skills" value="Skills:" />
+            <p:selectManyCheckbox id="skills" value="#{item.skills}" layout="grid" columns="3">
+                <f:selectItems value="#{skillService.skills}" var="skill" itemLabel="#{skill}" itemValue="#{skill}" />
+            </p:selectManyCheckbox>
+        </h:panelGrid>
+    </p:panel>
+
+
 </ui:composition>
