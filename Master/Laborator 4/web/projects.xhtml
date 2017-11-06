@@ -7,17 +7,24 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title>Hello</title>
+    <title>Projects</title>
 </h:head>
 <h:body>
 
-    <p:dataTable var="item" value="#{studentView.items}">
+    <h2>Projects</h2>
+    <hr/>
+    
+    <ui:include src="includes/navigation.xhtml"></ui:include>
+
+    <p:dataTable var="item" value="#{projectView.items}">
         <p:column headerText="Name">
-            <h:outputText value="#{items.name}" />
+            <h:outputText value="#{item.name}" />
         </p:column>
 
         <p:column headerText="Skills">
-            <h:outputText value="#{items.skills}" />
+            <p:dataList value="#{item.skills}" var="skill" type="unordered">
+                #{skill.name}
+            </p:dataList>
         </p:column>
 
     </p:dataTable>

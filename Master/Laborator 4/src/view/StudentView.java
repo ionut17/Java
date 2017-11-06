@@ -15,10 +15,12 @@ public class StudentView extends ItemView<Student> {
 
     @PostConstruct
     public void init() {
+        this.items = new ArrayList<>();
         List<Skill> skills =  new ArrayList<>();
         skills.add(new Skill("Programming"));
         skills.add(new Skill("Design"));
-        this.items.add(new Student("Ionut", skills));
+        Student student = new Student("Ionut", skills);
+        this.items.add(student);
     }
 
 }
