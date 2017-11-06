@@ -23,11 +23,18 @@
 
         <p:column headerText="Skills">
             <p:dataList value="#{item.skills}" var="skill" type="unordered">
-                #{skill.name}
+                #{skill}
             </p:dataList>
         </p:column>
 
     </p:dataTable>
+
+    <hr/>
+
+    <h:form>
+        <ui:include src="includes/form.xhtml"></ui:include>
+        <p:commandButton value="Add" id="submitBtn" actionListener="#{projectView.addItem(item)}" ajax="false" />
+    </h:form>
 
 </h:body>
 </html>

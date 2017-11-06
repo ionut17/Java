@@ -8,11 +8,11 @@ public class Item {
 
     String name;
 
-    List<Skill> skills;
+    List<String> skills;
 
     public Item(){}
 
-    public Item(String name, List<Skill> skills){
+    public Item(String name, List<String> skills){
         setName(name);
         setSkills(skills);
     }
@@ -25,11 +25,11 @@ public class Item {
         this.name = name;
     }
 
-    public List<Skill> getSkills() {
+    public List<String> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(List<String> skills) {
         this.skills = skills;
     }
 

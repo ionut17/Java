@@ -23,7 +23,7 @@
 
         <p:column headerText="Skills">
             <p:dataList value="#{item.skills}" var="skill" type="unordered">
-                #{skill.name}
+                #{skill}
             </p:dataList>
         </p:column>
 
@@ -33,7 +33,7 @@
 
     <h:form>
         <ui:include src="includes/form.xhtml"></ui:include>
-        <h:commandButton value="submit" action="#{studentView.addItem(item)}" />
+        <p:commandButton value="Add" id="submitBtn" actionListener="#{studentView.addItem(item)}" ajax="false" />
     </h:form>
 
 </h:body>
