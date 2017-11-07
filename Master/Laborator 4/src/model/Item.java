@@ -14,6 +14,12 @@ public class Item {
 
     public Item(){}
 
+    public Item(Integer id, String name, List<String> skills){
+        setId(id);
+        setName(name);
+        setSkills(skills);
+    }
+
     public Item(String name, List<String> skills){
         setName(name);
         setSkills(skills);

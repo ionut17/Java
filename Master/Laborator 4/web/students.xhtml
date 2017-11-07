@@ -27,13 +27,36 @@
             </p:dataList>
         </p:column>
 
+        <p:column headerText="Projects">
+            <p:dataList value="#{item.projects}" var="project" type="ordered">
+                #{project.name}
+            </p:dataList>
+        </p:column>
+
     </p:dataTable>
 
     <hr/>
 
     <h:form>
-        <ui:include src="includes/form.xhtml"></ui:include>
-        <p:commandButton value="Add" id="submitBtn" actionListener="#{studentView.addItem(item)}" ajax="false" />
+        <p:panel id="basic" header="Add Form" style="margin-bottom:20px;margin-top: 100px;">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="id" value="Id:" />
+                <p:inputText id="id" value="#{student.id}" required="true"/>
+
+                <p:outputLabel for="name" value="Name:" />
+                <p:inputText id="name" value="#{student.name}" required="true"/>
+
+                <p:outputLabel for="skills" value="Skills:" />
+                <p:selectManyCheckbox id="skills" value="#{student.skills}" layout="grid" columns="3">
+                    <f:selectItems value="#{skillService.skills}" var="skill" itemLabel="#{skill}" itemValue="#{skill}" />
+                </p:selectManyCheckbox>
+
+                <p:outputLabel for="projects" value="Projects:" />
+                #{student.projects = projectService.items}
+                <p:orderList id="projects" value="#{student.projects}" var="project" controlsLocation="none" itemLabel="#{project.name}"  itemValue="#{project.name}" />
+            </h:panelGrid>
+        </p:panel>
+        <p:commandButton value="Add" id="submitBtn" actionListener="#{studentView.addItem(student)}" ajax="false" />
     </h:form>
 
 </h:body>

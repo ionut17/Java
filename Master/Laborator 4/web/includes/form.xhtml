@@ -7,6 +7,9 @@
 
     <p:panel id="basic" header="Add Form" style="margin-bottom:20px;margin-top: 100px;">
         <h:panelGrid columns="2" cellpadding="10">
+            <p:outputLabel for="id" value="Id:" />
+            <p:inputText id="id" value="#{item.id}" required="true"/>
+
             <p:outputLabel for="name" value="Name:" />
             <p:inputText id="name" value="#{item.name}" required="true"/>
 

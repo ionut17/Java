@@ -1,7 +1,6 @@
 package view;
 
-import model.ItemDto;
-import model.Student;
+import model.*;
 import service.ItemService;
 import service.StudentService;
 
@@ -31,8 +30,16 @@ public class StudentView extends ItemView<Student> {
         int y = 4;
     }
 
-    public void addItem(Student item){
-        studentService.add(item);
+    public void addItem(StudentDto item){
+        Student student = new Student();
+        student.setId(item.getId());
+        student.setName(item.getName());
+        List<Project> proj = new ArrayList<>();
+        for (String project : item.getProjects()){
+            proj.add(new Project(Integer.valueOf(project), "ge", new ArrayList<String>()));
+        }
+        student.setProjects(proj);
+        studentService.add(student);
     }
 
     public void setStudentService(StudentService itemService) {

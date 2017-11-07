@@ -12,14 +12,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "itemService")
-@ApplicationScoped
 public class ItemService<T extends Item> {
 
     @ManagedProperty("#{databaseService}")
     protected DatabaseService databaseService;
 
-    @ManagedProperty("#{skillServiceS}")
+    @ManagedProperty("#{skillService}")
     protected SkillService skillService;
 
     public void setDatabaseService(DatabaseService databaseService) {
@@ -36,12 +34,6 @@ public class ItemService<T extends Item> {
         return this.items;
     }
 
-    public T add(T item){
-        int x = 5;
-        int y = 4;
-        return null;
-    }
-
     protected List<String> getSkills(Integer id, String table){
         ResultSet rs = null;
         PreparedStatement pst = null;
@@ -55,7 +47,8 @@ public class ItemService<T extends Item> {
             rs = pst.getResultSet();
             while(rs.next()) {
                 if (rs.getInt(1) == id){
-                    records.add(skillService.getSkill(rs.getInt(2)));
+                    String skill = skillService.getSkill(rs.getInt(2));
+                    records.add(skill);
                 }
             }
         } catch (SQLException e) {
