@@ -6,6 +6,8 @@ import java.util.List;
 @ManagedBean(name="item", eager = true)
 public class Item {
 
+    Integer id;
+
     String name;
 
     List<String> skills;
@@ -31,6 +33,14 @@ public class Item {
 
     public void setSkills(List<String> skills) {
         this.skills = skills;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }
