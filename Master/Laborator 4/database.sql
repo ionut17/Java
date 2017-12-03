@@ -54,7 +54,11 @@ INSERT INTO student_skills(student, skill) VALUES(2, 4);
 INSERT INTO student_skills(student, skill) VALUES(3, 1);
 
 INSERT INTO student_preferences(student, project) VALUES(1, 1);
-INSERT INTO student_preferences(student, project) VALUES(2, 1);
+INSERT INTO student_preferences(student, project) VALUES(1, 2);
+
+INSERT INTO student_preferences(student, project) VALUES(2, 1)
+INSERT INTO student_preferences(student, project) VALUES(2, 3);
+
 INSERT INTO student_preferences(student, project) VALUES(3, 1);
 
 INSERT INTO projects(id, name) VALUES(1, 'TAIP');

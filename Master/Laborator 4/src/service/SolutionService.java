@@ -6,10 +6,10 @@ import java.util.*;
 
 public class SolutionService {
 
-    private List<Project> projects;
-    private Map<String, Project> projectsMap;
-    private List<Student> unengagedStudents;
-    private Map<Student, Set<String>> preferredProjectsDictionary;
+    private List<Project> projects = new ArrayList<>();
+    private Map<String, Project> projectsMap = new HashMap<>();
+    private List<Student> unengagedStudents = new ArrayList<>();
+    private Map<Student, Set<String>> preferredProjectsDictionary = new HashMap<>();
 
     private Map<Student, Project> solution = new HashMap<>();
 
@@ -73,13 +73,19 @@ public class SolutionService {
             }
         }
         int maxProjectScore = projectSkillsNo*(projectSkillsNo+1)/2;
-        int projectPercentageScore = projectScore/maxProjectScore *100;
+        int projectPercentageScore = 0;
+        if(maxProjectScore != 0) {
+            projectPercentageScore = projectScore / maxProjectScore * 100;
+        }
 
         if(project.getStudents().size() < project.getQuota()){
             project.addStudent(projectPercentageScore, student);
         }
         else{
-            int smallestScore = project.getStudents().get(project.getStudents().size() - 1).getKey();
+            int smallestScore = 0;
+            if(project.getStudents().size()>0) {
+                smallestScore = project.getStudents().get(project.getStudents().size() - 1).getKey();
+            }
             if(smallestScore < projectPercentageScore){
                 project.replaceStudent(projectPercentageScore, student);
                 solution.put(student, project);

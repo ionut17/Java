@@ -16,5 +16,15 @@
 
     <ui:include src="includes/navigation.xhtml"></ui:include>
 
+    <p:dataTable value="#{solutionView.solution.entrySet().toArray()}" var="entry">
+        <p:column headerText="Student">
+            <h:outputText value="#{entry.key.name}" />
+        </p:column>
+
+        <p:column headerText="Project">
+            <h:outputText value="#{entry.value.name}" />
+        </p:column>
+    </p:dataTable>
+
 </h:body>
 </html>

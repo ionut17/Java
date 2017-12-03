@@ -52,7 +52,7 @@
                 </p:selectManyCheckbox>
 
                 <p:outputLabel for="projects" value="Projects:" />
-                #{student.projects = projectService.items}
+                <div style="visibility:hidden">#{student.projects = projectService.items}</div>
                 <p:orderList id="projects" value="#{student.projects}" var="project" controlsLocation="none" itemLabel="#{project.name}"  itemValue="#{project.name}" />
             </h:panelGrid>
         </p:panel>

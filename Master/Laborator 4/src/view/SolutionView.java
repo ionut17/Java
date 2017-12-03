@@ -17,19 +17,23 @@ import java.util.Map;
 
 @ManagedBean(name="solutionView")
 @ViewScoped
-public class SolutionView extends ItemView<Student> {
+public class SolutionView {
 
-
-    @ManagedProperty("#{studentService}")
-    protected StudentService studentService;
 
     public StudentService getStudentService() {
         return studentService;
     }
 
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
     public ProjectService getProjectService() {
         return projectService;
     }
+
+    @ManagedProperty("#{studentService}")
+    protected StudentService studentService;
 
     public void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
@@ -44,7 +48,9 @@ public class SolutionView extends ItemView<Student> {
 
     @PostConstruct
     public void init(){
-        solutioner = new SolutionService(projectService.getItems(), studentService.getItems());
+        List<Project> projects = projectService.getItems();
+        List<Student> students = studentService.getItems();
+        solutioner = new SolutionService(projects, students);
         this.solution = solutioner.solve();
     }
 
