@@ -15,7 +15,10 @@
    <hr/>
 
    <ui:include src="includes/navigation.xhtml"></ui:include>
-   <p:commandButton value="Generate" id="generateBtn" actionListener="#{solutionView.generate()}" ajax="false" />
+
+   <h:form>
+      <p:commandButton value="Generate" id="generateBtn" actionListener="#{solutionView.generate()}" ajax="false" />
+   </h:form>
 
 </h:body>
 </html>

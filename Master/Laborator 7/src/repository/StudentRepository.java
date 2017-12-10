@@ -29,4 +29,11 @@ public class StudentRepository {
         List<Student> list = entityManager.createQuery("SELECT t FROM Student t").getResultList();
         return list;
     }
+
+    public List<Student> getAllIncomplete() {
+        EntityManager entityManager = factory.createEntityManager();
+
+        List<Student> list = entityManager.createQuery("SELECT t FROM Student t").getResultList();
+        return list;
+    }
 }

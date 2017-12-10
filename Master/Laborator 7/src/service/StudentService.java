@@ -30,7 +30,7 @@ public class StudentService extends ItemService<Student> {
     private StudentRepository studentRepository;
 
     public List<Student> getItems() {
-        List<Student> students = this.studentRepository.getAll();
+        List<Student> students = this.studentRepository.getAllIncomplete();
         if (students == null) {
             System.out.println("No items found.");
         } else {
