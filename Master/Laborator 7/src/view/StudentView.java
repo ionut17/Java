@@ -32,16 +32,16 @@ public class StudentView extends ItemView<Student> {
         int y = 4;
     }
 
-    public void addItem(StudentDto item){
-        Student student = new Student();
-        student.setId(item.getId());
-        student.setName(item.getName());
-        List<Project> proj = new ArrayList<>();
-        for (String project : item.getProjects()){
-            proj.add(new Project(Integer.valueOf(project), "ge", new ArrayList<>()));
-        }
-        student.setProjects(proj);
-//        studentService.add(student);
+    public void addItem(Student student){
+        Student student2 = new Student();
+//        student.setId(item.getId());
+//        student.setName(item.getName());
+//        List<Project> proj = new ArrayList<>();
+//        for (Project project : item.getProjects()){
+//            proj.add(new Project(Integer.valueOf(project), "ge", new ArrayList<>()));
+//        }
+//        student.setProjects(item);
+        studentService.add(student);
     }
 
     public void setStudentService(StudentService itemService) {

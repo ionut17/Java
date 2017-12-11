@@ -6,6 +6,7 @@ import repository.StudentRepository;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.transaction.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,26 +55,11 @@ public class StudentService extends ItemService<Student> {
     }
 
     public void add(Student item){
-        PreparedStatement pst = null;
-        Connection con = databaseService.getConnection();
-        String stm = "INSERT INTO students (id, name) VALUES ("+item.getId()+",'"+item.getName()+"')";
         try {
-            pst = con.prepareStatement(stm);
-            pst.execute();
-            for (Skill skill: item.getSkills()){
-                stm = "INSERT INTO student_skills (student, skill) VALUES ("+item.getId()+","+skillService.getId(skill)+")";
-                pst = con.prepareStatement(stm);
-                pst.execute();
-            }
-            for (Project project: item .getProjects()){
-                stm = "INSERT INTO student_preferences (student, project) VALUES ("+item.getId()+","+project.getId()+")";
-                pst = con.prepareStatement(stm);
-                pst.execute();
-            }
-        } catch (SQLException e) {
+            this.studentRepository.add(item);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private List<Project> getProjects(Integer id){
