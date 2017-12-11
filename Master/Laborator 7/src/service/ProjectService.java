@@ -3,9 +3,12 @@ package service;
 import model.Project;
 import model.Skill;
 import model.Student;
+import repository.ProjectRepository;
+import repository.StudentRepository;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,23 +20,26 @@ import java.util.List;
 @ApplicationScoped
 public class ProjectService extends ItemService<Project> {
 
-    public List<Project> getItems() {
-        ResultSet rs = null;
-        PreparedStatement pst = null;
-        Connection con = databaseService.getConnection();
-        String stm = "Select * from projects";
-        List<Project> projects = new ArrayList<>();
-        try {
-            pst = con.prepareStatement(stm);
-            pst.execute();
-            rs = pst.getResultSet();
-            while(rs.next()) {
-                projects.add(new Project(rs.getString(2), getSkills(rs.getInt(1), "project_skills")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public ProjectRepository getProjectRepository() {
+        return projectRepository;
+    }
 
+    public void setProjectRepository(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
+    @ManagedProperty("#{projectRepository}")
+    private ProjectRepository projectRepository;
+
+    public List<Project> getItems() {
+        List<Project> projects = this.projectRepository.getAll();
+        if (projects == null) {
+            System.out.println("No items found.");
+        } else {
+            for (Project item : projects) {
+                System.out.println("Item name= " + item.getName());
+            }
+        }
         return projects;
     }
 

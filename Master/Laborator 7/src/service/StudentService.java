@@ -30,6 +30,18 @@ public class StudentService extends ItemService<Student> {
     private StudentRepository studentRepository;
 
     public List<Student> getItems() {
+        List<Student> students = this.studentRepository.getAll();
+        if (students == null) {
+            System.out.println("No items found.");
+        } else {
+            for (Student item : students) {
+                System.out.println("Item name= " + item.getName());
+            }
+        }
+        return students;
+    }
+
+    public List<Student> getItemsIncomplete() {
         List<Student> students = this.studentRepository.getAllIncomplete();
         if (students == null) {
             System.out.println("No items found.");
@@ -38,23 +50,6 @@ public class StudentService extends ItemService<Student> {
                 System.out.println("Item name= " + item.getName());
             }
         }
-        System.out.println("#########################");
-//        ResultSet rs = null;
-//        PreparedStatement pst = null;
-//        Connection con = databaseService.getConnection();
-//        String stm = "Select * from students";
-//        List<Student> students = new ArrayList<>();
-//        try {
-//            pst = con.prepareStatement(stm);
-//            pst.execute();
-//            rs = pst.getResultSet();
-//            while(rs.next()) {
-//                students.add(new Student(rs.getString(2), getSkills(rs.getInt(1), "student_skills"), getProjects(rs.getInt(1))));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
         return students;
     }
 

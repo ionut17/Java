@@ -15,6 +15,11 @@ import java.util.List;
 @ViewScoped
 public class StudentView extends ItemView<Student> {
 
+    public List<Student> getItemsIncomplete() {
+        return itemsIncomplete;
+    }
+
+    protected List<Student> itemsIncomplete;
 
     @ManagedProperty("#{studentService}")
     protected StudentService studentService;
@@ -23,6 +28,7 @@ public class StudentView extends ItemView<Student> {
     public void init(){
         int x = 5;
         this.items = studentService.getItems();
+        this.itemsIncomplete = studentService.getItemsIncomplete();
         int y = 4;
     }
 

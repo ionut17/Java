@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Students</title>
+</h:head>
+<h:body>
+
+    <h2>Students</h2>
+    <hr/>
+
+    <ui:include src="includes/navigation.xhtml"></ui:include>
+
+    <p:dataTable var="item" value="#{studentView.itemsIncomplete}">
+        <p:column headerText="Name">
+            <h:outputText value="#{item.name}" />
+        </p:column>
+
+        <p:column headerText="Skills">
+            <p:dataList value="#{item.skills}" var="skill" type="unordered">
+                #{skill}
+            </p:dataList>
+        </p:column>
+
+        <p:column headerText="Projects">
+            <p:dataList value="#{item.projects}" var="project" type="ordered">
+                #{project.name}
+            </p:dataList>
+        </p:column>
+
+    </p:dataTable>
+
+    <hr/>
+
+    <h:form>
+        <p:panel id="basic" header="Add Form" style="margin-bottom:20px;margin-top: 100px;">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="id" value="Id:" />
+                <p:inputText id="id" value="#{student.id}" required="true"/>
+
+                <p:outputLabel for="name" value="Name:" />
+                <p:inputText id="name" value="#{student.name}" required="true"/>
+
+                <p:outputLabel for="skills" value="Skills:" />
+                <p:selectManyCheckbox id="skills" value="#{student.skills}" layout="grid" columns="3">
+                    <f:selectItems value="#{skillService.skills}" var="skill" itemLabel="#{skill}" itemValue="#{skill}" />
+                </p:selectManyCheckbox>
+
+                <p:outputLabel for="projects" value="Projects:" />
+                <div style="visibility:hidden">#{student.projects = projectService.items}</div>
+                <p:orderList id="projects" value="#{student.projects}" var="project" controlsLocation="none" itemLabel="#{project.name}"  itemValue="#{project.name}" />
+            </h:panelGrid>
+        </p:panel>
+        <p:commandButton value="Add" id="submitBtn" actionListener="#{studentView.addItem(student)}" ajax="false" />
+    </h:form>
+
+</h:body>
+</html>
