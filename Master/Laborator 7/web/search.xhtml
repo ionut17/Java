@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Find Project</title>
+</h:head>
+<h:body>
+
+    <h2>Find Project</h2>
+    <hr/>
+
+    <ui:include src="includes/navigation.xhtml"></ui:include>
+
+    <h:form>
+        <p:panel id="basic" header="Find project" style="margin-bottom:20px;margin-top: 100px;">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="id1" value="Name:" />
+                <p:selectBooleanCheckbox value="#{filter.nameFilterActive}" />
+                <p:inputText id="id1" value="#{filter.nameValue}" required="false"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="id2" value="Description:" />
+                <p:selectBooleanCheckbox value="#{filter.descriptionFilterActive}" disabled="true" />
+                <p:inputText id="id2" value="#{filter.descriptionValue}" disabled="true" required="false"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="id3" value="Quota:" />
+                <p:selectBooleanCheckbox value="#{filter.quotaFilterActive}" disabled="true" />
+                <p:inputText id="id3" value="#{filter.quotaValue}" disabled="true" required="false"/>
+            </h:panelGrid>
+        </p:panel>
+        <p:commandButton value="Find" id="submitBtn" actionListener="#{solutionView.find(filter)}" ajax="false" />
+    </h:form>
+
+    <p:dataTable var="item" value="#{solutionView.filteredProjects}">
+        <p:column headerText="Name">
+            <h:outputText value="#{item.name}" />
+        </p:column>
+
+        <p:column headerText="Skills">
+            <p:dataList value="#{item.skills}" var="skill" type="unordered">
+                #{skill.name}
+            </p:dataList>
+        </p:column>
+
+        <p:column headerText="Prefference count">
+            #{item.students.size()}
+        </p:column>
+
+    </p:dataTable>
+
+</h:body>
+</html>

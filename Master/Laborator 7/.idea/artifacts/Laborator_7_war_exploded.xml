@@ -13,6 +13,12 @@
           <element id="library" level="project" name="org.postgresql:postgresql:9.4.1212.jre7" />
           <element id="library" level="project" name="org.hibernate:hibernate-core:5.2.12.Final" />
           <element id="library" level="project" name="org.hibernate:hibernate-entitymanager:5.2.12.Final" />
+          <element id="library" level="module" name="JUnit4" module-name="Laborator 7" />
+          <element id="library" level="project" name="org.mockito:mockito-core:2.2.2" />
+          <element id="library" level="project" name="org.jboss.arquillian.core:arquillian-core-spi:1.1.15.Final" />
+          <element id="library" level="project" name="org.jboss.arquillian.container:arquillian-container-test-api:1.0.0.CR7" />
+          <element id="library" level="project" name="org.jboss.arquillian.junit:arquillian-junit-core:1.1.14.Final" />
+          <element id="library" level="project" name="org.jboss.shrinkwrap:shrinkwrap-api:1.1.0" />
         </element>
       </element>
     </root>

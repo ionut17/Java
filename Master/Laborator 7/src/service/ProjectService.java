@@ -1,5 +1,6 @@
 package service;
 
+import filters.Filter;
 import model.Project;
 import model.Skill;
 import model.Student;
@@ -78,6 +79,10 @@ public class ProjectService extends ItemService<Project> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Project> find(Filter filters){
+        return this.projectRepository.find(filters);
     }
 
 }

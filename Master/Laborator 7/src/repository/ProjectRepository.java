@@ -1,5 +1,6 @@
 package repository;
 
+import filters.Filter;
 import jdk.nashorn.internal.runtime.ECMAException;
 import model.Project;
 import model.Student;
@@ -8,10 +9,11 @@ import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
@@ -68,5 +70,25 @@ public class ProjectRepository {
             entityManager.close();
         }
         tx.commit();
+    }
+
+    public List<Project> find(Filter filters){
+        EntityManager entityManager = factory.createEntityManager();
+
+        //SELECT c FROM Country c WHERE c.population > :p
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Project> query = cb.createQuery(Project.class);
+        Root<Project> project = query.from(Project.class);
+        ParameterExpression<Integer> p = cb.parameter(Integer.class);
+        if (filters.getNameFilterActive()){
+            query.select(project).where(cb.like(project.get("name"), filters.getNameValue()));
+        } else{
+            query.select(project);
+        }
+
+        //TypedQuery
+        TypedQuery<Project> results = entityManager.createQuery(query);
+        return results.getResultList();
     }
 }

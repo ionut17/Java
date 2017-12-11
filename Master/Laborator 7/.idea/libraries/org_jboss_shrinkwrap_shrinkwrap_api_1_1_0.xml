@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="org.jboss.shrinkwrap:shrinkwrap-api:1.1.0" type="repository">
+    <properties maven-id="org.jboss.shrinkwrap:shrinkwrap-api:1.1.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/shrinkwrap-api-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
